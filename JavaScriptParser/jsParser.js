@@ -1,51 +1,65 @@
-//Set up
-if (window.XMLHttpRequest)
-  {
-  xhttp=new XMLHttpRequest();
-  }
-else // IE 5/6
-  {
-  xhttp=new ActiveXObject("Microsoft.XMLHTTP");
-  }
-xhttp.open("GET","storagefacility.xml",false);
-xhttp.send();
-xmlDoc=xhttp.responseXML; 
-var x = xmlDoc.childNodes[0].childNodes;
 var currentIndex = new Array();
+main();
 
-//First, start looking for the main parent name by searching for the 'define' tag
-for(n=0; n<x.length; n++){
-	//If found, start printing out the children
-	if (x[n].nodeName === 'define'){
-		var elements = x[n].childNodes[1].childNodes;
-		document.write(x[n].childNodes[1].getAttribute('name')+ ': {<br>');
-		for(j=0; j<elements.length; j++){
-			//Find all valid elements that need to be printed
-			if(elements[j].nodeName != '#text'){
-				if(elements[j].nodeName != '#comment'){
-					//If it is just a tag, print out the node name
-					if(elements[j].getAttribute('name') === null){
-						document.write('&nbsp&nbsp&nbsp&nbsp'+elements[j].nodeName);
-					}
-					//If it is an element, then print its name
-					else{
-						document.write('&nbsp&nbsp&nbsp&nbsp'+elements[j].getAttribute('name'));
-					}
-					//Does it have a ref tag? If so, we need to mark it to let everyone know
-					//that this is just a temporary reference
-					isRef(elements[j].nodeName);
-					document.write(': {<br>');
-					//Under each element name, print out all of its possible children
-					printChildren(elements[j].childNodes, 2);
-					document.write('&nbsp&nbsp&nbsp&nbsp}<br>');
-				}
-			}
-		}
-		document.write('} <br>');
-	}
+function main(){
+	var parsed_obj = parse("storagefacility.xml");
+	print_obj(parsed_obj);
 }
 
-function printChildren(a, spaceNumber){
+//Take XML and convert to JS object to be printed out.
+function parse(document){
+	if (window.XMLHttpRequest)
+	  {
+	  xhttp=new XMLHttpRequest();
+	  }
+	else // IE 5/6
+	  {
+	  xhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	  }
+	xhttp.open("GET",document,false);
+	xhttp.send();
+	xmlDoc=xhttp.responseXML; 
+	return xmlDoc
+}
+
+
+function print_obj(parsed_obj){
+	var x = parsed_obj.childNodes[0].childNodes;
+	//var currentIndex = new Array();
+	
+	//First, start looking for the main parent name by searching for the 'define' tag
+	for(n=0; n<x.length; n++){
+		//If found, start printing out the children
+		if (x[n].nodeName === 'define'){
+			var elements = x[n].childNodes[1].childNodes;
+			document.write(x[n].childNodes[1].getAttribute('name')+ ': {<br>');
+			for(j=0; j<elements.length; j++){
+				//Find all valid elements that need to be printed
+				if(elements[j].nodeName != '#text'){
+					if(elements[j].nodeName != '#comment'){
+						//If it is just a tag, print out the node name
+						if(elements[j].getAttribute('name') === null){
+							document.write('&nbsp&nbsp&nbsp&nbsp'+elements[j].nodeName);
+						}
+						//If it is an element, then print its name
+						else{
+							document.write('&nbsp&nbsp&nbsp&nbsp'+elements[j].getAttribute('name'));
+						}
+						//Does it have a ref tag? If so, we need to mark it to let everyone know
+						//that this is just a temporary reference
+						isRef(elements[j].nodeName);
+						document.write(': {<br>');
+						//Under each element name, print out all of its possible children
+						printChildren(elements[j].childNodes, 2);
+						document.write('&nbsp&nbsp&nbsp&nbsp}<br>');
+					}
+				}
+			}
+			document.write('} <br>');
+		}
+	}
+}
+function printChildren(a, spaceNumber, indexList){
 	
 	for (i=0; i<a.length; i++){
 		//Extract only the element, not the text objects
@@ -59,10 +73,12 @@ function printChildren(a, spaceNumber){
 				if(currentElement.getAttribute('type') === null){
 					document.write(currentElement.nodeName);
 					//If it is a reference, mark it
-					isRef(elements[j].nodeName);
+					isRef(currentElement.nodeName);
 					document.write(': {<br>');
+					
 					//Print all possible children of the tag
 					printChildren(currentElement.childNodes, spaceNumber + 1);
+					
 					//If everything is done, exit the for loop
 					if (i = a.length){
 						inputSpaces(spaceNumber);
@@ -83,6 +99,7 @@ function printChildren(a, spaceNumber){
 			}
 			isRef(currentElement.nodeName);
 			document.write('<br>');
+			
 			//Check for its children's children. If it exists, recursively call printChildren
 			if(hasChildren(currentElement)){
 				//Push index into an array to keep track of
@@ -114,7 +131,7 @@ function inputSpaces(num){
 	}
 }
 
-//Helper functino to determine if the element is a reference or not
+//Helper function to determine if the element is a reference or not
 function isRef(nodeName){
 	if (nodeName === 'ref'){
 		document.write('**');
