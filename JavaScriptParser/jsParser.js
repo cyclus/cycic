@@ -2,12 +2,14 @@ main();
 
 function main(){
 	var parser = new Parser("storagefacility.xml");
-	var parsed_obj = parser.parse();
-	parser.print_obj(parsed_obj);
+	var parsed_obj = parser.parse_obj();
+	parser.print_obj();
 }
 
 function Parser(word){
 	var currentIndex = new Array();
+	jsObjName = new Array();
+	elementTrace = new Array();
 	this.file = word;
 	
 	this.speak = function() {
@@ -15,7 +17,7 @@ function Parser(word){
 	}
 	
 	//Take XML and convert to JS object to be printed out.
-	this.parse = function(){
+	this.parse_obj = function() {
 		if (window.XMLHttpRequest)
 		{
 			xhttp=new XMLHttpRequest();
@@ -28,11 +30,35 @@ function Parser(word){
 		xhttp.send();
 		xmlDoc=xhttp.responseXML; 
 		
-		return xmlDoc;
+		
+		var x = xmlDoc.childNodes[0].childNodes;
+			
+		//First, start looking for the main parent name by searching for the 'define' tag
+		for(n=0; n<x.length; n++){
+			//If found, start printing out the children
+			if (x[n].nodeName === 'define'){
+				var elements = x[n].childNodes[1].childNodes;
+							
+				jsObjName[x[n].childNodes[1].getAttribute('name')] = {};
+				jsObjName[x[n].childNodes[1].getAttribute('name')] = parseObject(elements);
+			}
+		}
 	}
-
-	this.print_obj = function(parsed_obj){
-		var x = parsed_obj.childNodes[0].childNodes;
+	
+	this.print_obj = function(){
+		if (window.XMLHttpRequest)
+		{
+			xhttp=new XMLHttpRequest();
+		}
+		else // IE 5/6
+		{
+			xhttp=new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		xhttp.open("GET",this.file,false);
+		xhttp.send();
+		xmlDoc=xhttp.responseXML; 
+		
+		var x = xmlDoc.childNodes[0].childNodes;
 		//var currentIndex = new Array();
 		
 		//First, start looking for the main parent name by searching for the 'define' tag
@@ -41,9 +67,11 @@ function Parser(word){
 			if (x[n].nodeName === 'define'){
 				var elements = x[n].childNodes[1].childNodes;
 				document.write("[\"" + x[n].childNodes[1].getAttribute('name') + '\",<br>');
+
 				if(x[n].childNodes[1].childNodes.length > 3){
 					document.write('&nbsp&nbsp&nbsp&nbsp[<br>');
 				}
+
 				for(j=0; j<elements.length; j++){
 					//Find all valid elements that need to be printed
 					if(elements[j].nodeName != '#text'){
@@ -51,22 +79,27 @@ function Parser(word){
 							//If it is just a tag, print out the node name
 							if(elements[j].getAttribute('name') === null){
 								document.write('&nbsp&nbsp&nbsp&nbsp'+'&nbsp&nbsp&nbsp&nbsp'+'[\"'+elements[j].nodeName);
+								
+								
 							}
 							//If it is an element, then print its name
 							else{
 								if(elements[j].nodeName === 'ref'){
 									document.write('&nbsp&nbsp&nbsp&nbsp'+'&nbsp&nbsp&nbsp&nbsp'+'\"'+elements[j].getAttribute('name') + '\"');
 									document.write(',<br>');
+									
 									continue;
 								}
 								else{
 									document.write('&nbsp&nbsp&nbsp&nbsp'+'&nbsp&nbsp&nbsp&nbsp'+'[\"'+elements[j].getAttribute('name'));
+									
+									
 								}
 							}
 							
 							//Does it have a ref tag? If so, we need to mark it to let everyone know
 							//that this is just a temporary reference
-							//isRef(elements[j].nodeName);
+							
 							document.write('\",&nbsp');
 							//Under each element name, print out all of its possible children
 							printChildren(elements[j].childNodes, 2);
@@ -96,9 +129,7 @@ function Parser(word){
 			if(a[i].nodeName != '#text'){
 				var currentElement = a[i];
 				//Input appropriate amount of spaces to format output
-				//inputSpaces(spaceNumber);
-				
-				
+								
 				//If the child is a tag, print out just its children since it has no 'name' or 'type' attribute
 				if(currentElement.getAttribute('name') === null){
 					if(currentElement.getAttribute('type') === null){
@@ -106,12 +137,8 @@ function Parser(word){
 						inputSpaces(spaceNumber + 1);						
 						document.write('[\"' + currentElement.nodeName + '\",<br>');
 						//If it is a reference, mark it
-						//isRef(currentElement.nodeName);
-						//document.write(': {<br>');
 						inputSpaces(spaceNumber + 2);
-						//document.write('[');
-						//spaceNumber++;
-					
+											
 						//Print all possible children of the tag
 						printChildren(currentElement.childNodes, spaceNumber + 2);
 						
@@ -124,10 +151,8 @@ function Parser(word){
 						continue;
 						//If everything is done, exit the for loop
 						if (i = a.length){
-							//document.write(']<br>');
 							break;
 						}	
-						document.write(']fghv<br>');
 						continue;
 					}
 					
@@ -174,7 +199,7 @@ function Parser(word){
 						else{
 						document.write(',<br>');
 						inputSpaces(spaceNumber);
-						//document.write('[');
+						
 						}
 					}
 				}
@@ -189,7 +214,7 @@ function Parser(word){
 						
 						document.write('[<br>');
 						inputSpaces(spaceNumber + 2);
-						//document.write('[');
+						
 						currentIndex.push(i);
 						printChildren(currentElement.childNodes, spaceNumber + 2);
 						
@@ -203,8 +228,7 @@ function Parser(word){
 						}
 						
 						inputSpaces(spaceNumber );
-						//document.write(']<br>');
-						//inputSpaces(spaceNumber - 1 );
+						
 					}
 					else if(currentElement.childNodes.length === 3){
 						document.write(',');
@@ -260,6 +284,86 @@ function Parser(word){
 		if (nodeName === 'ref'){
 			document.write('**');
 		}
+	}
+	function parseObject(a){
+		var spaces = new Array();
+		result = {};
+		for (i=0; i<a.length; i++){
+			//Extract only the element, not the text objects
+			if(a[i].nodeName != '#text'){
+				if(a[i].nodeName != '#comment'){
+					var currentElement = a[i];
+					//Input appropriate amount of spaces to format output
+					
+					//If the child is a tag, print out just its children since it has no 'name' or 'type' attribute
+					
+					
+					//If the object has a 'name' attribute, print it
+					if(currentElement.getAttribute('name')){
+						currentIndex.push(i);
+						
+						result[currentElement.getAttribute('name')] = {};						
+						elementTrace.push(result);
+						tempList = parseObject(currentElement.childNodes);
+						result = elementTrace.pop(result);
+						result[currentElement.getAttribute('name')] = tempList;
+						
+						i = currentIndex.pop(i);
+						//jsChildName2.push(currentElement.getAttribute('name'));
+						//document.write('\"'+ currentElement.getAttribute('name') + '\"');
+					}
+					
+					//If the object has a 'type' attribute, print it
+					else if(currentElement.getAttribute('type')){
+						currentIndex.push(i);	
+						
+						result[currentElement.getAttribute('type')] = {};
+						elementTrace.push(result);
+						tempList = parseObject(currentElement.childNodes);
+						result = elementTrace.pop(result);
+						result[currentElement.getAttribute('type')] = tempList;
+						
+						i = currentIndex.pop(i);
+						//jsChildName2.push(currentElement.getAttribute('type'));
+						//document.write('\"'+currentElement.getAttribute('type') + '\"');
+					}
+					else if(currentElement.getAttribute('name') === null){
+						if(currentElement.getAttribute('type') === null){
+
+							currentIndex.push(i);	
+							
+							result[currentElement.nodeName] = {};
+							elementTrace.push(result);
+							tempList = parseObject(currentElement.childNodes);
+							result = elementTrace.pop(result);
+							result[currentElement.nodeName] = tempList;
+						
+							i = currentIndex.pop(i);
+							//parseObject(currentElement.childNodes, spaceNumber + 2);
+							
+							
+						}
+						
+					}
+					
+					//Check for its children's children. If it exists, recursively call parseObject
+					continue;
+					if(hasChildren(currentElement)){
+						//Push index into an array to keep track of
+						currentIndex.push(i);				
+						//Print out the children's children
+						
+						jsChildName2.push(tempArray);
+						jsChildName2 = jsChildName2[count];
+						count++;
+						parseObject(currentElement.childNodes, tempArray);
+						//Pop out the most recent index
+						i = currentIndex.pop(i);
+					}
+				}
+			}
+		}
+		return result;
 	}
 
 }
