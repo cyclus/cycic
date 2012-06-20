@@ -1,0 +1,63 @@
+/*
+ Name: Generl Style CSS
+ Date: June 2012
+ Description: Interesting Adaptations
+ Version: 0.1
+ Author: Robert Flanagan
+ */
+
+/**** Time Line Stuff ****/
+#timeline{
+	background:none;
+}
+
+/* for events in the slider */ 
+.slider .slider-container-mask .slider-container{
+	background:none;
+}
+/* Background */
+#timeline div.navigation{
+	background: color = 4c4e7a;
+	border-top: none;	
+}
+#timeline div.navigation:before{
+	position:absolute;
+	content:'';
+	height: 40px;
+	width:100%;
+	left:0;
+	top:-40px;
+	background: #4C4E7A;
+}
+#timeline div.navigation:after{
+	position:absolute;
+	content:'';
+	height:10px;
+	width:100%;
+	left:0;
+	top:-40px;
+	background:#4C4E7A;
+}
+#timeline div.timenav-background{
+	background-color:rgba(0,0,0,0.4);	
+}
+#timeline .navigation .timenav-background .timenav-interval-background{
+	background:none;
+}
+#timeline .top-highlight{
+	background-color:transparent;
+}
+#timeline .toolbar{
+	border:none;
+	background-color: #202222;
+}
+#timeline .toolbar div{
+	border:none;
+}
+#timeline .navigation .timenav .time .time-interval-minor .minor{
+	margin-left: -1px;
+}
+#timeline .navigation .timenav .time .time-interval div{
+	color: #CCCCCC;
+}
+
