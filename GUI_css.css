@@ -20,7 +20,7 @@ body{background-color: #b0c4de;}
  
 .menu {
     height: 20px;
-    width: auto;
+    width: 100%;
  
     background: #4c4e7a;
     background: -webkit-linear-gradient(top, #4c4e5a 0%,#2c2d33 100%);
@@ -29,9 +29,9 @@ body{background-color: #b0c4de;}
     background: -ms-linear-gradient(top, #4c4e5a 0%,#2c2d33 100%);
     background: linear-gradient(top, #4c4e5a 0%,#2c2d33 100%);
  
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
 }
  
 .menu li {
@@ -114,6 +114,6 @@ body{background-color: #b0c4de;}
 	border-bottom: 1px solid #353539;
 }
 .menu ul li:last-child a {border:none;}
-.menu a.new_project {background:#202222;}
+/*.menu a.new_project {background:#202222;}
 .menu a.save_project {background:#202222;}
-.menu a.open_project {background:#202222;}
+.menu a.open_project {background:#202222;}*/

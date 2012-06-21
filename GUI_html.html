@@ -2,48 +2,64 @@
 <html lang="en">
 	<title> TESTING </title>
 <head>
-	<link rel="stylesheet" type ="text/css" href="GUI_css.css" />
 	<meta charset="utf-8"/>
+	<link rel="stylesheet" type ="text/css" href="GUI_css.css" />
+	<!-- Sidebar Style Sheet -->
+	<link rel="stylesheet" type ="text/css" href="sidebar.css" />
 	<!-- Timeline Style Steet -->
-	<link rel="stylesheet" href="timeline.css"/>
+	<link rel="stylesheet" type ="text/css" href="timeline.css"/>
 	<!-- Stylesheet for custumization -->
-	<link rel="stylesheet" href="style.css"/>
+	<link rel="stylesheet" type ="text/css" href="style.css"/>
 	<!--Google Fonts-->
 	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Dancing+Script|Antic+Slab"/>
 	<!--if IE 9-->
 	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"> </script>
 	<script src="http://d3js.org/d3.v2.js"> </script>
+	<!-- JavaScript + jQuery-->
+	<script src="http://code.jquery.com/jquery-1.7.1.min.js"> </script>
+	<script src="timeline-start.js"> </script>
+	<script src="script.js"> </script>
 </head>
 
 <body>
-<header id="banner" class="body">
-	<ul class="menu">
-		<li class ="active"><a href="#">File</a>
-			<ul>
-				<li><a href="#" class="new_project">New Project</a></li>
-				<li><a href="#" class="save_project">Save Project</a></li>
-				<li><a href="#" class="open_project">Open Project</a></li>
-			</ul>
-		</li>
-		
-		<li><a href = "#">Project</a></li>
-		<li><a href ="#">Edit</a></li>
-		<li><a href ="#">Mode</a>
-			<ul>
-				<li><a href="#" class="market_mode"> Market Mode</a></li>
-				<li><a href="#" class="construction_mode"> Construction Mode</a></li>
-				<li><a href="#" class="time_depentent_mode"> Time Dependent Mode</a></li>
-			</ul>
-		</li>
-		
-	</ul>
-</header>
-<div id="timeline">
-	<!-- Timeline can place content here-->
-</div>
-<!-- JavaScript + jQuery-->
-<script src="http://code.jquery.com/jquery-1.7.1.min.js"> </script>
-<script src="timeline-start.js"> </script>
-<script src="script.js"> </script>
+	<!-- Banner Mark-up -->
+	<header id="banner">
+		<ul class="menu">
+			<li class ="active"><a href="#">File</a>
+				<ul>
+					<li><a href="#" class="new_project">New Project</a></li>
+					<li><a href="#" class="save_project">Save Project</a></li>
+					<li><a href="#" class="open_project">Open Project</a></li>
+				</ul>
+			</li>
+			
+			<li><a href = "#">Project</a></li>
+			<li><a href ="#">Edit</a></li>
+			<li><a href ="#">Mode</a>
+				<ul>
+					<li><a href="#" class="market_mode"> Market Mode</a></li>
+					<li><a href="#" class="construction_mode"> Construction Mode</a></li>
+					<li><a href="#" class="time_depentent_mode"> Time Dependent Mode</a></li>
+				</ul>
+			</li>
+			
+		</ul>
+	</header>
+	<!-- Timeline Mark-up -->
+	<div id="timeline">
+		<!-- Timeline can place content here-->
+	</div>
+	<!-- Sidebar Wrapper Test -->
+	<div id="wrapper">
+		<ul class="sidebar_menu">
+			<li class="regions_type"><a href="#"> Regions <span> 4 </span></a>
+				<ul>
+					<li class="region"><a href="#"> United States </a></li>
+				</ul>
+			</li>
+			<li class="institution_type"><a href="#"> Institutions </a></li>
+			<li class="market_type"><a href="#"> Markets </a></li>		
+		</ul>
+	</div>
 </body>
 </html>
