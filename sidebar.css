@@ -49,7 +49,7 @@ ul, ul ul {
     -moz-box-shadow: inset 0px 1px 0px 0px #878e98;
     box-shadow: inset 0px 1px 0px 0px #878e98;
     width: 200px;
-    height: 20px;
+    height: 25px;
     line-height: 20px;
     text-indent: 0px;
     font-family: "Arial Black";
@@ -63,7 +63,7 @@ ul, ul ul {
 	width: 200px;
 	height: 20px; 
 	line-height: 20px;
-	text-indent: 10px;
+	text-indent: 20px;
 	font-family: "Arial Black";
 	font-size: 12px;
 	font-weight: 400;
@@ -78,28 +78,24 @@ ul, ul ul {
     background-image: -ms-linear-gradient(top, rgb(69, 199, 235), rgb(38, 152, 219));
     background-image: linear-gradient(top, rgb(69, 199, 235), rgb(38, 152, 219));
     filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='#45c7eb', EndColorStr='#2698db');
-    border-bottom: 1px solid #103c56;
     -webkit-box-shadow: inset 0px 1px 0px 0px #6ad2ef;
     -moz-box-shadow: inset 0px 1px 0px 0px #6ad2ef;
     box-shadow: inset 0px 1px 0px 0px #6ad2ef;
 }
-.sidebar_menu li a.active {
-	border-bottom: 2px solid #1F2024;
-}
 .sidebar_menu li a span {
     font-size: 0.857em;
     display: inline-block;
-    position: absolute;
-    right: 1em;
+    position: right;
+    right: 0;
     top: 50%;
     background: #48515c;
-    line-height: 1em;
-    height: 1em;
-    padding: .4em .6em;
-    margin: -.8em 0 0 0;
+    line-height: .65em;
+    height: .7em;
+    padding: .3em .4em;
+    margin: -.5em 0 0 0;
     color: #fff;
     text-indent: 0;
-    text-align: center;
+    text-align: right;
     -webkit-border-radius: .769em;
     -moz-border-radius: .769em;
     border-radius: .769em;
