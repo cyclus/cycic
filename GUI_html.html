@@ -22,6 +22,7 @@
 </head>
 
 <body>
+	<script language= Javascript> var items = $("regions_type ul").length</script>
 	<!-- Banner Mark-up -->
 	<header id="banner">
 		<ul class="menu">
@@ -42,7 +43,6 @@
 					<li><a href="#" class="time_depentent_mode"> Time Dependent Mode</a></li>
 				</ul>
 			</li>
-			
 		</ul>
 	</header>
 	<!-- Timeline Mark-up -->
@@ -52,14 +52,27 @@
 	<!-- Sidebar Wrapper Test -->
 	<div id="wrapper">
 		<ul class="sidebar_menu">
-			<li class="regions_type" id="regions_type"><a href="#"> Regions <span> 1 </span></a>
+			<li class="regions_type"><a href="#"> Regions <span class = "total" > </span></a>
 				<ul>
 					<li class="region"><a href="#"> United States </a></li>
+					<li class="region"><a href="#"> Country of Texas </a></li>
 				</ul>
 			</li>
-			<li class="institution_type"><a href="#"> Institutions </a></li>
+			<li class="institution_type"><a href="#"> Institutions <span class = "total"> </span></a>
+				<ul>
+					<li class="institution"><a href="#"> Constellation Energy</a></li>
+				</ul>
+			</li>
 			<li class="market_type"><a href="#"> Markets </a></li>		
 		</ul>
+		<ul class="facilities">
+			<li>Facilities</li>
+		</ul>
 	</div>
+	<script language=JavaScript>
+		$('ul li ul').each(function(){
+		  $(this).prev('a').find('.total').append('<div>'+ $(this).find('li').length +'</div>');
+		});
+	</script>
 </body>
 </html>
