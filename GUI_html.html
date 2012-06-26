@@ -56,22 +56,55 @@
 				<ul>
 					<li class="region"><a href="#"> United States </a></li>
 					<li class="region"><a href="#"> Country of Texas </a></li>
+					<li><a href="#"> Add New Region </a></li>
 				</ul>
 			</li>
 			<li class="institution_type"><a href="#"> Institutions <span class = "total"> </span></a>
 				<ul>
 					<li class="institution"><a href="#"> Constellation Energy</a></li>
+					<li><a href="#"> Add New Institution </a></li>
 				</ul>
 			</li>
-			<li class="market_type"><a href="#"> Markets </a></li>		
+			<li class="market_type"><a href="#"> Markets <span class = "total"> </span></a>
+				<ul>
+					<li><a href="#"> Add New Market</a></li>
+				</ul>
+			</li>		
 		</ul>
-		<ul class="facilities">
-			<li>Facilities</li>
+		<ul class="facilities_menu">
+			<li>Facilities <a><span class = "total"> </span></a>
+				<ul>
+					<li><a href ="#"> Add New Facilitiy </a></li>
+				</ul>
+			</li>
 		</ul>
 	</div>
+	<!-- Number counters for sidebar -->
 	<script language=JavaScript>
 		$('ul li ul').each(function(){
-		  $(this).prev('a').find('.total').append('<div>'+ $(this).find('li').length +'</div>');
+		  	$(this).prev('a').find('.total').append('<div>'+ ($(this).find('li').length - 1) +'</div>');
+		});
+	</script>
+	<!-- Hiding the side menus -->
+	<script type ="text/javascript">
+		$(function(){
+			var menu_ul = $('.sidebar_menu > li > ul'), 
+				menu_a = $('.sidebar_menu > li > a');
+			
+			menu_ul.hide();
+			
+			menu_a.click(function(e){
+				e.preventDefault();
+				if(!$(this).hasClass('active')) {
+					menu_a.removeClass('active');
+					menu_ul.filter(':visible').slideUp('normal');
+					$(this).addClass('active').next().stop(true,true).slideDown('normal');
+				}
+				else{
+					$(this).removeClass('active');
+					$(this).next().stop(true,true).slideUp('normal');
+				}
+			});
 		});
 	</script>
 </body>
