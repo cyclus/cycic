@@ -60,4 +60,97 @@
 #timeline .navigation .timenav .time .time-interval div{
 	color: #CCCCCC;
 }
+/**** SLIDER *****/
+.slider .nav-previous .icon {
+	background: url("timeline.png") no-repeat scroll 0 -293px transparent;
+}
 
+.slider .nav-previous,.slider .nav-next{
+	font-family:'Segoe UI',sans-serif;
+}
+
+.slider .nav-next .icon {
+	background: url("timeline.png") no-repeat scroll 72px -221px transparent;
+	width: 70px !important;
+}
+
+.slider .nav-next:hover .icon{
+	position:relative;
+	right:-5px;
+}
+
+.slider .nav-previous:hover, .slider .nav-next:hover {
+    color: #666;
+    cursor: pointer;
+}
+
+#timeline .thumbnail {
+	border: medium none;
+}
+#timeline .feedback {
+	background-color: #222222;
+	box-shadow: 0 0 30px rgba(0, 0, 0, 0.2) inset;
+	border:none;
+}
+
+#timeline .feedback div{
+	color: #AAAAAA;
+	font-size: 14px !important;
+	font-weight: normal;
+}
+#timeline .slider-item h2,
+#timeline .slider-item h3{
+	font-family:'Antic Slab','Segoe UI',sans-serif;
+}
+
+#timeline .slider-item h2{
+	color:#fff;
+}
+
+#timeline .slider-item p{
+	font-family:'Segoe UI',sans-serif;
+}
+
+#timeline .slider-item img,
+#timeline .slider-item iframe{
+	border:none;
+}
+/* Customizing the first slide - the cover */
+
+#timeline .slider-item:nth-child(1) h2{
+	font:normal 70px/1 'Antic Slab','Segoe UI',sans-serif;
+	background:rgba(0,0,0,0.3);
+	white-space: nowrap;
+	padding:10px 5px 5px 20px;
+	position:relative;
+	right:-60px;
+	z-index:10;
+}
+
+#timeline .slider-item:nth-child(1) p i{
+	font:normal normal 40px 'Dancing Script','Segoe UI',sans-serif;
+	background:rgba(0,0,0,0.3);
+	white-space: nowrap;
+	padding:5px 20px;
+	position:relative;
+	right:-60px;
+	z-index:10;
+}
+
+#timeline .slider-item:nth-child(1) p .c1{
+	color:#1bdff0;
+}
+
+#timeline .slider-item:nth-child(1) p .c2{
+	color:#c92fe6;
+}
+
+#timeline .slider-item:nth-child(1) .media-container {
+	left: -30px;
+	position: relative;
+	z-index: 1;
+}
+
+#timeline .slider-item:nth-child(1) .credit{
+	text-align: center;
+}
