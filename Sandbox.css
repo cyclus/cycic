@@ -1,0 +1,15 @@
+/*
+ Name: Sandbox CSS
+ Date: June 2012
+ Description: CSS for the GUI sidebar
+ Version: 0.1
+ Author: Robert Flanagan
+ */
+
+#sandbox {
+	background: #1BDFF0;
+	margin-left: 202px;
+	height: 100%;
+	border: 1px solid #4C4E5A;
+}
+	

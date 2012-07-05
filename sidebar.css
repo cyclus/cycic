@@ -23,8 +23,8 @@ ul, ul ul {
 	margin: 0px left;
 	font-size: 0.8125em;
 	background:#33373D;
-	border: 2px solid #4C4E5A;
-	font-size: 16px;
+	border: 1px solid #4C4E5A;
+	float: left;
 }
 /*.sidebar_menu {
 	width: auto;
