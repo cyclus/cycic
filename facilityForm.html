@@ -2,8 +2,23 @@
 <html lang="en">
 	<title> New Facility Form </title>
 	<!-- New Facility Form Example -->
-	<form>
-		Facility Test Name: <input type ="text" name ="facilityName" /><br />
-		Facility Burn-up: <input type ="text" name = "facilityBurnup" /><br />
-	</form>
+	<head>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"> </script>
+		<script src="http://d3js.org/d3.v2.js"> </script>
+		<!-- JavaScript + jQuery-->
+		<script src="http://code.jquery.com/jquery-1.7.1.min.js"> </script>
+		<script src="timeline-start.js"> </script>
+		<script src="script.js"> </script>
+	</head>
+	<body>
+		<script language=JavaScript>
+			$.getJSON("JavaScriptParser/sample_interface/storagefacility.json", function(data){
+				for(var i =0; i < data[1].length; i++)
+					$(facilityForm).append(data[1][i][0].toUpperCase() + '<input type="text" name="capacity"/> <br />');
+			});
+		</script>
+		<form id="facilityForm">
+			
+		</form>
+	</body>
 </html>

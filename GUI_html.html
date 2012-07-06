@@ -79,7 +79,7 @@
 			</li>
 			<li class="custom_facilities"><a href="#"> Custom Facilities <span class = "total"> </span></a>
 				<ul>
-					<li><a onClick ="openNewFacility()"> LWR </a></li>
+					<li><a onClick="openNewFacility()"> Storage Facility </a></li>
 					<li><a href="#"> Add New Custom Facility </a></li>
 				</ul>
 			</li>		
@@ -101,7 +101,7 @@
 		  	$(this).prev('a').find('.total').append('<div>'+ ($(this).find('li').length - 1) +'</div>');
 		});
 		function openNewFacility(){
-			newFacilityWin = window.open("http://cyclus.github.com/cycic/GUI_html.html", "Facility Form", 'width = 200, height = 200, toolbar = yes, location = yes, directories = yes, status = yes, menubar = yes, scrollbars = yes, copyhistory = no, resizable = no')
+			newFacilityWin = window.open("facilityForm.html", "Facility Form", 'width = 400, height = 300, toolbar = yes, location = yes, directories = yes, status = yes, menubar = yes, scrollbars = yes, copyhistory = no, resizable = no')
 		}
 	</script>
 	<!-- Hiding the side menus -->
