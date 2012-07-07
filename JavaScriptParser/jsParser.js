@@ -4,7 +4,8 @@ function main(){
 	// var parser = new Parser("storagefacility.xml");
 	// var parsed_obj = parser.parse_obj();
 	// parser.print_obj();	
-	var parser = new Parser("C:\\Users\\Kevin\\Documents\\GitHub\\core\\src\\Core\\Models\\Facility\\SourceFacility\\SourceFacility.rng");
+	//var parser = new Parser("C:\\Users\\Kevin\\Documents\\GitHub\\core\\src\\Core\\Models\\Facility\\SourceFacility\\SourceFacility.rng");
+	var parser = new Parser("file:/home/scopatz/cyclus/src/Core/Models/Facility/SourceFacility/SourceFacility.rng");
 	parser.print_obj();
 }
 
