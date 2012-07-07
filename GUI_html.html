@@ -1,6 +1,6 @@
 <!DOCTYPE = HTML>
 <html lang="en">
-	<title> TESTING </title>
+	<title> Cycic GUI </title>
 <head>
 	<meta charset="utf-8"/>
 	<link rel="stylesheet" type ="text/css" href="GUI_css.css" />
@@ -10,8 +10,17 @@
 	<link rel="stylesheet" type ="text/css" href="timeline.css"/>
 	<!-- Stylesheet for custumization -->
 	<link rel="stylesheet" type ="text/css" href="style.css"/>
+	<!-- Stylesheet for sandbox -->
+	<link rel="stylesheet" type ="text/css" href="Sandbox.css"/>
 	<!--Google Fonts-->
 	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Dancing+Script|Antic+Slab"/>
+	<!--Bootstrap Pluggins
+	<link rel="stylesheet" href="./bootstrap/js/bootstrap.js">
+	<!--<link rel="stylesheet" href="./bootstrap/js/bootstrap.min.js">
+	<link rel="stylesheet" href="./bootstrap/css/bootstrap.css">
+	<!--<link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css">-->
+	<!--<link rel="stylesheet" href="./bootstrap/css/bootstrap-responsive.css">-->
+	<!--<link rel="stylesheet" href="./bootstrap/css/bootstrap-responsive.min.css">-->
 	<!--if IE 9-->
 	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"> </script>
 	<script src="http://d3js.org/d3.v2.js"> </script>
@@ -22,7 +31,6 @@
 </head>
 
 <body>
-	<script language= Javascript> var items = $("regions_type ul").length</script>
 	<!-- Banner Mark-up -->
 	<header id="banner">
 		<ul class="menu">
@@ -46,9 +54,6 @@
 		</ul>
 	</header>
 	<!-- Timeline Mark-up -->
-	<div id="timeline">
-		<!-- Timeline can place content here-->
-	</div>
 	<!-- Sidebar Wrapper Test -->
 	<div id="wrapper">
 		<ul class="sidebar_menu">
@@ -62,6 +67,8 @@
 			<li class="institution_type"><a href="#"> Institutions <span class = "total"> </span></a>
 				<ul>
 					<li class="institution"><a href="#"> Constellation Energy</a></li>
+					<li class="institution"><a href="#"> STP </a></li>
+					<li class="institution"><a href="#"> Blah Blah</a></li>
 					<li><a href="#"> Add New Institution </a></li>
 				</ul>
 			</li>
@@ -69,21 +76,33 @@
 				<ul>
 					<li><a href="#"> Add New Market</a></li>
 				</ul>
+			</li>
+			<li class="custom_facilities"><a href="#"> Custom Facilities <span class = "total"> </span></a>
+				<ul>
+					<li><a onClick="openNewFacility()"> Storage Facility </a></li>
+					<li><a href="#"> Add New Custom Facility </a></li>
+				</ul>
 			</li>		
 		</ul>
 		<ul class="facilities_menu">
-			<li>Facilities <a><span class = "total"> </span></a>
+			<li> Facility <a><span class = "total"> </span></a>
 				<ul>
 					<li><a href ="#"> Add New Facilitiy </a></li>
 				</ul>
 			</li>
 		</ul>
 	</div>
+	<div id ="sandbox">
+		
+	</div>
 	<!-- Number counters for sidebar -->
 	<script language=JavaScript>
 		$('ul li ul').each(function(){
 		  	$(this).prev('a').find('.total').append('<div>'+ ($(this).find('li').length - 1) +'</div>');
 		});
+		function openNewFacility(){
+			newFacilityWin = window.open("facilityForm.html", "Facility Form", 'width = 400, height = 300, toolbar = yes, location = yes, directories = yes, status = yes, menubar = yes, scrollbars = yes, copyhistory = no, resizable = no')
+		}
 	</script>
 	<!-- Hiding the side menus -->
 	<script type ="text/javascript">
@@ -97,7 +116,7 @@
 				e.preventDefault();
 				if(!$(this).hasClass('active')) {
 					menu_a.removeClass('active');
-					menu_ul.filter(':visible').slideUp('normal');
+					/*menu_ul.filter(':visible').slideUp('normal');*/
 					$(this).addClass('active').next().stop(true,true).slideDown('normal');
 				}
 				else{

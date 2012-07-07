@@ -59,11 +59,11 @@ body{background-color: #b0c4de;}
 	color: #f3f3f3;
 	text-shadow: 1px 1px 1px rgba(0,0,0,.6);
 	
-	-webkit-transition: color .5s ease-in-out;
-    -moz-transition: color .5s ease-in-out;
-    -o-transition: color .5s ease-in-out;
-    -ms-transition: color .5s ease-in-out;
-    transition: color .5s ease-in-out;
+	-webkit-transition: color .2s ease-in-out;
+    -moz-transition: color .2s ease-in-out;
+    -o-transition: color .2s ease-in-out;
+    -ms-transition: color .2s ease-in-out;
+    transition: color .2s ease-in-out;
 }
 .menu li:first-child a {border-left: none;}
 .menu li:first-child a{border-right:none;}
