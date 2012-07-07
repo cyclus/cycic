@@ -1,88 +1,73 @@
-main();
-
 function main(){
-	// var parser = new Parser("storagefacility.xml");
-	// var parsed_obj = parser.parse_obj();
-	// parser.print_obj();	
-	//var parser = new Parser("C:\\Users\\Kevin\\Documents\\GitHub\\core\\src\\Core\\Models\\Facility\\SourceFacility\\SourceFacility.rng");
-	var parser = new Parser("file:/home/scopatz/cyclus/src/Core/Models/Facility/SourceFacility/SourceFacility.rng");
-	parser.print_obj();
+	var parser = new Parser("storagefacility.xml");
+	//var parser = new Parser("sourcefacility.xml");
+  //var parser = new Parser("file:///home/scopatz/cyclus/src/Models/Facility/StorageFacility/StorageFacility.rng");
+  var parsed_obj = parser.parse_obj();
+  parser.print_obj();	
 }
 
+function mainGather(){
+  //gatherSchemas('/home/scopatz/cyclus')
+  gatherSchemas('../../cyclus')
+}
+
+
+
+function cycicXMLHttpRequest() {
+  if (window.XMLHttpRequest) {
+    var xhttp = new XMLHttpRequest()
+  }
+  else { // IE 5/6
+    var xhttp = new ActiveXObject("Microsoft.XMLHTTP")
+  }
+  return xhttp
+}
+
+//
+// Parser Class
+//
+
 function Parser(word){
-	var currentIndex = new Array();
-	jsObjName = new Array();
-	elementTrace = new Array();
+	this.currentIndex = new Array();
+	this.jsObjName = new Array();
+	this.elementTrace = new Array();
 	this.file = word;
+}
+
+Parser.prototype.speak = function() {
+  document.write(this.word);
+}
 	
-	this.speak = function() {
-		document.write(this.word);
-	}
-	
-	this.processJSON = function(){
-		if (window.XMLHttpRequest)
-		{
-			xhttp=new XMLHttpRequest();
-		}
-		else // IE 5/6
-		{
-			xhttp=new ActiveXObject("Microsoft.XMLHTTP");
-		}
-		xhttp.open("GET","dump.json",false);
-		xhttp.send();
-		xmlDoc=JSON.parse(xhttp.responseText); 
-		document.write(xmlDoc);
-		for (i=0; i<xmlDoc.length; i++){
-			this.file = xmlDoc[i];
-			this.print_obj();
-		}
-	}
-	
-	//Take XML and convert to JS object to be printed out.
-	this.parse_obj = function() {
-		if (window.XMLHttpRequest)
-		{
-			xhttp=new XMLHttpRequest();
-		}
-		else // IE 5/6
-		{
-			xhttp=new ActiveXObject("Microsoft.XMLHTTP");
-		}
-		xhttp.open("GET",this.file,false);
-		xhttp.send();
-		xmlDoc=xhttp.responseXML; 
-		
-		
-		var x = xmlDoc.childNodes[0].childNodes;
-			
-		//First, start looking for the main parent name by searching for the 'define' tag
-		for(n=0; n<x.length; n++){
-			//If found, start printing out the children
-			if (x[n].nodeName === 'define'){
-				var elements = x[n].childNodes[1].childNodes;
+//Take XML and convert to JS object to be printed out.
+Parser.prototype.parse_obj = function() {
+  var xhttp = cycicXMLHttpRequest()
+	xhttp.open("GET", this.file, false);
+  xhttp.send();
+  xmlDoc=xhttp.responseXML; 
+
+  var x = xmlDoc.childNodes[0].childNodes;
+
+  //First, start looking for the main parent name by searching for the 'define' tag
+  for(n=0; n<x.length; n++){
+    //If found, start printing out the children
+    if (x[n].nodeName === 'define'){
+		  var elements = x[n].childNodes[1].childNodes;
 							
-				jsObjName[x[n].childNodes[1].getAttribute('name')] = {};
-				jsObjName[x[n].childNodes[1].getAttribute('name')] = parseObject(elements);
-			}
-		}
-		return jsObjName; 
-	}
+      this.jsObjName[x[n].childNodes[1].getAttribute('name')] = {};
+      this.jsObjName[x[n].childNodes[1].getAttribute('name')] = this.parseObject(elements);
+	  }
+  }
+  return this.jsObjName; 
+}
 	
-	this.print_obj = function(){
-		if (window.XMLHttpRequest)
-		{
-			xhttp=new XMLHttpRequest();
-		}
-		else // IE 5/6
-		{
-			xhttp=new ActiveXObject("Microsoft.XMLHTTP");
-		}
+Parser.prototype.print_obj = function(){
+    var xhttp = cycicXMLHttpRequest()
 		xhttp.open("GET",this.file,false);
 		xhttp.send();
 		xmlDoc=xhttp.responseXML; 
 		
 		var x = xmlDoc.childNodes[0].childNodes;
-		//var currentIndex = new Array();
+		//var this.currentIndex = new Array();
 		
 		//First, start looking for the main parent name by searching for the 'define' tag
 		for(n=0; n<x.length; n++){
@@ -125,7 +110,7 @@ function Parser(word){
 							
 							document.write('\",&nbsp');
 							//Under each element name, print out all of its possible children
-							printChildren(elements[j].childNodes, 2);
+							this.printChildren(elements[j].childNodes, 2);
 							
 							if(j+3> elements.length){
 								document.write(']<br>');
@@ -144,8 +129,9 @@ function Parser(word){
 				document.write('] <br>');
 			}
 		}
-	}
-	function printChildren(a, spaceNumber, indexList){
+}
+
+Parser.prototype.printChildren = function(a, spaceNumber, indexList) {
 		var spaces = new Array();
 		for (i=0; i<a.length; i++){
 			//Extract only the element, not the text objects
@@ -157,20 +143,20 @@ function Parser(word){
 				if(currentElement.getAttribute('name') === null){
 					if(currentElement.getAttribute('type') === null){
 						document.write('<br>');
-						inputSpaces(spaceNumber + 1);						
+						this.inputSpaces(spaceNumber + 1);						
 						document.write('[\"' + currentElement.nodeName + '\",<br>');
 						//If it is a reference, mark it
-						inputSpaces(spaceNumber + 2);
+						this.inputSpaces(spaceNumber + 2);
 											
 						//Print all possible children of the tag
-						printChildren(currentElement.childNodes, spaceNumber + 2);
+						this.printChildren(currentElement.childNodes, spaceNumber + 2);
 						
 						
 						document.write(']<br>');
 						
-						inputSpaces(spaceNumber+1);
+						this.inputSpaces(spaceNumber+1);
 						document.write(']<br>');
-						inputSpaces(spaceNumber);
+						this.inputSpaces(spaceNumber);
 						continue;
 						//If everything is done, exit the for loop
 						if (i = a.length){
@@ -209,39 +195,39 @@ function Parser(word){
 				
 				//If the object has a 'type' attribute, print it
 				if(currentElement.getAttribute('type')){
-					document.write('\"'+currentElement.getAttribute('type') + '\"');
+					document.write('\"' + currentElement.getAttribute('type') + '\"');
 				}
-				//isRef(currentElement.nodeName);
+				//this.isRef(currentElement.nodeName);
 				//document.write('<br>');
 				if(currentElement.nodeName === 'ref'){
 					if(spaceNumber >3){
 						if(i + 3 > a.length){
 							document.write(',<br>');
-							inputSpaces(spaceNumber - 1);
+							this.inputSpaces(spaceNumber - 1);
 						}
 						else{
 						document.write(',<br>');
-						inputSpaces(spaceNumber);
+						this.inputSpaces(spaceNumber);
 						
 						}
 					}
 				}
 				
 				//Check for its children's children. If it exists, recursively call printChildren
-				if(hasChildren(currentElement)){
+				if(this.hasChildren(currentElement)){
 					//Push index into an array to keep track of
 					
 					if(currentElement.childNodes.length > 3){
 						document.write(',<br>');
-						inputSpaces(spaceNumber + 1);
+						this.inputSpaces(spaceNumber + 1);
 						
 						document.write('[<br>');
-						inputSpaces(spaceNumber + 2);
+						this.inputSpaces(spaceNumber + 2);
 						
-						currentIndex.push(i);
-						printChildren(currentElement.childNodes, spaceNumber + 2);
+						this.currentIndex.push(i);
+						this.printChildren(currentElement.childNodes, spaceNumber + 2);
 						
-						if(currentIndex[currentIndex.length -1] + 3 > a.length){
+						if(this.currentIndex[this.currentIndex.length -1] + 3 > a.length){
 							document.write(']<br>');
 							
 						}
@@ -250,21 +236,21 @@ function Parser(word){
 
 						}
 						
-						inputSpaces(spaceNumber );
+						this.inputSpaces(spaceNumber);
 						
 					}
 					else if(currentElement.childNodes.length === 3){
 						document.write(',');
-						currentIndex.push(i);
-						printChildren(currentElement.childNodes, spaceNumber + 1);
+						this.currentIndex.push(i);
+						this.printChildren(currentElement.childNodes, spaceNumber + 1);
 						
-						if(currentIndex[currentIndex.length -1] + 3 > a.length){
+						if(this.currentIndex[this.currentIndex.length -1] + 3 > a.length){
 							document.write(']<br>');
-							inputSpaces(spaceNumber - 1);
+							this.inputSpaces(spaceNumber - 1);
 						}
 						else{
 							document.write('],<br>');
-							inputSpaces(spaceNumber);
+							this.inputSpaces(spaceNumber);
 							
 						}
 					}
@@ -276,39 +262,40 @@ function Parser(word){
 					
 					//document.write(',');
 					//Pop out the most recent index
-					i = currentIndex.pop(i);
+					i = this.currentIndex.pop(i);
 					
 				}
 			
 								
 			}
 		}
-	}
+}
 
-	//Helper function used to determine if a node has children or not
-	function hasChildren(node){
+//Helper function used to determine if a node has children or not
+Parser.prototype.hasChildren = function(node) {
 		if(node.childNodes.length >= 1){
 			return true;
 		}
 		else{
 			return false;
 		}
-	}
+}
 
-	//Helper function used to print out 'num' amount of tabs for formatting purposes
-	function inputSpaces(num){
+//Helper function used to print out 'num' amount of tabs for formatting purposes
+Parser.prototype.inputSpaces = function(num) {
 		for(k=0; k < num; k ++){
 			document.write('&nbsp&nbsp&nbsp&nbsp');
 		}
-	}
+}
 
-	//Helper function to determine if the element is a reference or not
-	function isRef(nodeName){
+//Helper function to determine if the element is a reference or not
+Parser.prototype.isRef = function(nodeName){
 		if (nodeName === 'ref'){
 			document.write('**');
 		}
-	}
-	function parseObject(a){
+}
+
+Parser.prototype.parseObject = function(a){
 		var spaces = new Array();
 		result = {};
 		for (i=0; i<a.length; i++){
@@ -323,45 +310,45 @@ function Parser(word){
 					
 					//If the object has a 'name' attribute, print it
 					if(currentElement.getAttribute('name')){
-						currentIndex.push(i);
+						this.currentIndex.push(i);
 						
 						result[currentElement.getAttribute('name')] = {};						
-						elementTrace.push(result);
-						tempList = parseObject(currentElement.childNodes);
-						result = elementTrace.pop(result);
+						this.elementTrace.push(result);
+						tempList = this.parseObject(currentElement.childNodes);
+						result = this.elementTrace.pop(result);
 						result[currentElement.getAttribute('name')] = tempList;
 						
-						i = currentIndex.pop(i);
+						i = this.currentIndex.pop(i);
 						//jsChildName2.push(currentElement.getAttribute('name'));
 						//document.write('\"'+ currentElement.getAttribute('name') + '\"');
 					}
 					
 					//If the object has a 'type' attribute, print it
 					else if(currentElement.getAttribute('type')){
-						currentIndex.push(i);	
+						this.currentIndex.push(i);	
 						
 						result[currentElement.getAttribute('type')] = {};
-						elementTrace.push(result);
-						tempList = parseObject(currentElement.childNodes);
-						result = elementTrace.pop(result);
+						this.elementTrace.push(result);
+						tempList = this.parseObject(currentElement.childNodes);
+						result = this.elementTrace.pop(result);
 						result[currentElement.getAttribute('type')] = tempList;
 						
-						i = currentIndex.pop(i);
+						i = this.currentIndex.pop(i);
 						//jsChildName2.push(currentElement.getAttribute('type'));
 						//document.write('\"'+currentElement.getAttribute('type') + '\"');
 					}
 					else if(currentElement.getAttribute('name') === null){
 						if(currentElement.getAttribute('type') === null){
 
-							currentIndex.push(i);	
+							this.currentIndex.push(i);	
 							
 							result[currentElement.nodeName] = {};
-							elementTrace.push(result);
-							tempList = parseObject(currentElement.childNodes);
-							result = elementTrace.pop(result);
+							this.elementTrace.push(result);
+							tempList = this.parseObject(currentElement.childNodes);
+							result = this.elementTrace.pop(result);
 							result[currentElement.nodeName] = tempList;
 						
-							i = currentIndex.pop(i);
+							i = this.currentIndex.pop(i);
 							//parseObject(currentElement.childNodes, spaceNumber + 2);
 							
 							
@@ -371,25 +358,72 @@ function Parser(word){
 					
 					//Check for its children's children. If it exists, recursively call parseObject
 					continue;
-					if(hasChildren(currentElement)){
+					if(this.hasChildren(currentElement)){
 						//Push index into an array to keep track of
-						currentIndex.push(i);				
+						this.currentIndex.push(i);				
 						//Print out the children's children
 						
 						jsChildName2.push(tempArray);
 						jsChildName2 = jsChildName2[count];
 						count++;
-						parseObject(currentElement.childNodes, tempArray);
+						this.parseObject(currentElement.childNodes, tempArray);
 						//Pop out the most recent index
-						i = currentIndex.pop(i);
+						i = this.currentIndex.pop(i);
 					}
 				}
 			}
 		}
 		return result;
-	}
-
 }
+	
+
+
+
+function gatherSchemas(cyclusPath){
+  // Default arguments
+  cyclusPath = typeof cyclusPath !== 'undefined' ? cyclusPath : ''
+  if (cyclusPath == ''){
+    console.error("cyclusPath is empty")
+  }
+
+  // local vars
+  var i = 0
+  var parser = null
+  var schemas = {}
+  var rngRelPath = ""
+  var rngFullPath = ""
+  var reFac = /eFacility/
+
+  // get the list of all rng files and parse them
+  var xhttp = cycicXMLHttpRequest();
+  xhttp.open("GET", "rngdump.json", false)
+  xhttp.send()
+  var rngPaths = JSON.parse(xhttp.responseText)
+  document.write(typeof(rngPaths) + "<br/>")
+  document.write(Object.prototype.toString.call(rngPaths) + "<br/>")
+  for (i in rngPaths) {
+    rngRelPath = rngPaths[i]
+    rngFullPath = cyclusPath + '/' + rngRelPath
+    //parser = new Parser(rngFullPath)
+    //schemas[rngRelPath] = parser.parse_obj()
+    if (rngRelPath.match(reFac) !== null) {
+      schemas[rngRelPath] = new Parser(rngFullPath)
+    }
+  }
+
+  for (s in schemas) {
+    document.write(s + ":  " + "<br/>")
+    parsed_obj = schemas[s].parse_obj()
+    
+    //schemas[s].print_obj()
+  }
+  return schemas
+}
+
+main();
+//mainGather();
+
+
 //MENTAL NOTES TO SELF
 
 //xmlDoc.childNodes[0].nodeName -- 'grammer'
@@ -408,3 +442,6 @@ document.write(xmlDoc.getElementsByTagName('element')[1].childNodes[1].nodeName)
 //prints inrecipt.. why
 document.write(xmlDoc.getElementsByTagName('element')[1].childNodes[1].nextSibling.nextSibling.getAttribute('name'));
 **/
+
+
+
