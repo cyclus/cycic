@@ -14,7 +14,7 @@
 	<link rel="stylesheet" type ="text/css" href="Sandbox.css"/>
 	<!--Google Fonts-->
 	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Dancing+Script|Antic+Slab"/>
-	<!--Bootstrap Pluggins
+	<!--Bootstrap Pluggins: Not currently in use. Mayhaps in the future.
 	<link rel="stylesheet" href="./bootstrap/js/bootstrap.js">
 	<!--<link rel="stylesheet" href="./bootstrap/js/bootstrap.min.js">
 	<link rel="stylesheet" href="./bootstrap/css/bootstrap.css">
@@ -53,7 +53,16 @@
 			</li>
 		</ul>
 	</header>
+	
+	<!-- Banner 2 Mark-up -->
+	<header id="banner2">
+		<ul class="menu2">
+			<li class ="active"><a href="#">New Facility Type</a></li>
+		</ul>
+	</header>
+	
 	<!-- Timeline Mark-up -->
+	
 	<!-- Sidebar Wrapper Test -->
 	<div id="wrapper">
 		<ul class="sidebar_menu">
@@ -79,10 +88,10 @@
 			</li>
 			<li class="custom_facilities"><a href="#"> Custom Facilities <span class = "total"> </span></a>
 				<ul>
-					<li><a onClick="openNewFacility()"> Storage Facility </a></li>
+					<li><a style ="cursor:hand; cursor:pointer" onClick ="openNewFacility()"> Storage Facility </a></li>
 					<li><a href="#"> Add New Custom Facility </a></li>
 				</ul>
-			</li>		
+			</li>
 		</ul>
 		<ul class="facilities_menu">
 			<li> Facility <a><span class = "total"> </span></a>
@@ -93,8 +102,14 @@
 		</ul>
 	</div>
 	<div id ="sandbox">
-		
+		Shannon is awesome.
 	</div>
+	
+	<!-- New Custom Facility Button -->
+	<script language=JavaScript>
+		
+	</script>
+	
 	<!-- Number counters for sidebar -->
 	<script language=JavaScript>
 		$('ul li ul').each(function(){
@@ -104,6 +119,7 @@
 			newFacilityWin = window.open("facilityForm.html", "Facility Form", 'width = 400, height = 300, toolbar = yes, location = yes, directories = yes, status = yes, menubar = yes, scrollbars = yes, copyhistory = no, resizable = no')
 		}
 	</script>
+	
 	<!-- Hiding the side menus -->
 	<script type ="text/javascript">
 		$(function(){

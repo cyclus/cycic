@@ -26,7 +26,7 @@ ul, ul ul {
 	border: 1px solid #4C4E5A;
 	float: left;
 }
-/*.sidebar_menu {
+.sidebar_menu {
 	width: auto;
 	height: auto;
 	-webkit-box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.73), 0px 0px 18px 0px rgba(0,0,0,0.13);
@@ -34,7 +34,7 @@ ul, ul ul {
 	-o-box-shadow: 0px 1px 3px 0px rgba(0,0,0,.73), 0px 0px 18px 0px rgba(0,0,0,.13);
 	-ms-box-shadow: 0px 1px 3px 0px rgba(0,0,0,.73), 0px 0px 18px 0px rgba(0,0,0,.13);
     box-shadow: 0px 1px 3px 0px rgba(0,0,0,.73), 0px 0px 18px 0px rgba(0,0,0,.13);
-}*/
+}*
 .sidebar_menu li a {
 	background-color: #AAAAAA;
     border: #33373d;   
