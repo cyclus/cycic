@@ -3,7 +3,10 @@
 	<title> Cycic GUI </title>
 <head>
 	<meta charset="utf-8"/>
-	<link rel="stylesheet" type ="text/css" href="GUI_css.css" />
+	<!-- Banner Style Sheet -->
+	<link rel="stylesheet" type ="text/css" href="banner.css" />
+	<!-- Banner 2 Style Sheet -->
+	<link rel="stylesheet" type ="text/css" href="banner2.css" />
 	<!-- Sidebar Style Sheet -->
 	<link rel="stylesheet" type ="text/css" href="sidebar.css" />
 	<!-- Timeline Style Steet -->
@@ -54,12 +57,12 @@
 		</ul>
 	</header>
 	
-	<!-- Banner 2 Mark-up -->
+	<!-- Banner 2 Mark-up
 	<header id="banner2">
-		<ul class="menu2">
+		<ul class="menu_2">
 			<li class ="active"><a href="#">New Facility Type</a></li>
 		</ul>
-	</header>
+	</header> -->
 	
 	<!-- Timeline Mark-up -->
 	
@@ -68,8 +71,17 @@
 		<ul class="sidebar_menu">
 			<li class="regions_type"><a href="#"> Regions <span class = "total" > </span></a>
 				<ul>
-					<li class="region"><a href="#"> United States </a></li>
-					<li class="region"><a href="#"> Country of Texas </a></li>
+					<li class="region"><a href="#"> United States </a>
+						<ul>
+							<li><a> Testing Facility </a></li>
+						</ul>
+					</li>
+					<li class="region"><a href="#"> Country of Texas </a>
+						<ul>
+							<li><a> Testing Facility 2 </a></li>
+							<li><a> Testing Facility 3 </a></li>
+						</ul>
+					</li>	
 					<li><a href="#"> Add New Region </a></li>
 				</ul>
 			</li>
@@ -88,7 +100,7 @@
 			</li>
 			<li class="custom_facilities"><a href="#"> Custom Facilities <span class = "total"> </span></a>
 				<ul>
-					<li><a style ="cursor:hand; cursor:pointer" onClick ="openNewFacility()"> Storage Facility </a></li>
+					<li><a style ="cursor:hand; cursor:pointer" onClick = "openNewFacility()"> Storage Facility </a></li>
 					<li><a href="#"> Add New Custom Facility </a></li>
 				</ul>
 			</li>
@@ -96,13 +108,14 @@
 		<ul class="facilities_menu">
 			<li> Facility <a><span class = "total"> </span></a>
 				<ul>
-					<li><a href ="#"> Add New Facilitiy </a></li>
+					<li><a href ="#"> Add New Facility </a></li>
 				</ul>
 			</li>
 		</ul>
 	</div>
+	<!-- Sandbox Javascript -->
 	<div id ="sandbox">
-		Shannon is awesome.
+		
 	</div>
 	
 	<!-- New Custom Facility Button -->
@@ -113,7 +126,7 @@
 	<!-- Number counters for sidebar -->
 	<script language=JavaScript>
 		$('ul li ul').each(function(){
-		  	$(this).prev('a').find('.total').append('<div>'+ ($(this).find('li').length - 1) +'</div>');
+		  	$(this).prev('a').find('.total').append('<div>'+ ($(this).find('li').length - $(this).find('li > ul > li').length - 1) +'</div>');
 		});
 		function openNewFacility(){
 			newFacilityWin = window.open("facilityForm.html", "Facility Form", 'width = 400, height = 300, toolbar = yes, location = yes, directories = yes, status = yes, menubar = yes, scrollbars = yes, copyhistory = no, resizable = no')
@@ -141,6 +154,35 @@
 				}
 			});
 		});
+		
+		$(function(){
+			var menu_ul_1 = $('.sidebar_menu > li > ul > li > ul'),
+				menu_a_1 = $('.sidebar_menu > li > ul > li > a');
+			
+			menu_ul_1.hide();
+			
+			menu_a_1.click(function(e){
+				e.preventDefault();
+				if(!$(this).hasClass('active1')) {
+					menu_a_1.removeClass('active1');
+					/*menu_ul.filter(':visible').slideUp('normal');*/
+					$(this).addClass('active1').next().stop(true,true).slideDown('normal');
+					$(this).closest('li').addClass('active_test');
+					$('.active_test > ul > li').clone().prependTo($('.facilities_menu > li > ul'));	
+				}
+				else{
+					$(this).removeClass('active1');
+					$(this).closest('li').removeClass('active_test');
+					$(this).next().stop(true,true).slideUp('normal');
+					document.getElementById('wrapper').style.display = 'none';
+					$('').replaceAll('.facilities_menu > li > ul > li');
+					$('.facilities_menu > li > ul').append('<li><a href = "#"> Add New Facility </a></li>');					
+					document.getElementById('wrapper').style.display = 'block';
+				}
+					
+			});	
+		});
 	</script>
+	
 </body>
 </html>
