@@ -1,9 +1,9 @@
 function main(){
-	var parser = new Parser("storagefacility.xml");
+	var parser = new Parser("recipereactor.xml");
 	//var parser = new Parser("sourcefacility.xml");
   //var parser = new Parser("file:///home/scopatz/cyclus/src/Models/Facility/StorageFacility/StorageFacility.rng");
   var parsed_obj = parser.parse_obj();
-  parser.print_obj();	
+  parser.printObject(parsed_obj, 0, false);	
 }
 
 function mainGather(){
@@ -272,13 +272,14 @@ Parser.prototype.printChildren = function(a, spaceNumber, indexList) {
 }
 
 //Helper function used to determine if a node has children or not
-Parser.prototype.hasChildren = function(node) {
-		if(node.childNodes.length >= 1){
-			return true;
+Parser.prototype.getChildrenNum = function(node) {
+		var count = 0;
+		for (var key in node){
+			if (key) {
+				count++;
+			}
 		}
-		else{
-			return false;
-		}
+		return count;
 }
 
 //Helper function used to print out 'num' amount of tabs for formatting purposes
@@ -358,6 +359,7 @@ Parser.prototype.parseObject = function(a){
 					
 					//Check for its children's children. If it exists, recursively call parseObject
 					continue;
+					/**
 					if(this.hasChildren(currentElement)){
 						//Push index into an array to keep track of
 						this.currentIndex.push(i);				
@@ -369,14 +371,89 @@ Parser.prototype.parseObject = function(a){
 						this.parseObject(currentElement.childNodes, tempArray);
 						//Pop out the most recent index
 						i = this.currentIndex.pop(i);
-					}
+					}**/
 				}
 			}
 		}
 		return result;
 }
 	
-
+Parser.prototype.getLength = function(object) {
+	var length = 0;
+	for (var key in object){
+		length++;
+	}
+	return length;
+}
+	
+Parser.prototype.printObject = function(parsed_object, spaces, justCheck) {
+	var count = 0;
+	if (justCheck == false){
+		for (var key in parsed_object) {
+			count++;
+			if(this.getChildrenNum(parsed_object[key]) > 1){
+				document.write("[" + key + ",<br>");
+				this.inputSpaces(spaces + 1);
+				document.write("[<br>");
+				this.inputSpaces(spaces + 2);
+				this.printObject(parsed_object[key], spaces + 2, false);
+				this.inputSpaces(spaces + 1);
+				document.write("]<br>");
+				//this.inputSpaces(spaces);
+				this.inputSpaces(spaces);
+				document.write("]<br>");
+				
+			}
+			else if (this.getChildrenNum(parsed_object[key]) == 1){
+				//document.write("[" + key + ", " + this.printObject(parsed_object[key], spaces, true) + "],<br>");
+				
+				document.write("[" + key + ", ");
+				length = this.getLength(parsed_object);
+				tempKey = this.printObject(parsed_object[key], spaces, true);
+				if (this.getChildrenNum(parsed_object[key][tempKey]) == 0){
+					document.write(this.printObject(parsed_object[key], spaces, true));
+					if(count == length){
+						document.write("]<br>");
+						//this.inputSpaces(spaces - 2);
+					}
+					else{
+						document.write("],<br>");
+						this.inputSpaces(spaces);
+					}
+				}
+				else {
+					document.write("<br>");
+					this.inputSpaces(spaces +1);
+					this.printObject(parsed_object[key], spaces + 1, false);
+					this.inputSpaces(spaces);
+					document.write("]<br>");
+					//this.inputSpaces(spaces);
+				}
+				
+			}
+			//TODO: Check if this is the last element in the object; don't add a comma if so
+			else if (this.getChildrenNum(parsed_object[key]) == 0){
+				length = this.getLength(parsed_object);
+				if (count == length) {
+					document.write(key + "<br>");
+				}
+				else {
+					document.write(key + ",<br>");
+					this.inputSpaces(spaces);
+				}
+			}
+		}	
+		
+	}
+	else {
+		var att = "";
+		for (var key in parsed_object) {
+			att = key;
+		}
+		return att;
+	}
+	
+}
 
 
 function gatherSchemas(cyclusPath){
