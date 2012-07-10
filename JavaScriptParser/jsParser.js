@@ -1,9 +1,9 @@
 function main(){
-	var parser = new Parser("recipereactor.xml");
+	var parser = new Parser("storagefacility.xml");
 	//var parser = new Parser("sourcefacility.xml");
   //var parser = new Parser("file:///home/scopatz/cyclus/src/Models/Facility/StorageFacility/StorageFacility.rng");
   var parsed_obj = parser.parse_obj();
-  parser.printObject(parsed_obj, 0, false);	
+  parser.printObject(parsed_obj, 0);	
 }
 
 function mainGather(){
@@ -60,242 +60,6 @@ Parser.prototype.parse_obj = function() {
   return this.jsObjName; 
 }
 	
-Parser.prototype.print_obj = function(){
-    var xhttp = cycicXMLHttpRequest()
-		xhttp.open("GET",this.file,false);
-		xhttp.send();
-		xmlDoc=xhttp.responseXML; 
-		
-		var x = xmlDoc.childNodes[0].childNodes;
-		//var this.currentIndex = new Array();
-		
-		//First, start looking for the main parent name by searching for the 'define' tag
-		for(n=0; n<x.length; n++){
-			//If found, start printing out the children
-			if (x[n].nodeName === 'define'){
-				var elements = x[n].childNodes[1].childNodes;
-				document.write("[\"" + x[n].childNodes[1].getAttribute('name') + '\",<br>');
-
-				if(x[n].childNodes[1].childNodes.length > 3){
-					document.write('&nbsp&nbsp&nbsp&nbsp[<br>');
-				}
-
-				for(j=0; j<elements.length; j++){
-					//Find all valid elements that need to be printed
-					if(elements[j].nodeName != '#text'){
-						if(elements[j].nodeName != '#comment'){
-							//If it is just a tag, print out the node name
-							if(elements[j].getAttribute('name') === null){
-								document.write('&nbsp&nbsp&nbsp&nbsp'+'&nbsp&nbsp&nbsp&nbsp'+'[\"'+elements[j].nodeName);
-								
-								
-							}
-							//If it is an element, then print its name
-							else{
-								if(elements[j].nodeName === 'ref'){
-									document.write('&nbsp&nbsp&nbsp&nbsp'+'&nbsp&nbsp&nbsp&nbsp'+'\"'+elements[j].getAttribute('name') + '\"');
-									document.write(',<br>');
-									
-									continue;
-								}
-								else{
-									document.write('&nbsp&nbsp&nbsp&nbsp'+'&nbsp&nbsp&nbsp&nbsp'+'[\"'+elements[j].getAttribute('name'));
-									
-									
-								}
-							}
-							
-							//Does it have a ref tag? If so, we need to mark it to let everyone know
-							//that this is just a temporary reference
-							
-							document.write('\",&nbsp');
-							//Under each element name, print out all of its possible children
-							this.printChildren(elements[j].childNodes, 2);
-							
-							if(j+3> elements.length){
-								document.write(']<br>');
-							}
-							else{
-								document.write('],<br>');
-							}
-							
-							
-						}
-					}
-				}
-				if(x[n].childNodes[1].childNodes.length > 3){
-					document.write('&nbsp&nbsp&nbsp&nbsp]<br>');
-				}
-				document.write('] <br>');
-			}
-		}
-}
-
-Parser.prototype.printChildren = function(a, spaceNumber, indexList) {
-		var spaces = new Array();
-		for (i=0; i<a.length; i++){
-			//Extract only the element, not the text objects
-			if(a[i].nodeName != '#text'){
-				var currentElement = a[i];
-				//Input appropriate amount of spaces to format output
-								
-				//If the child is a tag, print out just its children since it has no 'name' or 'type' attribute
-				if(currentElement.getAttribute('name') === null){
-					if(currentElement.getAttribute('type') === null){
-						document.write('<br>');
-						this.inputSpaces(spaceNumber + 1);						
-						document.write('[\"' + currentElement.nodeName + '\",<br>');
-						//If it is a reference, mark it
-						this.inputSpaces(spaceNumber + 2);
-											
-						//Print all possible children of the tag
-						this.printChildren(currentElement.childNodes, spaceNumber + 2);
-						
-						
-						document.write(']<br>');
-						
-						this.inputSpaces(spaceNumber+1);
-						document.write(']<br>');
-						this.inputSpaces(spaceNumber);
-						continue;
-						//If everything is done, exit the for loop
-						if (i = a.length){
-							break;
-						}	
-						continue;
-					}
-					
-				}
-				
-				//If the object has a 'name' attribute, print it
-				if(currentElement.getAttribute('name')){
-					if(i+ 3 > a.length){
-						if(spaceNumber > 3){
-							if(currentElement.nodeName != 'ref'){
-								document.write('[\"'+ currentElement.getAttribute('name') + '\"');
-							}
-							else{
-								document.write('\"'+ currentElement.getAttribute('name') + '\"');
-							}
-						}
-						else{
-							document.write('\"'+ currentElement.getAttribute('name') + '\"');
-						}
-					}
-					else{
-						if(currentElement.nodeName === 'ref'){
-							document.write('\"'+ currentElement.getAttribute('name') + '\"');
-						}
-						else{
-							document.write('[\"'+ currentElement.getAttribute('name') + '\"');
-						}
-					}
-					//document.write('\"'+ currentElement.getAttribute('name') + '\"');
-				}
-				
-				//If the object has a 'type' attribute, print it
-				if(currentElement.getAttribute('type')){
-					document.write('\"' + currentElement.getAttribute('type') + '\"');
-				}
-				//this.isRef(currentElement.nodeName);
-				//document.write('<br>');
-				if(currentElement.nodeName === 'ref'){
-					if(spaceNumber >3){
-						if(i + 3 > a.length){
-							document.write(',<br>');
-							this.inputSpaces(spaceNumber - 1);
-						}
-						else{
-						document.write(',<br>');
-						this.inputSpaces(spaceNumber);
-						
-						}
-					}
-				}
-				
-				//Check for its children's children. If it exists, recursively call printChildren
-				if(this.hasChildren(currentElement)){
-					//Push index into an array to keep track of
-					
-					if(currentElement.childNodes.length > 3){
-						document.write(',<br>');
-						this.inputSpaces(spaceNumber + 1);
-						
-						document.write('[<br>');
-						this.inputSpaces(spaceNumber + 2);
-						
-						this.currentIndex.push(i);
-						this.printChildren(currentElement.childNodes, spaceNumber + 2);
-						
-						if(this.currentIndex[this.currentIndex.length -1] + 3 > a.length){
-							document.write(']<br>');
-							
-						}
-						else{
-							document.write('],<br>');
-
-						}
-						
-						this.inputSpaces(spaceNumber);
-						
-					}
-					else if(currentElement.childNodes.length === 3){
-						document.write(',');
-						this.currentIndex.push(i);
-						this.printChildren(currentElement.childNodes, spaceNumber + 1);
-						
-						if(this.currentIndex[this.currentIndex.length -1] + 3 > a.length){
-							document.write(']<br>');
-							this.inputSpaces(spaceNumber - 1);
-						}
-						else{
-							document.write('],<br>');
-							this.inputSpaces(spaceNumber);
-							
-						}
-					}
-					
-					
-					//Print out the children's children
-				
-					//printChildren(currentElement.childNodes, spaceNumber + 1);
-					
-					//document.write(',');
-					//Pop out the most recent index
-					i = this.currentIndex.pop(i);
-					
-				}
-			
-								
-			}
-		}
-}
-
-//Helper function used to determine if a node has children or not
-Parser.prototype.getChildrenNum = function(node) {
-		var count = 0;
-		for (var key in node){
-			if (key) {
-				count++;
-			}
-		}
-		return count;
-}
-
-//Helper function used to print out 'num' amount of tabs for formatting purposes
-Parser.prototype.inputSpaces = function(num) {
-		for(k=0; k < num; k ++){
-			document.write('&nbsp&nbsp&nbsp&nbsp');
-		}
-}
-
-//Helper function to determine if the element is a reference or not
-Parser.prototype.isRef = function(nodeName){
-		if (nodeName === 'ref'){
-			document.write('**');
-		}
-}
-
 Parser.prototype.parseObject = function(a){
 		var spaces = new Array();
 		result = {};
@@ -304,11 +68,6 @@ Parser.prototype.parseObject = function(a){
 			if(a[i].nodeName != '#text'){
 				if(a[i].nodeName != '#comment'){
 					var currentElement = a[i];
-					//Input appropriate amount of spaces to format output
-					
-					//If the child is a tag, print out just its children since it has no 'name' or 'type' attribute
-					
-					
 					//If the object has a 'name' attribute, print it
 					if(currentElement.getAttribute('name')){
 						this.currentIndex.push(i);
@@ -351,33 +110,79 @@ Parser.prototype.parseObject = function(a){
 						
 							i = this.currentIndex.pop(i);
 							//parseObject(currentElement.childNodes, spaceNumber + 2);
-							
-							
 						}
-						
 					}
-					
-					//Check for its children's children. If it exists, recursively call parseObject
-					continue;
-					/**
-					if(this.hasChildren(currentElement)){
-						//Push index into an array to keep track of
-						this.currentIndex.push(i);				
-						//Print out the children's children
-						
-						jsChildName2.push(tempArray);
-						jsChildName2 = jsChildName2[count];
-						count++;
-						this.parseObject(currentElement.childNodes, tempArray);
-						//Pop out the most recent index
-						i = this.currentIndex.pop(i);
-					}**/
 				}
 			}
 		}
 		return result;
 }
 	
+//Function used to recursively print the JS object
+Parser.prototype.printObject = function(parsed_object, spaces) {
+	var count = 0;
+	//Loop through each element in the object
+	for (var key in parsed_object) {
+		//Keep track of the current index
+		count++;
+		//If the element has more than one child, print out the parent,
+		//the children and its children
+		if(this.getChildrenNum(parsed_object[key]) > 1){
+			document.write("[" + key + ",<br>");
+			this.inputSpaces(spaces + 1);
+			document.write("[<br>");
+			this.inputSpaces(spaces + 2);
+			this.printObject(parsed_object[key], spaces + 2);
+			this.inputSpaces(spaces + 1);
+			document.write("]<br>");
+			this.inputSpaces(spaces);
+			document.write("]<br>");
+		}
+		//If the element has exactly one child, print out the parent and its
+		//single child
+		else if (this.getChildrenNum(parsed_object[key]) == 1){
+			document.write("[" + key + ", ");
+			length = this.getLength(parsed_object);
+			tempKey = this.getKey(parsed_object[key]);
+			//If the parent's child has no children, just print out the child with
+			//closing brackets
+			if (this.getChildrenNum(parsed_object[key][tempKey]) == 0){
+				document.write(this.getKey(parsed_object[key]));
+				//Check if we are at the last element
+				if(count == length){
+					document.write("]<br>");
+				}
+				else{
+					document.write("],<br>");
+					this.inputSpaces(spaces);
+				}
+			}
+			//If the parent's child has children, print out everything and print the
+			//children's children
+			else {
+				document.write("<br>");
+				this.inputSpaces(spaces +1);
+				this.printObject(parsed_object[key], spaces + 1);
+				this.inputSpaces(spaces);
+				document.write("]<br>");
+			}
+		}
+		//If the parent has no child, it is a ref, so just print out the parent
+		else if (this.getChildrenNum(parsed_object[key]) == 0){
+			length = this.getLength(parsed_object);
+			//If it is the last element, print just a newline
+			if (count == length) {
+				document.write(key + "<br>");
+			}
+			else {
+				document.write(key + ",<br>");
+				this.inputSpaces(spaces);
+			}
+		}
+	}	
+}
+
+//Helper function used to get the length of the elements within a parent
 Parser.prototype.getLength = function(object) {
 	var length = 0;
 	for (var key in object){
@@ -385,75 +190,42 @@ Parser.prototype.getLength = function(object) {
 	}
 	return length;
 }
-	
-Parser.prototype.printObject = function(parsed_object, spaces, justCheck) {
-	var count = 0;
-	if (justCheck == false){
-		for (var key in parsed_object) {
-			count++;
-			if(this.getChildrenNum(parsed_object[key]) > 1){
-				document.write("[" + key + ",<br>");
-				this.inputSpaces(spaces + 1);
-				document.write("[<br>");
-				this.inputSpaces(spaces + 2);
-				this.printObject(parsed_object[key], spaces + 2, false);
-				this.inputSpaces(spaces + 1);
-				document.write("]<br>");
-				//this.inputSpaces(spaces);
-				this.inputSpaces(spaces);
-				document.write("]<br>");
-				
-			}
-			else if (this.getChildrenNum(parsed_object[key]) == 1){
-				//document.write("[" + key + ", " + this.printObject(parsed_object[key], spaces, true) + "],<br>");
-				
-				document.write("[" + key + ", ");
-				length = this.getLength(parsed_object);
-				tempKey = this.printObject(parsed_object[key], spaces, true);
-				if (this.getChildrenNum(parsed_object[key][tempKey]) == 0){
-					document.write(this.printObject(parsed_object[key], spaces, true));
-					if(count == length){
-						document.write("]<br>");
-						//this.inputSpaces(spaces - 2);
-					}
-					else{
-						document.write("],<br>");
-						this.inputSpaces(spaces);
-					}
-				}
-				else {
-					document.write("<br>");
-					this.inputSpaces(spaces +1);
-					this.printObject(parsed_object[key], spaces + 1, false);
-					this.inputSpaces(spaces);
-					document.write("]<br>");
-					//this.inputSpaces(spaces);
-				}
-				
-			}
-			//TODO: Check if this is the last element in the object; don't add a comma if so
-			else if (this.getChildrenNum(parsed_object[key]) == 0){
-				length = this.getLength(parsed_object);
-				if (count == length) {
-					document.write(key + "<br>");
-				}
-				else {
-					document.write(key + ",<br>");
-					this.inputSpaces(spaces);
-				}
-			}
-		}	
-		
+
+//Helper function used to get the key value in an object
+//Only used when we know that the parent has just one child
+Parser.prototype.getKey = function(object) {
+	var att = "";
+	for (var key in object) {
+		att = key;
 	}
-	else {
-		var att = "";
-		for (var key in parsed_object) {
-			att = key;
-		}
-		return att;
-	}
-	
+	return att;
 }
+
+//Helper function used to determine the number of children in a node
+Parser.prototype.getChildrenNum = function(node) {
+		var count = 0;
+		for (var key in node){
+			if (key) {
+				count++;
+			}
+		}
+		return count;
+}
+
+//Helper function used to print out 'num' amount of tabs for formatting purposes
+Parser.prototype.inputSpaces = function(num) {
+		for(k=0; k < num; k ++){
+			document.write('&nbsp&nbsp&nbsp&nbsp');
+		}
+}
+
+//Helper function to determine if the element is a reference or not
+Parser.prototype.isRef = function(nodeName){
+		if (nodeName === 'ref'){
+			document.write('**');
+		}
+}
+
 
 
 function gatherSchemas(cyclusPath){
