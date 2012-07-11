@@ -128,7 +128,7 @@ Parser.prototype.printObject = function(parsed_object, spaces) {
 		//If the element has more than one child, print out the parent,
 		//the children and its children
 		if(this.getChildrenNum(parsed_object[key]) > 1){
-			document.write("[" + key + ",<br>");
+			document.write("[\"" + key + "\",<br>");
 			this.inputSpaces(spaces + 1);
 			document.write("[<br>");
 			this.inputSpaces(spaces + 2);
@@ -141,13 +141,13 @@ Parser.prototype.printObject = function(parsed_object, spaces) {
 		//If the element has exactly one child, print out the parent and its
 		//single child
 		else if (this.getChildrenNum(parsed_object[key]) == 1){
-			document.write("[" + key + ", ");
+			document.write("[\"" + key + "\", ");
 			length = this.getLength(parsed_object);
 			tempKey = this.getKey(parsed_object[key]);
 			//If the parent's child has no children, just print out the child with
 			//closing brackets
 			if (this.getChildrenNum(parsed_object[key][tempKey]) == 0){
-				document.write(this.getKey(parsed_object[key]));
+				document.write("\"" + this.getKey(parsed_object[key]) + "\"");
 				//Check if we are at the last element
 				if(count == length){
 					document.write("]<br>");
@@ -172,10 +172,10 @@ Parser.prototype.printObject = function(parsed_object, spaces) {
 			length = this.getLength(parsed_object);
 			//If it is the last element, print just a newline
 			if (count == length) {
-				document.write(key + "<br>");
+				document.write("\"" + key + "\"<br>");
 			}
 			else {
-				document.write(key + ",<br>");
+				document.write("\"" + key + "\",<br>");
 				this.inputSpaces(spaces);
 			}
 		}
