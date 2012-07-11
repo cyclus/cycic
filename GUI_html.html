@@ -31,6 +31,9 @@
 	<script src="http://code.jquery.com/jquery-1.7.1.min.js"> </script>
 	<script src="timeline-start.js"> </script>
 	<script src="script.js"> </script>
+	<!-- Kinetic Plug In -->
+	<script src="http://www.html5canvastutorials.com/libraries/kinetic-v3.10.3.js"> </script>
+	
 </head>
 
 <body>
@@ -100,28 +103,42 @@
 			</li>
 			<li class="custom_facilities"><a href="#"> Custom Facilities <span class = "total"> </span></a>
 				<ul>
-					<li><a style ="cursor:hand; cursor:pointer" onClick = "openFacilityForm()"> Storage Facility </a></li>
-					<li><a href="#"> Add New Custom Facility </a></li>
+					<li class = "storage facility"><a style ="cursor:hand; cursor:pointer" onClick = "openFacilityForm()" > Storage Facility </a></li>
+					<li><a> Add New Custom Facility </a></li>
 				</ul>
 			</li>
 		</ul>
 		<ul class="facilities_menu">
-			<li> Facility <a><span class = "total"> </span></a>
+			<li><a> Facility <span class = "total"> </span></a>
 				<ul>
-					<li><a href ="#"> Add New Facility </a></li>
+					<li><a style ="cursor:hand; cursor:pointer" onClick = "newFacilityForm()"> Add New Facility </a></li>
 				</ul>
 			</li>
 		</ul>
 	</div>
-	<!-- Sandbox Javascript -->
+	<!-- Sandbox Div -->
 	<div id ="sandbox">
 		<div id ="sandbox_1">
 			<p align = "center">Form Information Here, maybe? </p>
-			<form id = "region_form">
+			<form id = "sandbox_form">
 				
 			</form>
 		</div>
 		<div id = "sandbox_2">
+			<p align = "center">Blah Blah</p>
+			<p align = "center">Blah Blah</p>
+			<p align = "center">Blah Blah</p>
+			<p align = "center">Blah Blah</p>
+			<p align = "center">Blah Blah</p>
+			<p align = "center">Blah Blah</p>
+			<p align = "center">Blah Blah</p>
+			<p align = "center">Blah Blah</p><p align = "center">Blah Blah</p>
+			<p align = "center">Blah Blah</p><br />
+			<p align = "center">Blah Blah</p>
+			<p align = "center">Blah Blah</p>
+			<p align = "center">Blah Blah</p>
+			<p align = "center">Blah Blah</p>
+			<p align = "center">Blah Blah</p>
 			<p align = "center">Blah Blah</p>
 		</div>
 		<div id = "sandbox_3">
@@ -138,16 +155,43 @@
 	
 	<!-- Add New Buttons -->
 	<script>
-		function openFacilityForm(){
-			newFacilityWin = window.open("facilityForm.html", "Facility Form", 'width = 400, height = 300, toolbar = yes, location = yes, directories = yes, status = yes, menubar = yes, scrollbars = yes, copyhistory = no, resizable = no')
-		}
-		function openNewRegionForm(){
-			/*newRegionWin = window.open("regionForm.html", "Facility Form", 'width = 400, height = 300, toolbar = yes, location = yes, directories = yes, status = yes, menubar = yes, scrollbars = yes, copyhistory = no, resizable = no')*/
-			$('#sandbox_1 form input').replaceWith('');
-			$('#sandbox_1 form').append('Region Name: <input type = "text" name = "region_name"/> <br /> Region Type: <input type = "test" name ="region_type"/> <br />');
+		function newFacilityForm(){
+			$('#sandbox_1 form p, button, select, input, br, b, option').replaceWith('');
+			$('#sandbox_1 form').append('<p> Facility Name:  <input type = "text" name = "region_name"/> </p> <br /> <b>Facility Type: </b> <select name=facility_type_select> <option> No Type </option>');
+			for(i = 0; i < $('.custom_facilities ul li').length-1; i ++){
+				$('#sandbox_1 form').append('<option value ="this sucks">' + $(".custom_facilities ul li")[i].className.toUpperCase() + '</option>');
+				if(i = $('.custom_facilities ul li').length-1){
+					$('#sandbox_1 form').append('</select> <br />  <button name = "submit_New_Facility" type="submit" onClick="openFacilityForm()"> Submit </button>');
+				}
+			}
+			for(i = 0; i < $('.custom_facilities ul li').length-1; i ++){
+				$('#sandbox_1 form').append('<br /><input type ="radio"> <b>' + $(".custom_facilities ul li")[i].className.toUpperCase()+'</b>');
+			}
 			document.getElementById('sandbox_1').style.display = 'none';					
-			document.getElementById('sandbox_1').style.display = 'block';		
+			document.getElementById('sandbox_1').style.display = 'block';					
 		}
+		function openFacilityForm(){
+			/*newFacilityWin = window.open("facilityForm.html", "Facility Form", 'width = 400, height = 300, toolbar = yes, location = yes, directories = yes, status = yes, menubar = yes, scrollbars = yes, copyhistory = no, resizable = no')*/
+			$('#sandbox_1 form p, button, input, br, select, b, option').replaceWith('');
+			$.getJSON("JavaScriptParser/sample_interface/storagefacility.json", function(data){				
+				for(var i =0; i < data[1].length; i++){
+						$('#sandbox_1 form').append('<p>' + data[1][i][0].toUpperCase() + '<input type="text" name ="' + data[1][i][0] +'" /> </p>');
+					}
+				$('#sandbox_1 form').append('<button name = "submit_Facility" type="submit" onClick="printout()"> Submit </button>');
+			});
+			document.getElementById('sandbox_1').style.display = 'none';					
+			document.getElementById('sandbox_1').style.display = 'block';
+		}
+		
+		function openNewRegionForm(){
+		}
+		
+		function printout(){
+				for(i=0; i<facilityForm.length; i++){
+					facility[facilityForm[i].name] = facilityForm[i].value;
+				}
+				return facility;
+			}
 	</script>
 	
 	<!-- Hiding the side menus -->

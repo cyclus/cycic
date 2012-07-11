@@ -157,9 +157,19 @@ ul, ul ul {
 }
 
 /*  --- Facilities side bar --- */
+.facilities_menu {
+	width: auto;
+	height: auto;
+	-webkit-box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.73), 0px 0px 18px 0px rgba(0,0,0,0.13);
+	-moz-box-shadow: 0px 1px 3px 0px rgba(0,0,0,.73), 0px 0px 18px 0px rgba(0,0,0,.13);
+	-o-box-shadow: 0px 1px 3px 0px rgba(0,0,0,.73), 0px 0px 18px 0px rgba(0,0,0,.13);
+	-ms-box-shadow: 0px 1px 3px 0px rgba(0,0,0,.73), 0px 0px 18px 0px rgba(0,0,0,.13);
+    box-shadow: 0px 1px 3px 0px rgba(0,0,0,.73), 0px 0px 18px 0px rgba(0,0,0,.13);
+   }
+   
 .facilities_menu li {
 	background-color: #AAAAAA;
-    border: #33373d;   
+    border: #33373d;
 	background-image: -webkit-gradient(linear, left top, left bottom, from(rgb(114, 122, 134)),to(rgb(80, 88, 100)));
     background-image: -webkit-linear-gradient(top, rgb(114, 122, 134), rgb(80, 88, 100));
     background-image: -moz-linear-gradient(top, rgb(114, 122, 134), rgb(80, 88, 100));
@@ -180,6 +190,7 @@ ul, ul ul {
     color: #1F2024;
     text-shadow: 0px 1px 0px rgba(0,0,0,.5);
 }
+
 .facilities_menu ul li a {
 	background:#FFFFFF;
 	width: 200px;
@@ -191,6 +202,20 @@ ul, ul ul {
 	font-weight: 400;
 	display:block;
 	color:#000000;
+	border-bottom: 1px solid #999999;
+}
+.facilities_menu ul li{
+	background:#FFFFFF;
+	width: 200px;
+	height: 20px; 
+	line-height: 20px;
+	text-indent: 20px;
+	font-family: "Arial Black";
+	font-size: 14px;
+	font-weight: 400;
+	display:block;
+	color:#000000;
+	border-bottom: 1px solid #999999;
 }
 .facilities_menu li span {
     font-size: 0.857em;
