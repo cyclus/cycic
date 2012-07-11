@@ -12,4 +12,17 @@
 	height: 100%;
 	border: 1px solid #4C4E5A;
 }
-	
+#sandbox_1 {
+	background: #F89406;
+	height: 50%;
+	width: 50%;
+	border:1px solid #4C4E5A;
+	float: left;
+}	
+#sandbox_2 {
+	background: #004AB3;
+	height: 50%;
+	width: 50%;
+	border:1px solid #4C4E5A;
+	margin-left: 50%
+}	

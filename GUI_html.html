@@ -71,7 +71,7 @@
 		<ul class="sidebar_menu">
 			<li class="regions_type"><a href="#"> Regions <span class = "total" > </span></a>
 				<ul>
-					<li class="region"><a href="#"> United States </a>
+					<li class="region" name = "united_states"><a href="#"> United States </a>
 						<ul>
 							<li><a> Testing Facility </a></li>
 						</ul>
@@ -82,7 +82,7 @@
 							<li><a> Testing Facility 3 </a></li>
 						</ul>
 					</li>	
-					<li><a href="#"> Add New Region </a></li>
+					<li><a style ="cursor:hand; cursor:pointer" onClick = "openNewRegionForm()"> Add New Region </a></li>
 				</ul>
 			</li>
 			<li class="institution_type"><a href="#"> Institutions <span class = "total"> </span></a>
@@ -100,7 +100,7 @@
 			</li>
 			<li class="custom_facilities"><a href="#"> Custom Facilities <span class = "total"> </span></a>
 				<ul>
-					<li><a style ="cursor:hand; cursor:pointer" onClick = "openNewFacility()"> Storage Facility </a></li>
+					<li><a style ="cursor:hand; cursor:pointer" onClick = "openFacilityForm()"> Storage Facility </a></li>
 					<li><a href="#"> Add New Custom Facility </a></li>
 				</ul>
 			</li>
@@ -115,21 +115,38 @@
 	</div>
 	<!-- Sandbox Javascript -->
 	<div id ="sandbox">
-		
+		<div id ="sandbox_1">
+			<p align = "center">Form Information Here, maybe? </p>
+			<form id = "region_form">
+				
+			</form>
+		</div>
+		<div id = "sandbox_2">
+			<p align = "center">Blah Blah</p>
+		</div>
+		<div id = "sandbox_3">
+			<p align = "center">Fuel Cycle Diagram Here! </p>
+		</div>
 	</div>
-	
-	<!-- New Custom Facility Button -->
-	<script language=JavaScript>
-		
-	</script>
 	
 	<!-- Number counters for sidebar -->
 	<script language=JavaScript>
 		$('ul li ul').each(function(){
 		  	$(this).prev('a').find('.total').append('<div>'+ ($(this).find('li').length - $(this).find('li > ul > li').length - 1) +'</div>');
 		});
-		function openNewFacility(){
+	</script>
+	
+	<!-- Add New Buttons -->
+	<script>
+		function openFacilityForm(){
 			newFacilityWin = window.open("facilityForm.html", "Facility Form", 'width = 400, height = 300, toolbar = yes, location = yes, directories = yes, status = yes, menubar = yes, scrollbars = yes, copyhistory = no, resizable = no')
+		}
+		function openNewRegionForm(){
+			/*newRegionWin = window.open("regionForm.html", "Facility Form", 'width = 400, height = 300, toolbar = yes, location = yes, directories = yes, status = yes, menubar = yes, scrollbars = yes, copyhistory = no, resizable = no')*/
+			$('#sandbox_1 form input').replaceWith('');
+			$('#sandbox_1 form').append('Region Name: <input type = "text" name = "region_name"/> <br /> Region Type: <input type = "test" name ="region_type"/> <br />');
+			document.getElementById('sandbox_1').style.display = 'none';					
+			document.getElementById('sandbox_1').style.display = 'block';		
 		}
 	</script>
 	
@@ -165,10 +182,18 @@
 				e.preventDefault();
 				if(!$(this).hasClass('active1')) {
 					menu_a_1.removeClass('active1');
-					/*menu_ul.filter(':visible').slideUp('normal');*/
+					menu_ul_1.filter(':visible').slideUp('normal');
 					$(this).addClass('active1').next().stop(true,true).slideDown('normal');
+					if(document.getElementsByClassName('active_test').length > 0){
+						document.getElementsByClassName('active_test')[0].classList.remove('active_test');
+						$('').replaceAll('.facilities_menu > li > ul > li');
+						document.getElementById('wrapper').style.display = 'none';					
+						document.getElementById('wrapper').style.display = 'block';
+						$('.facilities_menu > li > ul').append('<li><a href = "#"> Add New Facility </a></li>');	
+					}					
 					$(this).closest('li').addClass('active_test');
-					$('.active_test > ul > li').clone().prependTo($('.facilities_menu > li > ul'));	
+					$('.active_test > ul > li').clone().prependTo($('.facilities_menu > li > ul'));
+
 				}
 				else{
 					$(this).removeClass('active1');
@@ -176,13 +201,17 @@
 					$(this).next().stop(true,true).slideUp('normal');
 					document.getElementById('wrapper').style.display = 'none';
 					$('').replaceAll('.facilities_menu > li > ul > li');
-					$('.facilities_menu > li > ul').append('<li><a href = "#"> Add New Facility </a></li>');					
+					$('.facilities_menu > li > ul').append('<li><a href = "#"> Add New Facility </a></li>');									
 					document.getElementById('wrapper').style.display = 'block';
 				}
 					
 			});	
 		});
 	</script>
-	
+	<!-- Bubbles! Maybe -->
+	<script>
+			
+		
+	</script>
 </body>
 </html>

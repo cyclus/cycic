@@ -187,10 +187,10 @@ ul, ul ul {
 	line-height: 20px;
 	text-indent: 20px;
 	font-family: "Arial Black";
-	font-size: 12px;
+	font-size: 14px;
 	font-weight: 400;
 	display:block;
-	color:#878d95;
+	color:#000000;
 }
 .facilities_menu li span {
     font-size: 0.857em;
