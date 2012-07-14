@@ -14,15 +14,16 @@
 		<form id="facilityForm">
 			Facility Name: <input type="text" name="facility_name" /><br />
 		</form>
-		<button name = "submit_New_Facility" type="submit" onClick="printout()"> Submit </button>
+		<button name = "submit_New_Facility" type="submit" onClick="printout(document.getElementById(facilityForm)[0].value)"> Submit </button>
 		<script language=JavaScript>
-			var facility = {}
+			
 			$.getJSON("JavaScriptParser/sample_interface/storagefacility.json", function(data){
 				for(var i =0; i < data[1].length; i++){
 						$(facilityForm).append(data[1][i][0].toUpperCase() + '<input type="text" name ="' + data[1][i][0] +'" /> <br />');
 					}
 			});
-			function printout(){
+			function printout(facility){
+				var facility = {}
 				for(i=0; i<facilityForm.length; i++){
 					facility[facilityForm[i].name] = facilityForm[i].value;
 				}
