@@ -1,4 +1,4 @@
-/*
+ /*
  Name: Sandbox CSS
  Date: June 2012
  Description: CSS for the GUI sidebar
@@ -15,7 +15,7 @@
 #sandbox_1 {
 	background: #F89406;
 	height: 50%;
-	width: 29.9%;
+	width: 29.99%;
 	float: left;
 	overflow: scroll;
 }	
@@ -27,7 +27,7 @@
 	overflow:scroll;
 }	
 #sandbox_3 {
-	background: #004AB3;
+	background: #DBC59E;
 	height: 50%;
 	width: 100%;
 	overflow:scroll;

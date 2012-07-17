@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Force-Directed Symbols</title>
+    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.js?1.25.0"></script>
+    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.geom.js?1.25.0"></script>
+    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.layout.js?1.25.0"></script>
+  </head>
+  <body>
+  	<div id = "testing">
+  		
+  	</div>
+    <script type="text/javascript">
+
+var w = 1500,
+    h = 1000,
+    nodes = [],
+    node;
+
+var vis = d3.select("#testing").append("svg:svg")
+    .attr("width", w)
+    .attr("height", h);
+
+var force = d3.layout.force()
+    .nodes(nodes)
+    .links([])
+    .size([w, h])
+    .gravity(0)
+    .friction(0);
+
+force.on("tick", function(e) {
+  vis.selectAll("path")
+      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+});
+
+setInterval(function(){
+
+  // Add a new random shape.
+  nodes.push({
+    type: d3.svg.symbol(),
+    size: 5000
+  });
+
+  // Restart the layout.
+  force.start();
+
+  vis.selectAll("path")
+	  .data(nodes)
+	  .enter().append("svg:path")
+	  .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+	  .attr("d", d3.svg.symbol()
+	  .size(function(d) { return d.size; })
+	  .type(function(d) { return d.type; }))
+	  .style("fill", "steelblue")
+	  .style("stroke", "white")
+	  .style("stroke-width", "1.5px")
+	  .call(force.drag)
+	  .append("title")
+	      .text("awesome")
+}, 1000);
+
+    </script>
+  </body>
+</html>

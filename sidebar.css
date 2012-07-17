@@ -204,6 +204,9 @@ ul, ul ul {
 	color:#000000;
 	border-bottom: 1px solid #999999;
 }
+.facilities_menu li a:hover {
+    background: #1BDFF0;
+}
 .facilities_menu ul li{
 	background:#FFFFFF;
 	width: 200px;
