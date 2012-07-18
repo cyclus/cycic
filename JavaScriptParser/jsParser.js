@@ -1,14 +1,19 @@
 function main(){
-	var parser = new Parser("storagefacility.xml");
+	//var parser = new Parser("storagefacility.xml");
 	//var parser = new Parser("sourcefacility.xml");
   //var parser = new Parser("file:///home/scopatz/cyclus/src/Models/Facility/StorageFacility/StorageFacility.rng");
+  var parser = new Parser("file:///C:/Users/Kevin/Documents/GitHub/core/src/Models/Facility/StorageFacility/StorageFacility.rng");
+  
   var parsed_obj = parser.parse_obj();
   parser.printObject(parsed_obj, 0);	
 }
 
 function mainGather(){
   //gatherSchemas('/home/scopatz/cyclus')
-  gatherSchemas('../../cyclus')
+  //gatherSchemas('../../cyclus')
+   //gatherSchemas('file:///C:/Users/Kevin/Documents/GitHub/core');
+   gatherSchemas('http://raw.github.com/cyclus/core/master/src/Models/Facility/StorageFacility/StorageFacility.rng');
+   
 }
 
 function cycicXMLHttpRequest() {
@@ -216,7 +221,7 @@ function gatherSchemas(cyclusPath){
   // Default arguments
   cyclusPath = typeof cyclusPath !== 'undefined' ? cyclusPath : ''
   if (cyclusPath == ''){
-    console.error("cyclusPath is empty")
+	console.error("cyclusPath is empty")
   }
 
   // local vars
@@ -235,26 +240,25 @@ function gatherSchemas(cyclusPath){
   document.write(typeof(rngPaths) + "<br/>")
   document.write(Object.prototype.toString.call(rngPaths) + "<br/>")
   for (i in rngPaths) {
-    rngRelPath = rngPaths[i]
-    rngFullPath = cyclusPath + '/' + rngRelPath
-    //parser = new Parser(rngFullPath)
-    //schemas[rngRelPath] = parser.parse_obj()
-    if (rngRelPath.match(reFac) !== null) {
-      schemas[rngRelPath] = new Parser(rngFullPath)
-    }
+	rngRelPath = rngPaths[i]
+	rngFullPath = cyclusPath + '/' + rngRelPath
+	parser = new Parser(rngFullPath)
+	schemas[rngRelPath] = parser.parse_obj()
+	/**if (rngRelPath.match(reFac) !== null) {
+	  schemas[rngRelPath] = new Parser(rngFullPath)
+	}**/
   }
 
   for (s in schemas) {
-    document.write(s + ":  " + "<br/>")
-    parsed_obj = schemas[s].parse_obj()
-    
-    //schemas[s].print_obj()
+	document.write(s + ":  " + "<br/>")
+	var parser = new Parser('blah')
+	//parser.printObject(schemas[s],0)
   }
   return schemas
 }
 
-main();
-//mainGather();
+//main();
+mainGather();
 
 //
 //MENTAL NOTES TO SELF
