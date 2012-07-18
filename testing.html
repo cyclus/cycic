@@ -1,14 +1,24 @@
-<!DOCTYPE html>
+<!DOCTYPE = html>
 <html>
   <head>
-    <title>Force-Directed Symbols</title>
-    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.js?1.25.0"></script>
-    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.geom.js?1.25.0"></script>
-    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.layout.js?1.25.0"></script>
+    <title>Circles!</title>
+    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.js?1.25.0"> </script>
+    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.geom.js?1.25.0"> </script>
+    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.layout.js?1.25.0"> </script>
+    <style type ="text/css">
+    	#testing2 {
+    		background: #1BDFF0;
+			margin-left: 203px;
+			height: 97%;
+			border: 1px solid #4C4E5A;
+    	}
+    </style>
   </head>
   <body>
   	<div id = "testing">
-  		
+  		<div id = "testing2">
+  			<p> WHY?!</p>
+  		</div>
   	</div>
     <script type="text/javascript">
 
@@ -17,9 +27,9 @@ var w = 1500,
     nodes = [],
     node;
 
-var vis = d3.select("#testing").append("svg:svg")
-    .attr("width", w)
-    .attr("height", h);
+var vis = d3.select("#testing2").append("svg:svg")
+    .attr("width", w/2)
+    .attr("height", h/2);
 
 var force = d3.layout.force()
     .nodes(nodes)
@@ -49,14 +59,16 @@ setInterval(function(){
 	  .enter().append("svg:path")
 	  .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
 	  .attr("d", d3.svg.symbol()
-	  .size(function(d) { return d.size; })
-	  .type(function(d) { return d.type; }))
+	  	.size(function(d) { return d.size; })
+	  	.type(function(d) { return d.type; }))
 	  .style("fill", "steelblue")
 	  .style("stroke", "white")
 	  .style("stroke-width", "1.5px")
 	  .call(force.drag)
-	  .append("title")
-	      .text("awesome")
+	  .append("text")
+	  	.attr("text-anchor", "middle")
+	  	.attr("dy", ".3em")
+	  	.text("awesome")
 }, 1000);
 
     </script>

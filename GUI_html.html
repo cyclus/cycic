@@ -20,7 +20,9 @@
 	<!--if IE 9-->
 	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"> </script>
 	<!-- d3.js -->
-	<script src="http://d3js.org/d3.v2.js"> </script>
+    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.js?1.25.0"> </script>
+    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.geom.js?1.25.0"> </script>
+    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.layout.js?1.25.0"> </script>
 	<!-- JavaScript + jQuery-->
 	<script src="http://code.jquery.com/jquery-1.7.1.min.js"> </script>
 	<script src="timeline-start.js"> </script>
@@ -50,7 +52,7 @@
 					<li><a href="#" class="time_depentent_mode"> Time Dependent Mode</a></li>
 				</ul>
 			</li>
-			<li><a href = "#"> New Facility Type </a></li>
+			<li><a href = "#"><strike> New Facility Type </strike> </a></li>
 		</ul>
 	</header>
 	
@@ -120,22 +122,7 @@
 			</form>
 		</div>
 		<div id = "sandbox_2">
-			<p align = "center">Blah Blah</p>
-			<p align = "center">Blah Blah</p>
-			<p align = "center">Blah Blah</p>
-			<p align = "center">Blah Blah</p>
-			<p align = "center">Blah Blah</p>
-			<p align = "center">Blah Blah</p>
-			<p align = "center">Blah Blah</p>
-			<p align = "center">Blah Blah</p>
-			<p align = "center">Blah Blah</p>
-			<p align = "center">Blah Blah</p>
-			<p align = "center">Blah Blah</p>
-			<p align = "center">Blah Blah</p>
-			<p align = "center">Blah Blah</p>
-			<p align = "center">Blah Blah</p>
-			<p align = "center">Blah Blah</p>
-			<p align = "center">Blah Blah</p>
+			<p align = "center"> Alternate View </p>
 		</div>
 		<div id = "sandbox_3">
 			<p align = "center">Fuel Cycle Diagram Here! </p>
@@ -305,40 +292,50 @@
 		    node;
 		
 		var vis = d3.select("#sandbox_3").append("svg:svg")
-		    .attr("width", w)
-		    .attr("height", h);
+		    .attr("width", w/1.018)
+		    .attr("height", h/1.178);
 		
 		var force = d3.layout.force()
-		    .nodes(nodes)
+			.nodes(nodes)
 		    .links([])
 		    .size([w, h])
 		    .gravity(0)
 		    .friction(0);
 		    
+	    force.on("tick", function(e) {
+  			vis.selectAll("g.node")
+      			.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+			});
+		    
 		function addNewCircle(){
-		  // Add a new random shape.
-		  nodes.push({
-		    type: d3.svg.symbol(),
-		    size: 7000
-		  });
-		
-		  // Restart the layout.
-		  force.start();
-		
-		  vis.selectAll("path")
-			  .data(nodes)
-			  .enter().append("svg:path")
-			  .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
-			  .attr("d", d3.svg.symbol()
-			  .size(function(d) { return d.size; })
-			  .type(function(d) { return d.type; }))
-			  .style("fill", "steelblue")
-			  .style("stroke", "white")
-			  .style("stroke-width", "1.5px")
-			  .call(force.drag)
-			  .append("title")
-			      .text(window.NAME)
-		}
+			nodes.push({
+				name: window.NAME,
+		  		type: d3.svg.symbol("circle"),
+		    	size: 50,
+		    	x: 100,
+		    	y: 100
+		  	});
+		  	force.start();			  	
+		  	var node = vis.selectAll("g.node")
+		  		.data(nodes);
+		  		
+	  		node.enter().append("svg:g")
+	  		     .attr("class", "node")
+	  			 .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+	  			 .call(force.drag);
+	  		node.append("title")
+	  			.text(function(d) {return d.name;})
+  			node.append("circle")
+  				.attr("r", function(d) {return d.size;})
+  				.style("fill", "steelblue")
+	  			.style("stroke", "white")
+	  			.style("stroke-width", "1.5px")
+	  			
+  			node.append("text")
+  				.attr("text-anchor", "middle")
+  				.attr("dy", ".3em")
+  				.text(function(d) {return d.name;});
+		 }
 	</script>
 </body>
 </html>
