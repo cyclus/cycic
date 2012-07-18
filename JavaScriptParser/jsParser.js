@@ -1,8 +1,10 @@
 main();
 
 function main(){
-	var parser = new Parser("storagefacility.xml");
-	var parsed_obj = parser.parse_obj();
+	// var parser = new Parser("storagefacility.xml");
+	// var parsed_obj = parser.parse_obj();
+	// parser.print_obj();	
+	var parser = new Parser("C:\\Users\\Kevin\\Documents\\GitHub\\core\\src\\Core\\Models\\Facility\\SourceFacility\\SourceFacility.rng");
 	parser.print_obj();
 }
 
@@ -14,6 +16,25 @@ function Parser(word){
 	
 	this.speak = function() {
 		document.write(this.word);
+	}
+	
+	this.processJSON = function(){
+		if (window.XMLHttpRequest)
+		{
+			xhttp=new XMLHttpRequest();
+		}
+		else // IE 5/6
+		{
+			xhttp=new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		xhttp.open("GET","dump.json",false);
+		xhttp.send();
+		xmlDoc=JSON.parse(xhttp.responseText); 
+		document.write(xmlDoc);
+		for (i=0; i<xmlDoc.length; i++){
+			this.file = xmlDoc[i];
+			this.print_obj();
+		}
 	}
 	
 	//Take XML and convert to JS object to be printed out.
@@ -43,6 +64,7 @@ function Parser(word){
 				jsObjName[x[n].childNodes[1].getAttribute('name')] = parseObject(elements);
 			}
 		}
+		return jsObjName; 
 	}
 	
 	this.print_obj = function(){
