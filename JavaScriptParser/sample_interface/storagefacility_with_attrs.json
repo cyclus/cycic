@@ -8,7 +8,7 @@
     ["residencetime", "nonNegativeInteger"], 
     ["initialstocks", 
       ["zeroOrMore", 
-        ["entry", 
+        [["entry", 
           [
             ["facility", "string", {"default": "InterimStorage"}],
             "incommodity",
@@ -16,7 +16,7 @@
             ["amount", "double"],
             ["age", "double"]
           ]
-        ]
+        ]]
       ]
     ]
   ]
