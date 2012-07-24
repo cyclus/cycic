@@ -42,7 +42,7 @@ function openNewFacilityForm(){
 	$.getJSON("JavaScriptParser/sample_interface/storagefacility.json", function(data){				
 		for(var i =0; i < data[1].length; i++){
 			if(data[1][i][1] === "incommodity"){
-				$('#sandbox_1 form').append('<p> Market: <select name ="MARKET" id = "market_select"> </select> </p>');
+				$('#sandbox_1 form').append('<p> Market: <select name ="market" id = "market_select"> </select> </p>');
 				for(ii = 0; ii < $('.market_type ul li').length-1; ii ++){
 						$('#market_select').append('<option value ="'+$('.market_type ul li')[ii].id.toLowerCase()+'">' + $(".market_type ul li")[ii].id.toUpperCase() +'</option>');
 				}
@@ -81,7 +81,15 @@ function printoutFacility(){
 		for(i=0; i<length_2-1; i++){
 			facility[document.getElementById('sandbox_form')[i].name] = document.getElementById('sandbox_form')[i].value;
 		}
-		return facility;			
+		facility['circle'] = {
+			name: window.NAME,
+  			type: d3.svg.symbol("circle"),
+    		size: 50,
+    		x: 100,
+    		y: 100,
+    		id: window.NAME
+		};
+		return facility;		
 	}
 	if(!facilities[window.NAME]){
 		window.facilities[window.NAME] = testing();

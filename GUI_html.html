@@ -155,19 +155,45 @@
 			document.getElementById('sandbox_1').style.display = 'block';			
 		}
 		function openNewMarketForm(){
-			window.TYPE = "blue"
+			window.TYPE = "steelblue"
 			window.NAME = document.getElementById('sandbox_form')[0].value;
-			$('.market_type ul').prepend('<li id = "' + window.NAME.trim() + '"><a style ="cursor:hand; cursor:pointer">' + window.NAME);
 			$('#sandbox_1 form p, button, input, br, select, b, option').replaceWith('');
+			$('.market_type ul').prepend('<li id = "' + window.NAME.trim() + '"><a style ="cursor:hand; cursor:pointer">' + window.NAME);
 			$.getJSON("", function(data){
 				for(var i =0; i < data[1].length; i++){
 						$('#sandbox_1 form').append('<p>' + data[1][i][0].toUpperCase() + '<input type="text" name ="' + data[1][i][0] +'" value ="' + data[1][i][1] + '"/> </p>');
 					}
-				$('#sandbox_1 form').append('<button name = "submit_Facility" type="button" onClick="printoutFacility()"> Submit </button>');
+				$('#sandbox_1 form').append('<button name = "submit_Facility" type="button" onClick="printOutMarket()"> Submit </button>');
 			});
-			$('#sandbox_1 form').append('<button name = "submit_Facility" type="button" onClick="printoutFacility()"> Submit </button>');
+			$('#sandbox_1 form').append('<button name = "submit_Facility" type="button" onClick="printOutMarket()"> Submit </button>');
 			document.getElementById('sandbox_1').style.display = 'none';					
 			document.getElementById('sandbox_1').style.display = 'block';
+		}
+		function printOutMarket(){
+	
+			function testing(){
+				var length_2 = document.getElementById('sandbox_form').length;
+				var market = {};
+				market['Name'] = window.NAME;
+				for(i=0; i<length_2-1; i++){
+					market[document.getElementById('sandbox_form')[i].name] = document.getElementById('sandbox_form')[i].value;
+				}
+				market['circle'] = {
+					name: window.NAME,
+		  			type: d3.svg.symbol("circle"),
+		    		size: 50,
+		    		x: 100,
+		    		y: 100,
+		    		id: window.NAME
+				};
+				return market;		
+			}
+			if(!MARKETS[window.NAME]){
+				window.MARKETS[window.NAME] = testing();
+				addNewCircle();
+			}
+			window.MARKETS[window.NAME] = testing();
+			return MARKETS;
 		}
 	</script>
 	<!-- Hiding the side menus -->
@@ -239,40 +265,49 @@
 		var w = document.getElementById("sandbox_3").offsetWidth,
 		    h = document.getElementById("sandbox_3").offsetHeight,
 		    Fnodes = [],
+		    Tnodes= [],
 		    Fnode;
 		    
 		var vis = d3.select("#sandbox_3").append("svg:svg")
-		    .attr("width", w/1.018)
-		    .attr("height", h/1.178);
+		    .attr("width", w)
+		    .attr("height", h);
 		
 		var force = d3.layout.force()
 			.nodes(Fnodes)
 		    .links(links)
 		    .size([w, h])
 		    .gravity(0)
-		    .friction(0);
+		    .friction(0)
+		    .linkStrength(0);
 		    		    
-	    force.on("tick", function(e){
+	    force.on("tick", function(){
   			vis.selectAll("g.node")
-      			.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-			});
+  				.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+			vis.selectAll("line.link")
+			      .attr("x1", function(d) { return d.source.x; })
+			      .attr("y1", function(d) { return d.source.y; })
+			      .attr("x2", function(d) { return d.target.x; })
+			      .attr("y2", function(d) { return d.target.y; });
+		});
 			
-	    
 		function addNewCircle(){
-			Fnodes.push({
-				name: window.NAME,
-		  		type: d3.svg.symbol("circle"),
-		    	size: 50,
-		    	x: 100,
-		    	y: 100,
-		  	});
-		  	if(window.TYPE === "green"){
-		  		links.push({source: window.NAME, target: toTitleCase(facilities[window.NAME].MARKET)})
-		  	}
-		  	force.start();			  	
+			if(window.TYPE ==="green"){	
+				Fnodes.push(facilities[window.NAME]['circle']);
+				Tnodes.push(facilities[window.NAME]['circle']);
+				for( i = 0; i < Fnodes.length; i ++){
+					if(Fnodes[i].name === toTitleCase(facilities[window.NAME]['market'])){
+						var marketNamePass = i;
+					}
+				}
+			  	links.push({source: facilities[window.NAME]['circle'], target: Fnodes[marketNamePass]});		  	
+			}
+			if(window.TYPE ==="steelblue"){
+				Fnodes.push(MARKETS[window.NAME]['circle']);
+				Tnodes.push(MARKETS[window.NAME]['circle']);
+			}
 		  	var Fnode = vis.selectAll("g.node")
-		  		.data(Fnodes)
-	  	
+		  		.data(Tnodes, function(d) {return d.name;});
+	  		
 	  		Fnode.enter().append("svg:g")
 	  		     .attr("class", "node")
 	  			 .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
@@ -281,7 +316,7 @@
 	  			.text(function(d) {return d.name;})
   			Fnode.append("circle")
   				.attr("r", function(d) {return d.size;})
-  				.style("fill", function() {return "green";})
+  				.style("fill", function() {return window.TYPE;})
 	  			.style("stroke", "white")
 	  			.style("stroke-width", "1.5px")
 	  			
@@ -289,8 +324,17 @@
   				.attr("text-anchor", "middle")
   				.attr("dy", ".3em")
   				.text(function(d) {return d.name;})
+		  	
+		  	var link = vis.selectAll("line.link")
+			      .data(links, function(d) { return d.source.id + "-" + d.target.id; });
+			
+			  link.enter().insert("svg:line", "g.node")
+			      .attr("class", "link")
+		      
+		      force.start();
+		      Tnodes.pop();
 		 }
-		 
+
 	</script>
 </body>
 </html>
