@@ -1,3 +1,5 @@
+/* Facilitiy Javascript Functions */
+
 var facilities = {};
 var customFacilities = {};
 var MARKETS = {};
@@ -42,10 +44,20 @@ function openNewFacilityForm(){
 	$.getJSON("JavaScriptParser/sample_interface/storagefacility.json", function(data){				
 		for(var i =0; i < data[1].length; i++){
 			if(data[1][i][1] === "incommodity"){
-				$('#sandbox_1 form').append('<p> Market: <select name ="market" id = "market_select"> </select> </p>');
+				$('#sandbox_1 form').append('<p> In Market: <select name ="inMarket" id = "market_select"> </select> </p>');
 				for(ii = 0; ii < $('.market_type ul li').length-1; ii ++){
 						$('#market_select').append('<option value ="'+$('.market_type ul li')[ii].id.toLowerCase()+'">' + $(".market_type ul li")[ii].id.toUpperCase() +'</option>');
 				}
+				/*$('#sandbox_1 form').append('<button onclick="addNewInMarket()" type ="button"> Add Additional Incommodity </button>');*/
+				i++;
+			}
+			if(data[1][i][1] === "outcommodity"){
+				$('#sandbox_1 form').append('<p> Out Market: <select name ="outMarket" id = "market_select"> </select> </p>');
+				for(ii = 0; ii < $('.market_type ul li').length-1; ii ++){
+						$('#market_select').append('<option value ="'+$('.market_type ul li')[ii].id.toLowerCase()+'">' + $(".market_type ul li")[ii].id.toUpperCase() +'</option>');
+				}
+				$('#sandbox_1 form').append('<button onclick="addNewOutMarket()"> Add Additional Outcommodity </button>');
+				i++;
 			}
 			else{
 				$('#sandbox_1 form').append('<p>' + data[1][i][0].toUpperCase() + '<input type="text" name ="' + data[1][i][0] +'" value ="' + data[1][i][1] + '"/> </p>');
@@ -56,18 +68,39 @@ function openNewFacilityForm(){
 	document.getElementById('sandbox_1').style.display = 'none';					
 	document.getElementById('sandbox_1').style.display = 'block';
 }
-
+function addNewInMarket(){
+	$('#market_select').insertAfter('<p> In Market: <select name ="inMarket" id = "market_select"> </select> </p>');
+	for(ii = 0; ii < $('.market_type ul li').length-1; ii ++){			
+				$('#market_select').append('<option value ="'+$('.market_type ul li')[ii].id.toLowerCase()+'">' + $(".market_type ul li")[ii].id.toUpperCase() +'</option>');
+	}
+	$('#sandbox_1 form').append('<button onclick="addNewInMarket()"> Add Additional Incommodity </button>');
+	document.getElementById('sandbox_1').style.display = 'none';					
+	document.getElementById('sandbox_1').style.display = 'block';
+	
+}
 function openFacilityForm(facility){
 	window.TYPE = "green";
 	$('#sandbox_1 form p, button, input, br, select, b, option').replaceWith('');			
 	for(attribute in facilities[facility]){
 		var STR = attribute;
 		window.NAME = facility;
-		$('#sandbox_1 form').append('<p>' + attribute.toUpperCase() + '<input type="text" name ="' + attribute +'" value ="' + facilities[facility][STR] + '"/>');
+		if(attribute === "inMarket"){
+			$('#sandbox_1 form').append('<p> Market: <select name ="inMarket" id = "market_select"> </select> </p>');
+			for(ii = 0; ii < $('.market_type ul li').length-1; ii ++){
+					$('#market_select').append('<option value ="'+$('.market_type ul li')[ii].id.toLowerCase()+'">' + $(".market_type ul li")[ii].id.toUpperCase() +'</option>');
+			}
+			continue;
+		}
+		if(attribute === "circle"){
+			/*$('#sandbox_1 form').append('<p>' + toTitleCase(attribute) + '<input type="text" name ="' + attribute +'" value ="' + facilities[facility][STR] + '"/>');*/
+			continue;
+		}
+		$('#sandbox_1 form').append('<p>' + toTitleCase(attribute) + '<input type="text" name ="' + attribute +'" value ="' + toTitleCase(facilities[facility][STR]) + '"/>');
 	}
 	$('#sandbox_1 form').append('<button name = "submit_Facility" type="button" onClick="printoutFacility()"> Submit </button>');
 	document.getElementById('sandbox_1').style.display = 'none';					
 	document.getElementById('sandbox_1').style.display = 'block';
+	
 }
 
 function printoutFacility(){
@@ -89,14 +122,26 @@ function printoutFacility(){
     		y: 100,
     		id: window.NAME
 		};
+		delete facility[""]
 		return facility;		
 	}
+	
 	if(!facilities[window.NAME]){
 		window.facilities[window.NAME] = testing();
 		$('#'+facilities[window.NAME].Region +' ul').append('<li><a style ="cursor:hand; cursor:pointer" onClick = "openFacilityForm(facilities.' + window.NAME+'.Name)" >' + facilities[window.NAME].Name);
 		$('#'+facilities[window.NAME].Institution +' ul').append('<li><a style ="cursor:hand; cursor:pointer" onClick = "openFacilityForm(facilities.' + window.NAME+'.Name)" >' + facilities[window.NAME].Name);
 		addNewCircle();
+	}else{
+		window.facilities[window.NAME] = testing();
+		/*addNewCircle();*/
+		updateLinks();
 	}
-	window.facilities[window.NAME] = testing();
+	
 	return facilities;
+}
+
+function updateSidebar(){
+	$('ul li ul').each(function(){
+	  	$(this).prev('a').find('.total').append('<div>'+ ($(this).find('li').length - $(this).find('li > ul > li').length - 1) +'</div>');
+	});
 }
