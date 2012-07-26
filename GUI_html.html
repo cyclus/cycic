@@ -27,6 +27,8 @@
 	<script src="http://code.jquery.com/jquery-1.7.1.min.js"> </script>
 	<script src="timeline-start.js"> </script>
 	<script src="script.js"> </script>
+	<script src="facilities.js"> </script>
+	<script src="markets.js"> </script>
 	<!-- Kinetic Plug In -->
 	<script src="http://www.html5canvastutorials.com/libraries/kinetic-v3.10.2.js"> </script>
 </head>
@@ -78,7 +80,7 @@
 			</li>
 			<li class="institution_type"><a href="#"> Institutions <span class = "total"> </span></a>
 				<ul>
-					<li class="institution" id = "constellation_energy"><a href="#"> Constellation Energy</a>
+					<li class="institution" id = "constellation_energy"><a href="#"> Constellation Energy </a>
 						<ul>
 						</ul>
 					</li>
@@ -86,7 +88,7 @@
 						<ul>
 						</ul>
 					</li>
-					<li class="institution" id = "blah_blah"><a href="#"> Blah Blah</a>
+					<li class="institution" id = "blah_blah"><a href="#"> Blah Blah </a>
 						<ul>
 						</ul>
 					</li>
@@ -95,7 +97,7 @@
 			</li>
 			<li class="market_type"><a href="#"> Markets <span class = "total"> </span></a>
 				<ul>
-					<li><a href="#"> Add New Market</a></li>
+					<li><a style ="cursor:hand; cursor:pointer" onClick = "newMarketForm()"> Add New Market</a></li>
 				</ul>
 			</li>
 			<li class="custom_facilities"><a href="#"> Custom Facilities <span class = "total"> </span></a>
@@ -116,7 +118,7 @@
 	<!-- Sandbox Div -->
 	<div id ="sandbox">
 		<div id ="sandbox_1">
-			<p align = "center">Form Information Here, maybe? </p>
+			<p align = "center">Form Information</p>
 			<form id = "sandbox_form">
 				
 			</form>
@@ -125,7 +127,7 @@
 			<p align = "center"> Alternate View </p>
 		</div>
 		<div id = "sandbox_3">
-			<p align = "center">Fuel Cycle Diagram Here! </p>
+			<p align = "center">Fuel Cycle Diagram</p>
 		</div>
 	</div>
 	
@@ -139,86 +141,11 @@
 	<script type ="text/javascript">
 		var facilities = {};
 		var customFacilities = {};
+		var MARKETS = {};
 		var NAME;
 		var REGION;
 		var INSTITUTION;
-		function newFacilityForm(){
-			$('#sandbox_1 form p, button, select, input, br, b, option').replaceWith('');
-			$('#sandbox_1 form').prepend('<p> Facility Name:  <input type = "text" name = "region_name"/> </p>');			
-			$('#sandbox_1 form').append('<p> Region: <select id = "region_select"> </select> </p>');
-			$('#sandbox_1 form').append('<p> Institution: <select id = "institution_select"> </select> </p>');
-			$('#sandbox_1 form').append('<p> Facility Type: <select id = "facility_select"> </select> </p>');
-			for(i = 0; i < $('.region_type ul li').length-1; i ++){
-				if($('.region_type ul li')[i].hasAttribute('class')===true){
-					$('#region_select').append('<option value ="'+$('.region_type ul li')[i].id.toLowerCase()+'">' + $(".region_type ul li")[i].id.toUpperCase() +'</option>');
-				}
-			}
-			for(i = 0; i < $('.institution_type ul li').length-1; i ++){
-				if($('.institution_type ul li')[i].hasAttribute('class')===true){
-					$('#institution_select').append('<option value ="'+$('.institution_type ul li')[i].id.toLowerCase()+'">' + $(".institution_type ul li")[i].id.toUpperCase() +'</option>');
-				}
-			}
-			for(i = 0; i < $('.custom_facilities ul li').length-1; i ++){
-				$('#facility_select').append('<option value ="'+$('.custom_facilities ul li')[i].className.toLowerCase()+'">' + $(".custom_facilities ul li")[i].className.toUpperCase() +'</option>');
-				if(i = $('.custom_facilities ul li').length-1){
-					$('#sandbox_1 form').append('<button name = "submit_New_Facility" type="submit" onClick="openNewFacilityForm()"> Submit </button>');
-				}
-			}
-			/*for(i = 0; i < $('.custom_facilities ul li').length-1; i ++){
-				$('#sandbox_1 form').append('<br /><input type ="radio"> <b>' + $(".custom_facilities ul li")[i].className.toUpperCase()+'</b>');
-			}*/
-			document.getElementById('sandbox_1').style.display = 'none';					
-			document.getElementById('sandbox_1').style.display = 'block';		
-		}
-		function openNewFacilityForm(){
-			window.NAME = document.getElementById('sandbox_form')[0].value;
-			window.REGION = document.getElementById('sandbox_form')[1].value;
-			window.INSTITUTION = document.getElementById('sandbox_form')[2].value;
-			$('#sandbox_1 form p, button, input, br, select, b, option').replaceWith('');
-			$.getJSON("JavaScriptParser/sample_interface/storagefacility.json", function(data){				
-				for(var i =0; i < data[1].length; i++){
-						$('#sandbox_1 form').append('<p>' + data[1][i][0].toUpperCase() + '<input type="text" name ="' + data[1][i][0] +'" value ="' + data[1][i][1] + '"/> </p>');
-					}
-				$('#sandbox_1 form').append('<button name = "submit_Facility" type="button" onClick="printout()"> Submit </button>');
-			});
-			document.getElementById('sandbox_1').style.display = 'none';					
-			document.getElementById('sandbox_1').style.display = 'block';
-		}
-		function openFacilityForm(facility){
-			$('#sandbox_1 form p, button, input, br, select, b, option').replaceWith('');			
-			for(attribute in facilities[facility]){
-				var STR = attribute;
-				window.NAME = facility;
-				$('#sandbox_1 form').append('<p>' + attribute.toUpperCase() + '<input type="text" name ="' + attribute +'" value ="' + facilities[facility][STR] + '"/>');
-			}
-			$('#sandbox_1 form').append('<button name = "submit_Facility" type="button" onClick="printout()"> Submit </button>');
-			document.getElementById('sandbox_1').style.display = 'none';					
-			document.getElementById('sandbox_1').style.display = 'block';
-		}
-		function openNewRegionForm(){
-		}
-		function printout(){
-			
-			function testing(){
-				var length_2 = document.getElementById('sandbox_form').length;
-				var facility = {};
-				facility['Name'] = window.NAME;
-				facility['Region'] = window.REGION;
-				facility['Institution'] = window.INSTITUTION;
-				for(i=0; i<length_2-1; i++){
-					facility[document.getElementById('sandbox_form')[i].name] = document.getElementById('sandbox_form')[i].value;
-				}
-				return facility;			
-			}
-			if(!facilities[window.NAME]){
-				window.facilities[window.NAME] = testing();
-				$('#'+facilities[window.NAME].Region +' ul').append('<li><a style ="cursor:hand; cursor:pointer" onClick = "openFacilityForm(facilities.' + window.NAME+'.Name)" >' + facilities[window.NAME].Name);
-				$('#'+facilities[window.NAME].Institution +' ul').append('<li><a style ="cursor:hand; cursor:pointer" onClick = "openFacilityForm(facilities.' + window.NAME+'.Name)" >' + facilities[window.NAME].Name);
-				addNewCircle();
-			}
-			window.facilities[window.NAME] = testing();
-			return facilities;
-		}
+		var TYPE;
 	</script>
 	<!-- Hiding the side menus -->
 	<script type ="text/javascript">
@@ -284,59 +211,123 @@
 	    	});
 		}
 	</script>
-	<!-- Bubbles! Maybe -->
+	<!-- Bubbles!-->
     <script type="text/javascript">	
 		var w = document.getElementById("sandbox_3").offsetWidth,
 		    h = document.getElementById("sandbox_3").offsetHeight,
-		    nodes = [],
-		    node;
-		
+		    Fnodes = [],
+		    Tnodes= [],
+		    links = [],
+		    Tlinks = [];
+		    
 		var vis = d3.select("#sandbox_3").append("svg:svg")
-		    .attr("width", w/1.018)
-		    .attr("height", h/1.178);
+		    .attr("width", w)
+		    .attr("height", h);
 		
 		var force = d3.layout.force()
-			.nodes(nodes)
-		    .links([])
+			.nodes(Fnodes)
+		    .links(links)
 		    .size([w, h])
 		    .gravity(0)
-		    .friction(0);
-		    
-	    force.on("tick", function(e) {
+		    .friction(0)
+		    .linkStrength(0);
+		    		    
+	    force.on("tick", function(){
   			vis.selectAll("g.node")
-      			.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-			});
-		    
+  				.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+			vis.selectAll("line.link")
+			      .attr("x1", function(d) { return d.source.x; })
+			      .attr("y1", function(d) { return d.source.y; })
+			      .attr("x2", function(d) { return d.target.x; })
+			      .attr("y2", function(d) { return d.target.y; });
+		});
+		
+		function updateLinks(){
+			for(i = 0; i < links.length; i ++){
+				if(toTitleCase(links[i].source.name) === toTitleCase(window.NAME)){
+					links.splice(i,1);
+					i=0;
+				}
+			}
+			var link = vis.selectAll("line.link")
+			      .data(links, function(d) { return d.source.id + "-" + d.target.id; });
+	      	link.exit().remove("svg:line", "g.node")
+	      			.attr("class", "link");
+			          
+			for( i = 0; i < Fnodes.length; i ++){
+				if(Fnodes[i].name === toTitleCase(facilities[window.NAME]['inMarket'])){
+					var marketNamePass = i;
+				}
+			}
+			for( j = 0; j < Fnodes.length; j++){
+				if(Fnodes[j].name === toTitleCase(window.NAME)){
+					var facNamePass = j;
+				}
+			}
+			links.push({source: Fnodes[facNamePass], target: Fnodes[marketNamePass]});
+			
+			var link = vis.selectAll("line.link")
+			      .data(links, function(d) { return d.source.id + "-" + d.target.id; });
+			
+			link.enter().insert("svg:line", "g.node")
+			      .attr("class", "link");
+			      
+		    force.start();
+		    Tlinks.pop();
+		}
+		
 		function addNewCircle(){
-			// Add a new random shape.
-			nodes.push({
-				name: window.NAME,
-		  		type: d3.svg.symbol("circle"),
-		    	size: 50,
-		    	x: 100,
-		    	y: 100
-		  	});
-		  	force.start();			  	
-		  	var node = vis.selectAll("g.node")
-		  		.data(nodes);
-		  		
-	  		node.enter().append("svg:g")
+			if(window.TYPE ==="green"){	
+				Fnodes.push(facilities[window.NAME]['circle']);
+				Tnodes.push(facilities[window.NAME]['circle']);
+
+				if(!facilities[window.NAME]['inMarket']==""){
+					for( i = 0; i < Fnodes.length; i ++){
+						if(Fnodes[i].name === toTitleCase(facilities[window.NAME]['inMarket'])){
+							var marketNamePass = i;
+						}
+					}
+			  		links.push({source: facilities[window.NAME]['circle'], target: Fnodes[marketNamePass]});
+			  		Tlinks.push({source: facilities[window.NAME]['circle'], target: Fnodes[marketNamePass]});
+			  	}		  	
+			}
+			if(window.TYPE ==="steelblue"){
+				Fnodes.push(MARKETS[window.NAME]['circle']);
+				Tnodes.push(MARKETS[window.NAME]['circle']);
+			}
+		  	var Fnode = vis.selectAll("g.node")
+		  		.data(Tnodes, function(d) {return d.name;});
+	 	  		
+	  		Fnode.enter().append("svg:g")
 	  		     .attr("class", "node")
 	  			 .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
-	  			 .call(force.drag);
-	  		node.append("title")
+	  			 .call(force.drag)
+	  			 .on("dblclick", function(d){openFacilityForm(d.name);})
+	  		Fnode.append("title")
 	  			.text(function(d) {return d.name;})
-  			node.append("circle")
+  			Fnode.append("circle")
   				.attr("r", function(d) {return d.size;})
-  				.style("fill", "steelblue")
+  				.style("fill", function() {return window.TYPE;})
 	  			.style("stroke", "white")
 	  			.style("stroke-width", "1.5px")
 	  			
-  			node.append("text")
+  			Fnode.append("text")
   				.attr("text-anchor", "middle")
-  				.attr("dy", ".3em")
-  				.text(function(d) {return d.name;});
+  				.attr("dy", "0.2em")
+  				.attr("font-size", "12")
+  				.text(function(d) {return d.name;})
+		  	
+		  	var link = vis.selectAll("line.link")
+			      .data(Tlinks, function(d) { return d.source.id + "-" + d.target.id; });
+			
+			link.enter().insert("svg:line", "g.node")
+			      .attr("class", "link")
+		      
+		    force.start();
+		    Tnodes.pop();
+		    Tlinks.pop();
 		 }
+
 	</script>
 </body>
 </html>
