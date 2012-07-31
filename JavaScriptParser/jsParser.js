@@ -43,7 +43,7 @@ Parser.prototype.speak = function() {
 	
 // Take XML and convert to JS object to be printed out.
 Parser.prototype.parse_obj = function() {
-    if (this.file[4] == 'http') {
+    if (this.file.URL == '') {
         var x = this.file.childNodes[0].childNodes;
     }
     else{
@@ -248,9 +248,8 @@ function gatherSchemas(cyclusPath){
   for (i in rngPaths) {
 	rngRelPath = rngPaths[i]
     // Test to see if server request works
-    rngRelPath = "https://raw.github.com/cyclus/core/master/src/Models/Facility/StorageFacility/StorageFacility.rng"
-    //document.write(rngRelPath.slice(0,4))
-    if (rngRelPath.slice(0,4) == 'http'){
+    rngRelPath = "\"https://raw.github.com/cyclus/core/master/src/Models/Facility/StorageFacility/StorageFacility.rng\""
+    if (rngRelPath.slice(0,4) == '\"htt'){
         $(document).ready(function() {
             $.ajax({
                 crossDomain: true,
@@ -259,7 +258,6 @@ function gatherSchemas(cyclusPath){
                 dataType: 'jsonp',
                 success: function(response){
                     if(response.results[0] != undefined){
-                        //alert(response.results[0])
                         var text = response.results[0]
                         if (window.ActiveXObject){
                           var doc=new ActiveXObject('Microsoft.XMLDOM');
@@ -269,6 +267,7 @@ function gatherSchemas(cyclusPath){
                           var parser=new DOMParser();
                           var doc=parser.parseFromString(text,'text/xml');
                         }
+                        
                         var parser = new Parser(doc)
                         var parsed_obj = parser.parse_obj()
                         parser.printObject(parsed_obj, 0);
