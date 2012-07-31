@@ -1,8 +1,9 @@
 function main(){
 	//var parser = new Parser("storagefacility.xml");
 	//var parser = new Parser("sourcefacility.xml");
+	//var parser = new Parser("recipereactor.xml");
   //var parser = new Parser("file:///home/scopatz/cyclus/src/Models/Facility/StorageFacility/StorageFacility.rng");
-  var parser = new Parser("file:///C:/Users/Kevin/Documents/GitHub/core/src/Models/Facility/StorageFacility/StorageFacility.rng");
+  var parser = new Parser("file:///C:/Users/Kevin/Documents/GitHub/core/src/Models/Facility/SourceFacility/SourceFacility.rng");
   
   var parsed_obj = parser.parse_obj();
   parser.printObject(parsed_obj, 0);	
@@ -164,11 +165,21 @@ Parser.prototype.printObject = function(parsed_object, spaces) {
 			// If the parent's child has children, print out everything and print the
 			// children's children
 			else {
-				document.write("<br>");
-				this.inputSpaces(spaces +1);
-				this.printObject(parsed_object[key], spaces + 1);
-				this.inputSpaces(spaces);
-				document.write("]<br>");
+                document.write("<br>");
+                this.inputSpaces(spaces +1);
+                tempKey = this.getKey(parsed_object[key]);
+                
+                if (this.getChildrenNum(parsed_object[key][tempKey]) ==1){
+                    document.write("[");
+                    this.printObject(parsed_object[key], spaces + 1);
+                    this.inputSpaces(spaces);
+                    document.write("]]<br>");
+				}
+                else{
+                    this.printObject(parsed_object[key], spaces + 1);
+                    this.inputSpaces(spaces);
+                    document.write("]<br>");
+                }
 			}
 		}
 		// If the parent has no child, it is a ref, so just print out the parent
@@ -297,8 +308,8 @@ function gatherSchemas(cyclusPath){
   return schemas
 }
 
-//main();
-mainGather();
+main();
+//mainGather();
 
 //
 //MENTAL NOTES TO SELF
