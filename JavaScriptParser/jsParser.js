@@ -11,8 +11,8 @@ function main(){
 function mainGather(){
   //gatherSchemas('/home/scopatz/cyclus')
   //gatherSchemas('../../cyclus')
-   //gatherSchemas('file:///C:/Users/Kevin/Documents/GitHub/core');
-   gatherSchemas('http://raw.github.com/cyclus/core/master/src/Models/Facility/StorageFacility/StorageFacility.rng');
+   gatherSchemas('file:///C:/Users/Kevin/Documents/GitHub/core');
+   //gatherSchemas('http://raw.github.com/cyclus/core/master/src/Models/Facility/StorageFacility/StorageFacility.rng');
    
 }
 
@@ -43,13 +43,18 @@ Parser.prototype.speak = function() {
 	
 // Take XML and convert to JS object to be printed out.
 Parser.prototype.parse_obj = function() {
-	var xhttp = cycicXMLHttpRequest()
-	xhttp.open("GET", this.file, false);
-	xhttp.send();
-	xmlDoc=xhttp.responseXML; 
+    if (this.file[4] == 'http') {
+        var x = this.file.childNodes[0].childNodes;
+    }
+    else{
+        var xhttp = cycicXMLHttpRequest()
+        xhttp.open("GET", this.file, false);
+        xhttp.send();
+        xmlDoc=xhttp.responseXML; 
 
-	var x = xmlDoc.childNodes[0].childNodes;
-
+        var x = xmlDoc.childNodes[0].childNodes;
+    }
+    
 	// First, start looking for the main parent name by searching for the 'define' tag
 	for(n=0; n<x.length; n++){
     // If found, start printing out the children
@@ -125,7 +130,8 @@ Parser.prototype.printObject = function(parsed_object, spaces) {
 		count++;
 		// If the element has more than one child, print out the parent,
 		// the children and its children
-		if(this.getChildrenNum(parsed_object[key]) > 1){
+        
+        if(this.getChildrenNum(parsed_object[key]) > 1){
 			document.write("[\"" + key + "\",<br>");
 			this.inputSpaces(spaces + 1);
 			document.write("[<br>");
@@ -241,18 +247,53 @@ function gatherSchemas(cyclusPath){
   document.write(Object.prototype.toString.call(rngPaths) + "<br/>")
   for (i in rngPaths) {
 	rngRelPath = rngPaths[i]
-	rngFullPath = cyclusPath + '/' + rngRelPath
-	parser = new Parser(rngFullPath)
-	schemas[rngRelPath] = parser.parse_obj()
-	/**if (rngRelPath.match(reFac) !== null) {
-	  schemas[rngRelPath] = new Parser(rngFullPath)
-	}**/
+    // Test to see if server request works
+    rngRelPath = "https://raw.github.com/cyclus/core/master/src/Models/Facility/StorageFacility/StorageFacility.rng"
+    //document.write(rngRelPath.slice(0,4))
+    if (rngRelPath.slice(0,4) == 'http'){
+        $(document).ready(function() {
+            $.ajax({
+                crossDomain: true,
+                type: 'GET',
+                url: 'http://query.yahooapis.com/v1/public/yql?q=select * from xml where url=' + rngRelPath,
+                dataType: 'jsonp',
+                success: function(response){
+                    if(response.results[0] != undefined){
+                        //alert(response.results[0])
+                        var text = response.results[0]
+                        if (window.ActiveXObject){
+                          var doc=new ActiveXObject('Microsoft.XMLDOM');
+                          doc.async='false';
+                          doc.loadXML(text);
+                        } else {
+                          var parser=new DOMParser();
+                          var doc=parser.parseFromString(text,'text/xml');
+                        }
+                        var parser = new Parser(doc)
+                        var parsed_obj = parser.parse_obj()
+                        parser.printObject(parsed_obj, 0);
+                    }
+                    else{
+                        alert('Response undefined; incorrect url')
+                    }
+                }
+            })
+        });
+    }
+    else{
+        rngFullPath = cyclusPath + '/' + rngRelPath
+        parser = new Parser(rngFullPath)
+        schemas[rngRelPath] = parser.parse_obj()
+        /**if (rngRelPath.match(reFac) !== null) {
+          schemas[rngRelPath] = new Parser(rngFullPath)
+        }**/
+    }
   }
 
   for (s in schemas) {
 	document.write(s + ":  " + "<br/>")
 	var parser = new Parser('blah')
-	//parser.printObject(schemas[s],0)
+	parser.printObject(schemas[s],0)
   }
   return schemas
 }

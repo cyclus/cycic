@@ -1,7 +1,40 @@
 <!DOCTYPE html>
 <html>
+<head>
+<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+<script type='text/javascript' src='jsParser.js'></script>
+<!--http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url=%22https://raw.github.com/cyclus/core/master/src/Models/Facility/StorageFacility/StorageFacility.rng%22&format=json-->
+</head>
 <body>
-<script type='text/javascript' src='jsParser.js'>
-</script>
+<!--<script>
+$(document).ready(function() {
+    $.ajax({
+        crossDomain: true,
+        type: 'GET',
+        url: 'http://query.yahooapis.com/v1/public/yql?q=select * from xml where url="https://raw.github.com/cyclus/core/master/src/Models/Facility/StorageFacility/StorageFacility.rng?callback=blah"',
+        dataType: 'jsonp',
+        success: function(response){
+            if(response.results[0] != undefined){
+                //alert(response.results[0])
+                var text = response.results[0]
+                if (window.ActiveXObject){
+                  var doc=new ActiveXObject('Microsoft.XMLDOM');
+                  doc.async='false';
+                  doc.loadXML(text);
+                } else {
+                  var parser=new DOMParser();
+                  var doc=parser.parseFromString(text,'text/xml');
+                }
+                var parser = new Parser(doc)
+                var parsed_obj = parser.parse_obj()
+                parser.printObject(parsed_obj, 0);
+            }
+            else{
+                alert('Response undefined; incorrect url')
+            }
+        }
+    })
+});
+</script>-->
 </body>
 </html>
