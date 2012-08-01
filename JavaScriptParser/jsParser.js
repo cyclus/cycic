@@ -1,8 +1,12 @@
 function main(){
-    //var parser = new Parser("storagefacility.xml");
-	//var parser = new Parser("sourcefacility.xml");
-	//var parser = new Parser("recipereactor.xml");
-    //var parser = new Parser("file:///home/scopatz/cyclus/src/Models/Facility/StorageFacility/StorageFacility.rng");
+
+    /**
+     * Examples for using the parser:
+     * var parser = new Parser("storagefacility.xml");
+     * var parser = new Parser("sourcefacility.xml");
+	 * var parser = new Parser("recipereactor.xml");
+     * var parser = new Parser("file:///home/scopatz/cyclus/src/Models/Facility/StorageFacility/StorageFacility.rng");
+     */
     var parser = new Parser("file:///C:/Users/Kevin/Documents/GitHub/core/src/Models/Facility/SourceFacility/SourceFacility.rng");
   
     var parsed_obj = parser.parse_obj();
@@ -10,26 +14,32 @@ function main(){
 }
 
 function mainGather(){
-    //gatherSchemas('/home/scopatz/cyclus')
-    //gatherSchemas('../../cyclus')
+    
+    /**
+     * Examples for using mainGather
+     * gatherSchemas('/home/scopatz/cyclus')
+     * gatherSchemas('../../cyclus')
+     * gatherSchemas('http://raw.github.com/cyclus/core/master/src/Models/Facility/StorageFacility/StorageFacility.rng');
+     */
     gatherSchemas('file:///C:/Users/Kevin/Documents/GitHub/core');
-    //gatherSchemas('http://raw.github.com/cyclus/core/master/src/Models/Facility/StorageFacility/StorageFacility.rng');
-   
+     
 }
 
 function cycicXMLHttpRequest() {
     if (window.XMLHttpRequest) {
         var xhttp = new XMLHttpRequest()
     }
-    else { // IE 5/6
+    
+    /** IE 5/6 */
+    else { 
         var xhttp = new ActiveXObject("Microsoft.XMLHTTP")
     }
     return xhttp
 }
 
-//
-// Parser Class
-//
+/**
+ * Parser Class
+ */
 
 function Parser(word){
     this.currentIndex = new Array();
@@ -42,7 +52,7 @@ Parser.prototype.speak = function() {
     document.write(this.word);
 }
 	
-// Take XML and convert to JS object to be printed out.
+/** Take XML and convert to JS object to be printed out. */
 Parser.prototype.parse_obj = function() {
     if (this.file.URL == '') {
         var x = this.file.childNodes[0].childNodes;
@@ -56,10 +66,12 @@ Parser.prototype.parse_obj = function() {
         var x = xmlDoc.childNodes[0].childNodes;
     }
     
-    // First, start looking for the main parent name by searching for the 
-    // 'define' tag
+    /**
+     * First, start looking for the main parent name by searching for the 
+     * 'define' tag
+     */
     for(n=0; n<x.length; n++){
-    // If found, start printing out the children
+    /** If found, start printing out the children */
         if (x[n].nodeName === 'define'){
             var elements = x[n].childNodes[1].childNodes;
             this.jsObjName[x[n].childNodes[1].getAttribute('name')] = {};
@@ -74,11 +86,13 @@ Parser.prototype.parseObject = function(a){
     var spaces = new Array();
     result = {};
     for (i=0; i<a.length; i++){
-        // Extract only the element, not the text objects
+    
+        /** Extract only the element, not the text objects */
         if(a[i].nodeName != '#text'){
             if(a[i].nodeName != '#comment'){
                 var currentElement = a[i];
-                // If the object has a 'name' attribute, print it
+                
+                /** If the object has a 'name' attribute, print it */
                 if(currentElement.getAttribute('name')){
                     this.currentIndex.push(i);
                     result[currentElement.getAttribute('name')] = {};						
@@ -90,7 +104,7 @@ Parser.prototype.parseObject = function(a){
                     i = this.currentIndex.pop(i);
 				}
 
-                // If the object has a 'type' attribute, print it
+                /** If the object has a 'type' attribute, print it */
                 else if(currentElement.getAttribute('type')){
                     this.currentIndex.push(i);	
                     
@@ -122,16 +136,20 @@ Parser.prototype.parseObject = function(a){
     return result;
 }
 
-// Function used to recursively print the JS object
+/** Function used to recursively print the JS object */
 Parser.prototype.printObject = function(parsed_object, spaces) {
     var count = 0;
-    // Loop through each element in the object
+    
+    /** Loop through each element in the object */
     for (var key in parsed_object) {
-        // Keep track of the current index
+    
+        /** Keep track of the current index */
         count++;
-        // If the element has more than one child, print out the parent,
-        // the children and its children
         
+        /** 
+         * If the element has more than one child, print out the parent,
+         * the children and its children
+         */
         if(this.getChildrenNum(parsed_object[key]) > 1){
             document.write("[\"" + key + "\",<br>");
             this.inputSpaces(spaces + 1);
@@ -143,14 +161,20 @@ Parser.prototype.printObject = function(parsed_object, spaces) {
             this.inputSpaces(spaces);
             document.write("]<br>");
         }
-        // If the element has exactly one child, print out the parent and its
-        // single child
+        
+        /** 
+         * If the element has exactly one child, print out the parent and its
+         * single child
+         */
         else if (this.getChildrenNum(parsed_object[key]) == 1){
             document.write("[\"" + key + "\", ");
             length = this.getLength(parsed_object);
             tempKey = this.getKey(parsed_object[key]);
-            // If the parent's child has no children, just print out the child with
-            // closing brackets
+        
+            /** 
+             * If the parent's child has no children, just print out the child with
+             * closing brackets
+             */
             if (this.getChildrenNum(parsed_object[key][tempKey]) == 0){
                 document.write("\"" + this.getKey(parsed_object[key]) + "\"");
                 // Check if we are at the last element
@@ -162,8 +186,11 @@ Parser.prototype.printObject = function(parsed_object, spaces) {
                     this.inputSpaces(spaces);
                 }
             }
-            // If the parent's child has children, print out everything and print the
-            // children's children
+            
+            /** 
+             * If the parent's child has children, print out everything and print the
+             * children's children
+             */
             else {
                 document.write("<br>");
                 this.inputSpaces(spaces +1);
@@ -182,10 +209,12 @@ Parser.prototype.printObject = function(parsed_object, spaces) {
                 }
             }
         }
-        // If the parent has no child, it is a ref, so just print out the parent
+        
+        /** If the parent has no child, it is a ref, so just print out the parent */
         else if (this.getChildrenNum(parsed_object[key]) == 0){
             length = this.getLength(parsed_object);
-            //If it is the last element, print just a newline
+            
+            /**If it is the last element, print just a newline */
             if (count == length) {
                 document.write("\"" + key + "\"<br>");
             }
@@ -197,7 +226,7 @@ Parser.prototype.printObject = function(parsed_object, spaces) {
     }	
 }
 
-// Helper function used to get the length of the elements within a parent
+/** Helper function used to get the length of the elements within a parent */
 Parser.prototype.getLength = function(object) {
     var length = 0;
     for (var key in object){
@@ -206,9 +235,11 @@ Parser.prototype.getLength = function(object) {
     return length;
 }
 
-// Helper function used to get the key value in an object
-// Only used when we know that the parent has just one child
-Parser.prototype.getKey = function(object) {
+/** 
+ * Helper function used to get the key value in an object
+ * Only used when we know that the parent has just one child
+ */
+ Parser.prototype.getKey = function(object) {
     var att = "";
     for (var key in object) {
         att = key;
@@ -216,7 +247,7 @@ Parser.prototype.getKey = function(object) {
     return att;
 }
 
-// Helper function used to determine the number of children in a node
+/** Helper function used to determine the number of children in a node */
 Parser.prototype.getChildrenNum = function(node) {
     var count = 0;
     for (var key in node){
@@ -227,7 +258,7 @@ Parser.prototype.getChildrenNum = function(node) {
     return count;
 }
 
-// Helper function used to print out 'num' amount of tabs for formatting purposes
+/** Helper function used to print out 'num' amount of tabs for formatting purposes */
 Parser.prototype.inputSpaces = function(num) {
     for(k=0; k < num; k ++){
         document.write('&nbsp&nbsp&nbsp&nbsp');
@@ -235,13 +266,14 @@ Parser.prototype.inputSpaces = function(num) {
 }
 
 function gatherSchemas(cyclusPath){
-    // Default arguments
+
+    /** Default arguments */
     cyclusPath = typeof cyclusPath !== 'undefined' ? cyclusPath : '';
     if (cyclusPath == ''){
         console.error("cyclusPath is empty");
     }
 
-    // local vars
+    /** local vars */
     var i = 0;
     var parser = null;
     var schemas = {};
@@ -249,7 +281,7 @@ function gatherSchemas(cyclusPath){
     var rngFullPath = "";
     var reFac = /eFacility/;
 
-    // get the list of all rng files and parse them
+    /** get the list of all rng files and parse them */
     var xhttp = cycicXMLHttpRequest();
     xhttp.open("GET", "rngdump.json", false);
     xhttp.send();
@@ -258,7 +290,8 @@ function gatherSchemas(cyclusPath){
     document.write(Object.prototype.toString.call(rngPaths) + "<br/>");
     for (i in rngPaths) {
         rngRelPath = rngPaths[i]
-        // Test to see if server request works
+        
+        /** Test to see if server request works */
         rngRelPath =
             "\"https://raw.github.com/cyclus/core/master/src/Models/Facility/StorageFacility/StorageFacility.rng\""
         if (rngRelPath.slice(0,4) == '\"htt'){
@@ -296,9 +329,11 @@ function gatherSchemas(cyclusPath){
             rngFullPath = cyclusPath + '/' + rngRelPath;
             parser = new Parser(rngFullPath);
             schemas[rngRelPath] = parser.parse_obj();
-            /**if (rngRelPath.match(reFac) !== null) {
-                schemas[rngRelPath] = new Parser(rngFullPath)
-            }**/
+            /** 
+             * if (rngRelPath.match(reFac) !== null) {
+             * schemas[rngRelPath] = new Parser(rngFullPath)
+             * }
+             */
         }
     }
 
@@ -310,30 +345,30 @@ function gatherSchemas(cyclusPath){
     return schemas;
 }
 
-//main();
+/** main(); */
 mainGather();
 
-//
-//MENTAL NOTES TO SELF
-//
+/**
+ * MENTAL NOTES TO SELF
+ */
 
 /**
-xmlDoc.childNodes[0].nodeName -- 'grammer'
-xmlDoc.childNodes[0].childNodes[1].nodeName -- 'define'
-xmlDoc.childNodes[0].childNodes[1].childNodes[1] --element RecipeReactor 
-xmlDoc.childNodes[0].childNodes[1].childNodes[1].childNodes[1].nodeName --oneOrMore
+ * xmlDoc.childNodes[0].nodeName -- 'grammer'
+ * xmlDoc.childNodes[0].childNodes[1].nodeName -- 'define'
+ * xmlDoc.childNodes[0].childNodes[1].childNodes[1] --element RecipeReactor 
+ * xmlDoc.childNodes[0].childNodes[1].childNodes[1].childNodes[1].nodeName --oneOrMore
+ *
+ * for(i=0; i<elements.length; i++){
+ *     document.write(elements[1].childNodes[i]);
+ * }
 
-for(i=0; i<elements.length; i++){
-	document.write(elements[1].childNodes[i]);
-}
+ * print tag name and value of the name attribute. change 'name' to type to get the data type of the object
+ * document.write(xmlDoc.getElementsByTagName('element')[1].childNodes[1].getAttribute('name'));
+ * document.write(xmlDoc.getElementsByTagName('element')[1].childNodes[1].nodeName);
 
-//print tag name and value of the name attribute. change 'name' to type to get the data type of the object
-document.write(xmlDoc.getElementsByTagName('element')[1].childNodes[1].getAttribute('name'));
-document.write(xmlDoc.getElementsByTagName('element')[1].childNodes[1].nodeName);
-
-//prints inrecipt.. why
-document.write(xmlDoc.getElementsByTagName('element')[1].childNodes[1].nextSibling.nextSibling.getAttribute('name'));
-**/
+ * prints inrecipt.. why
+ * document.write(xmlDoc.getElementsByTagName('element')[1].childNodes[1].nextSibling.nextSibling.getAttribute('name'));
+ */
 
 
 
