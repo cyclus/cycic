@@ -1,3 +1,6 @@
+/** main(); */
+mainGather();
+
 function main(){
 
     /**
@@ -7,7 +10,8 @@ function main(){
 	 * var parser = new Parser("recipereactor.xml");
      * var parser = new Parser("file:///home/scopatz/cyclus/src/Models/Facility/StorageFacility/StorageFacility.rng");
      */
-    var parser = new Parser("file:///C:/Users/Kevin/Documents/GitHub/core/src/Models/Facility/SourceFacility/SourceFacility.rng");
+    var parser = new Parser(
+        "file:///C:/Users/Kevin/Documents/GitHub/core/src/Models/Facility/SourceFacility/SourceFacility.rng");
   
     var parsedObj = parser.parseObj();
     parser.printObject(parsedObj, 0);	
@@ -37,9 +41,9 @@ function cycicXMLHttpRequest() {
     return xhttp
 }
 
-/**
- * Parser Class
- */
+/******************************************************************************
+ *                             Parser Class                                   *    
+ ******************************************************************************/
 
 function Parser(word){
     this.currentIndex = new Array();
@@ -87,12 +91,12 @@ Parser.prototype.parseObject = function(a){
     result = {};
     for (i=0; i<a.length; i++){
     
-        /** Extract only the element, not the text objects */
+        /** Extract only the element, not the text objects. */
         if(a[i].nodeName != '#text'){
             if(a[i].nodeName != '#comment'){
                 var currentElement = a[i];
                 
-                /** If the object has a 'name' attribute, print it */
+                /** If the object has a 'name' attribute, print it. */
                 if(currentElement.getAttribute('name')){
                     this.currentIndex.push(i);
                     result[currentElement.getAttribute('name')] = {};						
@@ -104,7 +108,7 @@ Parser.prototype.parseObject = function(a){
                     i = this.currentIndex.pop(i);
 				}
 
-                /** If the object has a 'type' attribute, print it */
+                /** If the object has a 'type' attribute, print it. */
                 else if(currentElement.getAttribute('type')){
                     this.currentIndex.push(i);	
                     
@@ -136,19 +140,19 @@ Parser.prototype.parseObject = function(a){
     return result;
 }
 
-/** Function used to recursively print the JS object */
+/** Function used to recursively print the JS object. */
 Parser.prototype.printObject = function(parsedObject, spaces) {
     var count = 0;
     
-    /** Loop through each element in the object */
+    /** Loop through each element in the object. */
     for (var key in parsedObject) {
     
-        /** Keep track of the current index */
+        /** Keep track of the current index. */
         count++;
         
         /** 
          * If the element has more than one child, print out the parent,
-         * the children and its children
+         * the children and its children.
          */
         if(this.getChildrenNum(parsedObject[key]) > 1){
             document.write("[\"" + key + "\",<br>");
@@ -164,7 +168,7 @@ Parser.prototype.printObject = function(parsedObject, spaces) {
         
         /** 
          * If the element has exactly one child, print out the parent and its
-         * single child
+         * single child.
          */
         else if (this.getChildrenNum(parsedObject[key]) == 1){
             document.write("[\"" + key + "\", ");
@@ -173,7 +177,7 @@ Parser.prototype.printObject = function(parsedObject, spaces) {
         
             /** 
              * If the parent's child has no children, just print out the child with
-             * closing brackets
+             * closing brackets.
              */
             if (this.getChildrenNum(parsedObject[key][tempKey]) == 0){
                 document.write("\"" + this.getKey(parsedObject[key]) + "\"");
@@ -189,7 +193,7 @@ Parser.prototype.printObject = function(parsedObject, spaces) {
             
             /** 
              * If the parent's child has children, print out everything and print the
-             * children's children
+             * children's children.
              */
             else {
                 document.write("<br>");
@@ -210,11 +214,11 @@ Parser.prototype.printObject = function(parsedObject, spaces) {
             }
         }
         
-        /** If the parent has no child, it is a ref, so just print out the parent */
+        /** If the parent has no child, it is a ref, so just print out the parent. */
         else if (this.getChildrenNum(parsedObject[key]) == 0){
             length = this.getLength(parsedObject);
             
-            /**If it is the last element, print just a newline */
+            /**If it is the last element, print just a newline. */
             if (count == length) {
                 document.write("\"" + key + "\"<br>");
             }
@@ -226,7 +230,7 @@ Parser.prototype.printObject = function(parsedObject, spaces) {
     }	
 }
 
-/** Helper function used to get the length of the elements within a parent */
+/** Helper function used to get the length of the elements within a parent. */
 Parser.prototype.getLength = function(object) {
     var length = 0;
     for (var key in object){
@@ -236,8 +240,8 @@ Parser.prototype.getLength = function(object) {
 }
 
 /** 
- * Helper function used to get the key value in an object
- * Only used when we know that the parent has just one child
+ * Helper function used to get the key value in an object.
+ * Only used when we know that the parent has just one child.
  */
  Parser.prototype.getKey = function(object) {
     var att = "";
@@ -247,7 +251,7 @@ Parser.prototype.getLength = function(object) {
     return att;
 }
 
-/** Helper function used to determine the number of children in a node */
+/** Helper function used to determine the number of children in a node. */
 Parser.prototype.getChildrenNum = function(node) {
     var count = 0;
     for (var key in node){
@@ -258,7 +262,7 @@ Parser.prototype.getChildrenNum = function(node) {
     return count;
 }
 
-/** Helper function used to print out 'num' amount of tabs for formatting purposes */
+/** Helper function used to print out 'num' amount of tabs for formatting purposes. */
 Parser.prototype.inputSpaces = function(num) {
     for(k=0; k < num; k ++){
         document.write('&nbsp&nbsp&nbsp&nbsp');
@@ -267,13 +271,13 @@ Parser.prototype.inputSpaces = function(num) {
 
 function gatherSchemas(cyclusPath){
 
-    /** Default arguments */
+    /** Default arguments. */
     cyclusPath = typeof cyclusPath !== 'undefined' ? cyclusPath : '';
     if (cyclusPath == ''){
         console.error("cyclusPath is empty");
     }
 
-    /** local vars */
+    /** Local vars. */
     var i = 0;
     var parser = null;
     var schemas = {};
@@ -281,7 +285,7 @@ function gatherSchemas(cyclusPath){
     var rngFullPath = "";
     var reFac = /eFacility/;
 
-    /** get the list of all rng files and parse them */
+    /** Get the list of all rng files and parse them. */
     var xhttp = cycicXMLHttpRequest();
     xhttp.open("GET", "rngdump.json", false);
     xhttp.send();
@@ -291,7 +295,7 @@ function gatherSchemas(cyclusPath){
     for (i in rngPaths) {
         rngRelPath = rngPaths[i]
         
-        /** Test to see if server request works */
+        /** Test to see if server request works. */
         rngRelPath =
             "\"https://raw.github.com/cyclus/core/master/src/Models/Facility/StorageFacility/StorageFacility.rng\""
         if (rngRelPath.slice(0,4) == '\"htt'){
@@ -346,9 +350,6 @@ function gatherSchemas(cyclusPath){
     return schemas;
 }
 
-/** main(); */
-mainGather();
-
 /**
  * MENTAL NOTES TO SELF
  */
@@ -370,6 +371,3 @@ mainGather();
  * prints inrecipt.. why
  * document.write(xmlDoc.getElementsByTagName('element')[1].childNodes[1].nextSibling.nextSibling.getAttribute('name'));
  */
-
-
-
