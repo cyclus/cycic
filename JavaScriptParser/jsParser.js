@@ -9,8 +9,8 @@ function main(){
      */
     var parser = new Parser("file:///C:/Users/Kevin/Documents/GitHub/core/src/Models/Facility/SourceFacility/SourceFacility.rng");
   
-    var parsed_obj = parser.parse_obj();
-    parser.printObject(parsed_obj, 0);	
+    var parsedObj = parser.parseObj();
+    parser.printObject(parsedObj, 0);	
 }
 
 function mainGather(){
@@ -53,7 +53,7 @@ Parser.prototype.speak = function() {
 }
 	
 /** Take XML and convert to JS object to be printed out. */
-Parser.prototype.parse_obj = function() {
+Parser.prototype.parseObj = function() {
     if (this.file.URL == '') {
         var x = this.file.childNodes[0].childNodes;
     }
@@ -137,11 +137,11 @@ Parser.prototype.parseObject = function(a){
 }
 
 /** Function used to recursively print the JS object */
-Parser.prototype.printObject = function(parsed_object, spaces) {
+Parser.prototype.printObject = function(parsedObject, spaces) {
     var count = 0;
     
     /** Loop through each element in the object */
-    for (var key in parsed_object) {
+    for (var key in parsedObject) {
     
         /** Keep track of the current index */
         count++;
@@ -150,12 +150,12 @@ Parser.prototype.printObject = function(parsed_object, spaces) {
          * If the element has more than one child, print out the parent,
          * the children and its children
          */
-        if(this.getChildrenNum(parsed_object[key]) > 1){
+        if(this.getChildrenNum(parsedObject[key]) > 1){
             document.write("[\"" + key + "\",<br>");
             this.inputSpaces(spaces + 1);
             document.write("[<br>");
             this.inputSpaces(spaces + 2);
-            this.printObject(parsed_object[key], spaces + 2);
+            this.printObject(parsedObject[key], spaces + 2);
             this.inputSpaces(spaces + 1);
             document.write("]<br>");
             this.inputSpaces(spaces);
@@ -166,17 +166,17 @@ Parser.prototype.printObject = function(parsed_object, spaces) {
          * If the element has exactly one child, print out the parent and its
          * single child
          */
-        else if (this.getChildrenNum(parsed_object[key]) == 1){
+        else if (this.getChildrenNum(parsedObject[key]) == 1){
             document.write("[\"" + key + "\", ");
-            length = this.getLength(parsed_object);
-            tempKey = this.getKey(parsed_object[key]);
+            length = this.getLength(parsedObject);
+            tempKey = this.getKey(parsedObject[key]);
         
             /** 
              * If the parent's child has no children, just print out the child with
              * closing brackets
              */
-            if (this.getChildrenNum(parsed_object[key][tempKey]) == 0){
-                document.write("\"" + this.getKey(parsed_object[key]) + "\"");
+            if (this.getChildrenNum(parsedObject[key][tempKey]) == 0){
+                document.write("\"" + this.getKey(parsedObject[key]) + "\"");
                 // Check if we are at the last element
                 if(count == length){
                     document.write("]<br>");
@@ -194,16 +194,16 @@ Parser.prototype.printObject = function(parsed_object, spaces) {
             else {
                 document.write("<br>");
                 this.inputSpaces(spaces +1);
-                tempKey = this.getKey(parsed_object[key]);
+                tempKey = this.getKey(parsedObject[key]);
                 
-                if (this.getChildrenNum(parsed_object[key][tempKey]) ==1){
+                if (this.getChildrenNum(parsedObject[key][tempKey]) ==1){
                     document.write("[");
-                    this.printObject(parsed_object[key], spaces + 1);
+                    this.printObject(parsedObject[key], spaces + 1);
                     this.inputSpaces(spaces);
                     document.write("]]<br>");
                 }
                 else{
-                    this.printObject(parsed_object[key], spaces + 1);
+                    this.printObject(parsedObject[key], spaces + 1);
                     this.inputSpaces(spaces);
                     document.write("]<br>");
                 }
@@ -211,8 +211,8 @@ Parser.prototype.printObject = function(parsed_object, spaces) {
         }
         
         /** If the parent has no child, it is a ref, so just print out the parent */
-        else if (this.getChildrenNum(parsed_object[key]) == 0){
-            length = this.getLength(parsed_object);
+        else if (this.getChildrenNum(parsedObject[key]) == 0){
+            length = this.getLength(parsedObject);
             
             /**If it is the last element, print just a newline */
             if (count == length) {
@@ -314,8 +314,8 @@ function gatherSchemas(cyclusPath){
                             }
                         
                             var parser = new Parser(doc);
-                            var parsed_obj = parser.parse_obj();
-                            parser.printObject(parsed_obj, 0);
+                            var parsedObj = parser.parseObj();
+                            parser.printObject(parsedObj, 0);
                         }
                         else{
                             alert('Response undefined; incorrect url');
@@ -328,7 +328,8 @@ function gatherSchemas(cyclusPath){
         else{
             rngFullPath = cyclusPath + '/' + rngRelPath;
             parser = new Parser(rngFullPath);
-            schemas[rngRelPath] = parser.parse_obj();
+            schemas[rngRelPath] = parser.parseObj();
+            
             /** 
              * if (rngRelPath.match(reFac) !== null) {
              * schemas[rngRelPath] = new Parser(rngFullPath)
