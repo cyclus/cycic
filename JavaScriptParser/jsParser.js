@@ -47,7 +47,7 @@ function cycicXMLHttpRequest() {
 
 function Parser(word){
     this.currentIndex = new Array();
-    this.jsObjName = new Array();
+    this.jsObjName = new Object();
     this.elementTrace = new Array();
     this.file = word;
 }
