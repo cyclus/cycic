@@ -22,10 +22,31 @@
 #sandbox_2 {
 	background: #004AB3;
 	height: 45%;
-	width: 70%;
-	margin-left: 29.9%;
+	width: 29.99%;
+	float: left;
 	overflow:scroll;
-}	
+}
+#sandbox_4 {
+	background: #2D6987;
+	height: 45%;
+	width: 39.99%;
+	margin-left: 60.0%;
+	overflow:scroll;
+}
+#fuelCycleInfo {
+	background: #2D6987;
+	height: 100%;
+	width: 95%;
+	margin-left: 5%;
+	display: block;
+}
+#variableWindow{
+	background: #2D6987;
+	height: 100%;
+	width: 95%;
+	margin-left: 5%;
+	display: none;
+}
 #sandbox_3 {
 	background: #DBC59E;
 	height: 55%;
