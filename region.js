@@ -4,9 +4,9 @@ var NAME;
 
 
 function newRegionForm(){
-	$('#sandbox_form').empty();	
+	$('#form_sandbox div form').empty();	
 	$('#sandbox_1 form').append('<p> Region Name:  <input type = "text" name = "region_name"/> </p>');
-	$('#sandbox_1 form').append('<button name = "submit_New_Region" type="submit" onClick="openNewRegionForm()"> Submit </button>');
+	$('#submit_area > form').append('<button name = "submit_New_Region" type="submit" onClick="openNewRegionForm()"> Submit </button>');
 	document.getElementById('sandbox_1').style.display = 'none';					
 	document.getElementById('sandbox_1').style.display = 'block';			
 }

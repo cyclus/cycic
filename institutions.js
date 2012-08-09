@@ -4,9 +4,9 @@ var NAME;
 
 
 function newInstitutionForm(){
-	$('#sandbox_form').empty();	
+	$('#form_sandbox div form').empty();
 	$('#sandbox_1 form').append('<p> Institution Name:  <input type = "text" name = "instituion_name"/> </p>');
-	$('#sandbox_1 form').append('<button name = "submit_New_Institution" type="submit" onClick="openNewInstitutionForm()"> Submit </button>');
+	$('#submit_area > form').append('<button name = "submit_New_Institution" type="submit" onClick="openNewInstitutionForm()"> Submit </button>');
 	document.getElementById('sandbox_1').style.display = 'none';					
 	document.getElementById('sandbox_1').style.display = 'block';			
 }

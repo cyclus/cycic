@@ -10,16 +10,16 @@ var links =[];
 var TYPE;
 
 function newMarketForm(){
-	$('#sandbox_form').empty();	
+	$('#form_sandbox div form').empty();
 	$('#sandbox_1 form').append('<p> Market Name:  <input type = "text" name = "market_name"/> </p>');
-	$('#sandbox_1 form').append('<button name = "submit_New_Market" type="submit" onClick="openNewMarketForm()"> Submit </button>');
+	$('#submit_area > form').append('<button name = "submit_New_Market" type="submit" onClick="openNewMarketForm()"> Submit </button>');
 	document.getElementById('sandbox_1').style.display = 'none';					
 	document.getElementById('sandbox_1').style.display = 'block';			
 }
 function openNewMarketForm(){
 	window.TYPE = "steelblue"
 	window.NAME = document.getElementById('sandbox_form')[0].value;
-	$('#sandbox_form').empty();	
+	$('#form_sandbox div form').empty();
 	$('.market_type ul').prepend('<li id = "' + window.NAME.trim() + '"><a style ="cursor:hand; cursor:pointer">' + window.NAME);
 	updateSidebar();
 	document.getElementById('wrapper').style.display = 'none';					
@@ -30,7 +30,7 @@ function openNewMarketForm(){
 			}
 		$('#sandbox_1 form').append('<button name = "submit_Facility" type="button" onClick="printOutMarket()"> Submit </button>');
 	});
-	$('#sandbox_1 form').append('<button name = "submit_Facility" type="button" onClick="printOutMarket()"> Submit </button>');
+	$('#submit_area > form').append('<button name = "submit_Facility" type="button" onClick="printOutMarket()"> Submit </button>');
 	document.getElementById('sandbox_1').style.display = 'none';					
 	document.getElementById('sandbox_1').style.display = 'block';
 }
@@ -45,11 +45,12 @@ function printOutMarket(){
 		}
 		market['circle'] = {
 			name: window.NAME,
-  			type: d3.svg.symbol("circle"),
+  			type: d3.svg.symbol("square"),
     		size: 40,
     		x: 100,
     		y: 100,
-    		id: window.NAME
+    		id: window.NAME,
+    		call: "mark"
 		};
 		return market;		
 	}
@@ -62,7 +63,7 @@ function printOutMarket(){
 }
 function openMarketForm(facility){
 	window.TYPE = "steelblue";
-	$('#sandbox_form').empty();			
+	$('#form_sandbox div form').empty();		
 	for(attribute in facilities[facility]){
 		var STR = attribute;
 		window.NAME = facility;
@@ -89,7 +90,7 @@ function openMarketForm(facility){
 		$('#sandbox_1 form').append('<p>' + toTitleCase(attribute) + '<input type="text" name ="' + attribute +'" value ="' + toTitleCase(facilities[facility][STR]) + '"/>');
 	}
 	/*$('#sandbox_1 form').append('<button name = "submit_Facility" type="button" onClick="cloneFacilityForm()"> Clone Facility </button>');*/
-	$('#sandbox_1 form').append('<button name = "submit_Facility" type="button" onClick="printoutFacility()"> Submit </button>');
+	$('#submit_area > form').append('<button name = "submit_Facility" type="button" onClick="printoutFacility()"> Submit </button>');
 	document.getElementById('sandbox_1').style.display = 'none';					
 	document.getElementById('sandbox_1').style.display = 'block';
 	

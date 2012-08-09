@@ -7,31 +7,45 @@
  */
 
 #sandbox {
-	background: #1BDFF0;
+	background: #4C4E5A;
 	margin-left: 203px;
 	height: 97%;
+	border: 1px solid #4C4E5A;
+	overflow: hidden;
+}
+#form_sandbox {
+	background: #F89406;
+	height: 45%;
+	width: 29.95%;
+	float: left;
 	border: 1px solid #4C4E5A;
 }
 #sandbox_1 {
 	background: #F89406;
-	height: 45%;
-	width: 29.99%;
-	float: left;
-	overflow: scroll;
+	height: 90%;
+	width: 100%;
+	overflow: auto;
+}
+#submit_area {
+	background: #F89406;
+	max-height: 10%;
+	width: 100%;
 }	
 #sandbox_2 {
-	background: #004AB3;
+	background: #878D95;
 	height: 45%;
-	width: 29.99%;
+	width: 29.95%;
 	float: left;
-	overflow:scroll;
+	overflow:auto;
+	border: 1px solid #4C4E5A;
 }
 #sandbox_4 {
 	background: #2D6987;
 	height: 45%;
-	width: 39.99%;
-	margin-left: 60.0%;
-	overflow:scroll;
+	width: auto;
+	right: 0px;
+	overflow:auto;
+	border: 1px solid #4C4E5A;
 }
 #fuelCycleInfo {
 	background: #2D6987;
@@ -51,5 +65,6 @@
 	background: #DBC59E;
 	height: 55%;
 	width: 100%;
-	overflow:scroll;
+	overflow:auto;
+	border: 1px solid #4C4E5A;
 }
