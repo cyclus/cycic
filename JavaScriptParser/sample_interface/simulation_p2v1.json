@@ -99,4 +99,25 @@
     'inventorysize': 1e10,
     'commodprice': 0
   }
+'regions': {
+  'oneRegion': {
+  'allowedfacilities': ['FrontEnd', 'Reactor', 'BackEnd'],
+  'model': {
+    'BuildRegion': {
+      'prototyperequirements': [
+        {'prototypename': 'FrontEnd', 'demandschedule': [[72, 1]]}, 
+        {'prototypename': 'Reactor', 'demandschedule': [[73, 10]]},
+        {'prototypename': 'BackEnd', 'demandschedule': [[72, 1]]}
+        ]
+      }
+    }
+  'institution': {
+    'oneInst': {
+      'model': {
+        'BuildInst': {'availableprototypes': ['FrontEnd', 'Reactor', 'BackEnd']}
+          }
+        }
+      }
+    }
+  }
 }
