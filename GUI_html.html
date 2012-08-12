@@ -28,13 +28,15 @@
 	<script src="http://code.jquery.com/jquery-1.7.1.min.js"> </script>
 	<script src="jquery.dform=1.0.0.min.js"> </script>
 	<script src="timeline-start.js"> </script>
-	<script src="script.js"> </script>
+	<script src="functions.js"> </script>
 	<script src="facilities.js"> </script>
+	<script src="script.js"> </script>
 	<script src="markets.js"> </script>
 	<script src="region.js"> </script>
 	<script src="institutions.js"> </script>
 	<script src="parser.js"> </script>
 	<script src="material.js"> </script>
+	<script src="Nodes.js"> </script>
 	<!-- Kinetic Plug In -->
 	<script src="http://www.html5canvastutorials.com/libraries/kinetic-v3.10.2.js"> </script>
 </head>
@@ -155,7 +157,7 @@
 			<div id ="fuelCycleInfo">
 				<p align = "center"> Fuel Cycle Information </p>
 				<form id = "fuel_cycle_information">
-					<p> Fuel Cycle Name:  <input type = "text" name = "fc_name"/> </p>
+					<p> Fuel Cycle Name:  <input type = "text" name = "fc_name" onsubmit=function(){return false;}/> </p>
 					<p> Fuel Cycle Abstract: </p> 
 					<textarea name = "fc_abstract" rows=4 cols=40> Enter Fuel Cycle Abstract </textarea> 
 					<p> Fuel Cycle Comments: </p>
@@ -176,6 +178,9 @@
 		$('ul li ul').each(function(){
 		  	$(this).prev('a').find('.total').append('<div>'+ ($(this).find('li').length - $(this).find('li > ul > li').length - 1) +'</div>');
 		});
+		$('form').submit(function(e){
+   			 e.preventDefault();
+		});
 	</script>
 	<!-- Variables -->
 	<script type ="text/javascript">
@@ -188,6 +193,7 @@
 		var INSTITUTION;
 		var TYPE;
 		var PARENT;
+		var MODEL;
 		
 	</script>
 	<!-- Hiding the side menus -->
@@ -249,12 +255,6 @@
 			});	
 		});
 		
-		function toTitleCase(str){
-	    	return str.replace(/\w\S*/g, function(txt){
-	    		return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-	    	});
-		}
-		
 		function updateSidebar(){
 			$('ul li ul').each(function(){
 				$(this).prev('a').find('.total').find('div').remove()
@@ -285,15 +285,14 @@
 		    .attr("height", h);
 		
 		var force = d3.layout.force()
-		    /*.linkStrength(function(d){if(d['target']['call']=="child"){ return 1;} else{return 0;}});		
-			.linkDistance(function(d){if(d['target']['call'] == "child"){return 150;}})
-			.charge(function(d) {if(d['call'] == "child"){ return -100;}else{return 0}})*/
+		    .linkStrength(function(d){if(d['target']['call'] == "child"){ return 1;} else{return 0;}})		
+			.linkDistance(150)
+			.charge(function(d){if(d['call'] == "child"){ return -20;} else{return 0;}})
 			.nodes(Fnodes)
 		    .links(links)
 		    .size([w, h])
 		    .gravity(0)
 		    .friction(0)
-			.linkStrength(0);
 		    
 	    force.on("tick", function(){
   			vis.selectAll("g.node")
@@ -308,14 +307,13 @@
 		function updateLinks(){
 			var marketNamePass = []
 	      	for(i = 0; i < links.length; i ++){
-				if(toTitleCase(links[i].source.name) === toTitleCase(window.NAME)){
+				if(links[i].source.name === nameStore[window.NAME]){
 					if(links[i]['target']['call'] == "mark"){
 						links.splice(i,1);
 						i = 0;						
 					}
 				}
-			}		
-				      	
+			}
 			for( i = 0; i < Fnodes.length; i ++){
 				if(toTitleCase(Fnodes[i].name) === toTitleCase(facilities[window.NAME]['inMarket'])){
 					marketNamePass.push(i);
@@ -335,6 +333,52 @@
 				links.push({source: Fnodes[facNamePass], target: Fnodes[marketNamePass[k]]});
 			}
 			
+			// Updating Parent Node with Child Node Links //
+			if(Fnodes[facNamePass]['call'] == "child"){
+				for(i = 0; i < Fnodes.length; i++){
+					if(Fnodes[i]['children']){
+						for(j = 0; j < Fnodes[i]['children'].length; j++){
+							if(Fnodes[i]['children'][j]['name'] == Fnodes[facNamePass]['name']){
+								var parNamePass = i;
+							}
+						}
+					}
+				}
+				// Removing the old Parent Node to Market Links //
+				for(i = 0; i < links.length; i++){
+					if(links[i].source['name'] == Fnodes[parNamePass]['name']){
+						if(links[i].target['call'] == "mark"){
+							links.splice(i,1);
+							i = i-1;
+						}
+					}
+				}
+				// Finding Parent Node Markets
+				var marketParNamePass = []
+				var childNamePass = []
+				for(i = 0; i < Fnodes[parNamePass]['children'].length; i++){
+					childNamePass.push(facilities[Fnodes[parNamePass]['children'][i]['name']]['Name'])
+				}
+				
+				for(i = 0; i < childNamePass.length; i++){
+					marketNamePass.push(facilities[nameStore[childNamePass[i]]]['inMarket'])
+					for(j = 0; j < marketNamePass.length-1; j++){
+						if(marketNamePass[j] == marketNamePass[marketNamePass.length]){
+							marketNamePass.pop();
+						}
+					}
+				}
+				for(i = 0; i < childNamePass.length; i++){
+					marketNamePass.push(facilities[nameStore[childNamePass[i]]]['outMarket'])
+					for(j = 0; j < marketNamePass.length-1; j++){
+						if(marketNamePass[j] == marketNamePass[marketNamePass.length]){
+							marketNamePass.pop();
+						}
+					}
+				}
+				console.log(marketNamePass);			
+			}
+			// Updating Force Layout Links //
 			var link = vis.selectAll("line.link")
 			      .data(links, function(d) { return d.source.id + "-" + d.target.id; });
 	      	link.exit().remove();
@@ -345,208 +389,7 @@
 		    force.start();
 		}
 		
-		function addParentCircle(){
-			if(window.TYPE ==="green"){	
-				Fnodes.push(facilities[window.NAME]['circle']);
-				Tnodes.push(facilities[window.NAME]['circle']);
-				
-				for( k = 0; k < Fnodes.length; k ++){
-					if(Fnodes[k].name === toTitleCase(window.NAME)){
-						var facilityNamePass = k;
-					}
-				}
 
-				if(facilities[window.NAME]['inMarket']){
-					for( i = 0; i < Fnodes.length; i ++){
-						if(toTitleCase(Fnodes[i].name) === toTitleCase(facilities[window.NAME]['inMarket'])){
-							var marketNamePass = i;
-						}
-					}
-			  		links.push({source: Fnodes[facilityNamePass], target: Fnodes[marketNamePass]});
-			  		Tlinks.push({source: Fnodes[facilityNamePass], target: Fnodes[marketNamePass]});
-			  	}
-			  	if(facilities[window.NAME]['outMarket']){
-					for( j = 0; j < Fnodes.length; j ++){
-						if(toTitleCase(Fnodes[j].name) === toTitleCase(facilities[window.NAME]['outMarket'])){
-							var marketNamePass = j;
-						}
-					}
-			  		links.push({source: Fnodes[facilityNamePass], target: Fnodes[marketNamePass]});
-			  		Tlinks.push({source: Fnodes[facilityNamePass], target: Fnodes[marketNamePass]});
-			  	}			  	
-			}
-			if(window.TYPE ==="steelblue"){
-				Fnodes.push(MARKETS[window.NAME]['circle']);
-				Tnodes.push(MARKETS[window.NAME]['circle']);
-			}
-			
-		  	var Fnode = vis.selectAll("g.node")
-		  		.data(Tnodes, function(d) {return d.name;});
-		  		
-	 	  	if(window.TYPE === "green"){
-	 	  		Fnode.enter().append("svg:g")
-	  		     .attr("class", "node")
-	  			 .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
-	  			 .call(force.drag)
-	  			 .on("dblclick", function(d){hideChildren(d.name);})
-	  			 .on("click", function(d){openFacilityForm(d.name);})
-	  			Fnode.append("circle")
-  				 .attr("r", function(d) {return d.size;})
-  				 .style("fill", function() {return window.TYPE;})
-	  			 .style("stroke", "white")
-	  			 .style("stroke-width", "1.5px")
-	  			Fnode.append("text")
-  				 .attr("text-anchor", "middle")
-  				 .attr("dy", "0.2em")
-  				 .attr("font-size", "12")
-  				 .text(function(d) {return d.name;})
-	 	  	}
-	 	  	if(window.TYPE === "steelblue"){
-	 	  		Fnode.enter().append("svg:g")
-	  		     .attr("class", "node")
-	  			 .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
-	  			 .call(force.drag)
-	  			 .on("dblclick", function(d){openMarketForm(d.name);})
-  			    Fnode.append("ellipse")
-  				 .attr("rx", function(d) {return d.size;})
-  				 .attr("ry", function(d) {return d.size * 0.75;})
-  				 .style("fill", function() {return window.TYPE;})
-	  			 .style("stroke", "white")
-	  			 .style("stroke-width", "1.5px")
-	  			Fnode.append("text")
-  				 .attr("text-anchor", "middle")
-  				 .attr("dy", "0.2em")
-  				 .attr("font-size", "12")
-  				 .text(function(d) {return d.name;})	 	  		
-	 	  	}
-
-	  		Fnode.append("title")
-	  			.text(function(d) {return d.name;})
-	
-		  	var link = vis.selectAll("line.link")
-			      .data(Tlinks, function(d) {return d.source.id + "-" + d.target.id; });
-			
-			link.enter().insert("svg:line", "g.node")
-			      .attr("class", "link")
-		      
-		    force.start();
-		    Tnodes.splice(0, Tnodes.length);
-		    Tlinks.splice(0, Tlinks.length);
-		 }
-		 
-		function addCloneCircle(){
-		 	var test = false;
-		 	for(i = 0; i < Fnodes.length; i++){
-	 			if(Fnodes[i]['name'] == window.NAME){
-	 				test = true;
-	 			}
-		 	}
-	 		if(test == false){
-	 			for(i = 0; i < Fnodes.length; i++){
-	 				if(Fnodes[i]['name'].toLowerCase() === window.PARENT.toLowerCase()){
-	 					var facNamePass = i;
-	 				}
-	 			}
-	 			Fnodes.push(facilities[window.NAME]['circle']);
-				Tnodes.push(facilities[window.NAME]['circle']);
-				
-		  		links.push({source: Fnodes[facNamePass], target: Fnodes[Fnodes.length-1]});
-		  		Tlinks.push({source: Fnodes[facNamePass], target: Fnodes[Fnodes.length-1]});	
-		  				
-				Fnode = vis.selectAll("g.node")
-			  		.data(Tnodes, function(d) {return d.name;});
-		  		Fnode.enter().append("svg:g")
-		  		     .attr("class", "node")
-		  			 .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
-		  			 .call(force.drag)
-		  			 .on("click", function(d){openFacilityForm(d.name);})
-		  		Fnode.append("title")
-		  			.text(function(d) {return d.name;})
-	  			Fnode.append("circle")
-	  				.attr("r", "40")
-	  				.style("fill", function() {return window.TYPE;})
-		  			.style("stroke", "white")
-		  			.style("stroke-width", "1.5px")
-		  			
-	  			Fnode.append("text")
-	  				.attr("text-anchor", "middle")
-	  				.attr("dy", "0.2em")
-	  				.attr("font-size", "10")
-	  				.text(function(d) {return toTitleCase(d.name);})
-			  	
-			  	var link = vis.selectAll("line.link")
-				      .data(Tlinks, function(d) { return d.source.id + "-" + d.target.id; });
-				
-				link.enter().insert("svg:line", "g.node")
-				      .attr("class", "link")
-			      
-	 		}
-	 		 	    
-	 		force.start();
-		    Tnodes.splice(0, Tnodes.length);
-		    Tlinks.splice(0, Tlinks.length);	
-		}
-		
-		function hideChildren(facility){
-			/*CLOSE IT */
-			if(facilities[facility]['state'] == "open"){
-				/* Finding and removing children nodes */
-				for(i = 0; i < Fnodes.length; i++){
-					if(Fnodes[i]['name'] == facility){
-						for(ii = 0; ii < Fnodes[i]['children'].length; ii++){
-							for(j = 0; j < Fnodes.length; j++){
-								if(Fnodes[j]['name'] == Fnodes[i]['children'][ii]['name']){
-									Fnodes.splice(j, 1);
-									j = 0;
-								}
-							}
-						}
-					}
-				}
-				/* Finding and removing children links*/
-				for(i = 0; i < links.length; i++){
-					if(links[i]['source']['name'] == facilities[facility]['Name']){
-						if(links[i]['target']['call'] == "child"){
-							links.splice(i, 1);
-							i = 0;
-						}
-					}
-				}
-				
-				var link = vis.selectAll("line.link")
-					.data(links, function(d) { return d.source.id + "-" + d.target.id; });
-				link.exit().remove();
-				
-				Fnode = vis.selectAll("g.node")
-			  		.data(Fnodes, function(d) {return d.name;});
-			  	Fnode.exit().remove();	
-			  		
-		  		var link = vis.selectAll("line.link")
-					.data(links, function(d) { return d.source.id + "-" + d.target.id; });
-					
-				force.start();				
-			}
-			/*OPEN IT */
-			if(facilities[facility]['state'] == "closed"){
-				facilities[facility]['state'] = "open";
-				for(i = 0; i < Fnodes.length; i++){
-					if(Fnodes[i]['name'] === facility){
-						for(j = 0; j < Fnodes[i]['children'].length; j++){
-							Fnodes.push(Fnodes[i]['children'][j])
-							links.push({source: Fnodes[i], target: Fnodes[Fnodes.length-1]})
-						}
-					}
-				}
-				Fnode = vis.selectAll("g.node")
-			  		.data(Fnodes, function(d) {return d.name;});
-			  		
-		  		var link = vis.selectAll("line.link")
-					.data(links, function(d) { return d.source.id + "-" + d.target.id; });
-					
-				force.start();
-			}
-			facilities[facility]['state'] = "closed";
-		}
 
 	</script>
 </body>
