@@ -30,13 +30,13 @@
 	<script src="timeline-start.js"> </script>
 	<script src="functions.js"> </script>
 	<script src="facilities.js"> </script>
+	<script src="Nodes.js"> </script>	
 	<script src="script.js"> </script>
 	<script src="markets.js"> </script>
 	<script src="region.js"> </script>
 	<script src="institutions.js"> </script>
-	<script src="parser.js"> </script>
+	<script src="JavaScriptParser/jsParser.js"> </script>
 	<script src="material.js"> </script>
-	<script src="Nodes.js"> </script>
 	<!-- Kinetic Plug In -->
 	<script src="http://www.html5canvastutorials.com/libraries/kinetic-v3.10.2.js"> </script>
 </head>
@@ -69,6 +69,13 @@
 			</li>
 			<li><a href = "#"><strike> New Facility Type </strike> </a></li>
 			<li><a style="cursor:hand; cursor: pointer" onclick ="testingFunction()" class = "testing"> dForms Test </a></li>
+			<li><a style="cursor:hand; cursor: pointer" onclick ="testingFunction()" class = "testing"> Help </a>
+				<ul>
+					<li><a href = "#"> Documentation </a></li>
+					<li><a href = "#"> About Cycic </a></li>
+					<li><a href = "#"> Call Robert </a></li>
+				</ul>
+			</li>
 		</ul>
 	</header>
 	
@@ -305,36 +312,41 @@
 		});
 		
 		function updateLinks(){
+			// Removing all of focused node's old links //
 			var marketNamePass = []
 	      	for(i = 0; i < links.length; i ++){
 				if(links[i].source.name === nameStore[window.NAME]){
 					if(links[i]['target']['call'] == "mark"){
 						links.splice(i,1);
-						i = 0;						
+						i = i-1;						
 					}
 				}
 			}
+			// Pushing new links for focus node //
 			for( i = 0; i < Fnodes.length; i ++){
-				if(toTitleCase(Fnodes[i].name) === toTitleCase(facilities[window.NAME]['inMarket'])){
+				if(Fnodes[i].name === facilities[window.NAME]['inMarket']){
 					marketNamePass.push(i);
 				}
 			}
 			for( i = 0; i < Fnodes.length; i ++){
-				if(toTitleCase(Fnodes[i].name) === toTitleCase(facilities[window.NAME]['outMarket'])){
+				if(Fnodes[i].name === facilities[window.NAME]['outMarket']){
 					marketNamePass.push(i);
 				}
 			}
+			// Finding Fnode for focus node //
 			for( j = 0; j < Fnodes.length; j++){
-				if(toTitleCase(Fnodes[j].name) === toTitleCase(window.NAME)){
+				if(Fnodes[j].name === window.NAME){
 					var facNamePass = j;	
 				}
 			}
+			// Pushing focus node links //
 			for(k = 0; k < marketNamePass.length; k++){
 				links.push({source: Fnodes[facNamePass], target: Fnodes[marketNamePass[k]]});
 			}
 			
 			// Updating Parent Node with Child Node Links //
 			if(Fnodes[facNamePass]['call'] == "child"){
+				// Finding the parent node //
 				for(i = 0; i < Fnodes.length; i++){
 					if(Fnodes[i]['children']){
 						for(j = 0; j < Fnodes[i]['children'].length; j++){
@@ -359,24 +371,24 @@
 				for(i = 0; i < Fnodes[parNamePass]['children'].length; i++){
 					childNamePass.push(facilities[Fnodes[parNamePass]['children'][i]['name']]['Name'])
 				}
-				
+				console.log(childNamePass);
 				for(i = 0; i < childNamePass.length; i++){
-					marketNamePass.push(facilities[nameStore[childNamePass[i]]]['inMarket'])
+					marketParNamePass.push(facilities[nameStore[childNamePass[i]]]['inMarket'])
 					for(j = 0; j < marketNamePass.length-1; j++){
-						if(marketNamePass[j] == marketNamePass[marketNamePass.length]){
-							marketNamePass.pop();
+						if(marketParNamePass[j] == marketParNamePass[marketNamePass.length]){
+							marketParNamePass.pop();
 						}
 					}
 				}
+				console.log(marketParNamePass);
 				for(i = 0; i < childNamePass.length; i++){
-					marketNamePass.push(facilities[nameStore[childNamePass[i]]]['outMarket'])
-					for(j = 0; j < marketNamePass.length-1; j++){
-						if(marketNamePass[j] == marketNamePass[marketNamePass.length]){
-							marketNamePass.pop();
+					marketParNamePass.push(facilities[nameStore[childNamePass[i]]]['outMarket'])
+					for(j = 0; j < marketParNamePass.length-1; j++){
+						if(marketParNamePass[j] == marketParNamePass[marketNamePass.length]){
+							marketParNamePass.pop();
 						}
 					}
-				}
-				console.log(marketNamePass);			
+				}		
 			}
 			// Updating Force Layout Links //
 			var link = vis.selectAll("line.link")

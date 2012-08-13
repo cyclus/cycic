@@ -14,7 +14,7 @@ function main(){
         "file:///C:/Users/Kevin/Documents/GitHub/core/src/Models/Facility/SourceFacility/SourceFacility.rng");
   
     var parsedObj = parser.parseObj();
-    parser.printObject(parsedObj, 0);	
+    /*parser.printObject(parsedObj, 0);*/	
 }
 
 function mainGather(){
@@ -159,7 +159,7 @@ Parser.prototype.printObject = function(parsedObject, spaces) {
             this.inputSpaces(spaces + 1);
             document.write("[<br>");
             this.inputSpaces(spaces + 2);
-            this.printObject(parsedObject[key], spaces + 2);
+            /*this.printObject(parsedObject[key], spaces + 2);*/
             this.inputSpaces(spaces + 1);
             document.write("]<br>");
             this.inputSpaces(spaces);
@@ -202,12 +202,12 @@ Parser.prototype.printObject = function(parsedObject, spaces) {
                 
                 if (this.getChildrenNum(parsedObject[key][tempKey]) ==1){
                     document.write("[");
-                    this.printObject(parsedObject[key], spaces + 1);
+                    /*this.printObject(parsedObject[key], spaces + 1);*/
                     this.inputSpaces(spaces);
                     document.write("]]<br>");
                 }
                 else{
-                    this.printObject(parsedObject[key], spaces + 1);
+                    /*this.printObject(parsedObject[key], spaces + 1);*/
                     this.inputSpaces(spaces);
                     document.write("]<br>");
                 }
@@ -269,7 +269,7 @@ Parser.prototype.inputSpaces = function(num) {
     }
 }
 
-function gatherSchemas(cyclusPath){
+function gatherSchemas(cyclusPath, rDumpPath){
 
     /** Default arguments. */
     cyclusPath = typeof cyclusPath !== 'undefined' ? cyclusPath : '';
@@ -287,11 +287,11 @@ function gatherSchemas(cyclusPath){
 
     /** Get the list of all rng files and parse them. */
     var xhttp = cycicXMLHttpRequest();
-    xhttp.open("GET", "rngdump.json", false);
+    xhttp.open("GET", rDumpPath + "/rngdump.json", false);
     xhttp.send();
     var rngPaths = JSON.parse(xhttp.responseText);
-    document.write(typeof(rngPaths) + "<br/>");
-    document.write(Object.prototype.toString.call(rngPaths) + "<br/>");
+    /*document.write(typeof(rngPaths) + "<br/>");
+    document.write(Object.prototype.toString.call(rngPaths) + "<br/>");*/
     for (i in rngPaths) {
         rngRelPath = rngPaths[i]
         
@@ -343,10 +343,9 @@ function gatherSchemas(cyclusPath){
     }
 
     for (s in schemas) {
-        document.write(s + ":  " + "<br/>");
+        /*document.write(s + ":  " + "<br/>");*/
         var parser = new Parser('blah');
-        parser.printObject(schemas[s],0);
-    }
+        parser.printObject(schemas[s],0);   }
     return schemas;
 }
 

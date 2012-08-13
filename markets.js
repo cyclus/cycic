@@ -52,7 +52,8 @@ function printOutMarket(){
     		x: 100,
     		y: 100,
     		id: nameStore[window.NAME],
-    		call: "mark"
+    		call: "mark",
+    		color: "steelblue"
 		};
 		return market;		
 	}
@@ -84,10 +85,5 @@ function updateSidebar(){
 	$('ul li ul').each(function(){
 		$(this).prev('a').find('.total').find('div').remove()
 	  	$(this).prev('a').find('.total').append('<div>'+ ($(this).find('li').length - $(this).find('li > ul > li').length - 1) +'</div>');
-	});
-}
-function toTitleCase(str){
-	return str.replace(/\w\S*/g, function(txt){
-		return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
 	});
 }

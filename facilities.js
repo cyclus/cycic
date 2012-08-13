@@ -162,7 +162,7 @@ function printoutFacility(){
     		x: 100,
     		y: 100,
     		id: nameStore[window.NAME],
-    		call: "fac"
+    		call: "fac",
 		};
 		facility['circle']['children'] = [];
 		delete facility[""];

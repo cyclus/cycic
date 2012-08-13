@@ -10,7 +10,7 @@ function addParentCircle(){
 		Tnodes.push(facilities[nameStore[window.NAME]]['circle']);
 		
 		for( k = 0; k < Fnodes.length; k ++){
-			if(Fnodes[k].name === toTitleCase(window.NAME)){
+			if(Fnodes[k].name === window.NAME){
 				var facilityNamePass = k;
 			}
 		}
@@ -71,7 +71,7 @@ function addParentCircle(){
 	    Fnode.append("ellipse")
 		 .attr("rx", function(d) {return d.size;})
 		 .attr("ry", function(d) {return d.size * 0.75;})
-		 .style("fill", function() {return window.TYPE;})
+		 .style("fill", function() {return d.color;})
 		 .style("stroke", "white")
 		 .style("stroke-width", "1.5px")
 		Fnode.append("text")
@@ -161,23 +161,33 @@ function addCloneCircle(){
 
 function hideChildren(facility){
 	/*CLOSE IT */
-	//Removing Childlinks to markets //
+	//Removing Child links to markets //
 	var childNamePass = [];
+	var parMarkNamePass = [];
 	for(i = 0; i < Fnodes.length; i++){
 		if(Fnodes[i]['name'] == [facility]){
+			var facNamePass = i;
 			for(j = 0; j < Fnodes[i]['children'].length; j++){
 				childNamePass.push(Fnodes[i]['children'][j]);
 			}
 			for(k = 0; k < childNamePass.length; k++){
 				for(ii = 0; ii < links.length; ii++){
 					if(childNamePass[k]['name'] == links[ii]['source']['name']){
+						// Obtaining market links for parent //
+						parMarkNamePass.push(links[ii]['target']['name']);
+						for(jj = 0; jj < parMarkNamePass.length-1; jj++){
+							if(parMarkNamePass[jj] == parMarkNamePass[parMarkNamePass.length-1]){
+								parMarkNamePass.pop();
+							}
+						}
+						// Removing child links to markets //
 						links.splice(ii, 1);
 						ii = ii - 1;
 					}
 				}
 			}
 		}
-	}			
+	}		
 	/* Finding and removing children nodes */
 	for(i = 0; i < Fnodes.length; i++){
 		if(Fnodes[i]['name'] == [facility]){
@@ -200,17 +210,27 @@ function hideChildren(facility){
 			}
 		}
 	}
-	// Removing the links //
+	// Removing excess links //
 	var link = vis.selectAll("line.link")
 		.data(links, function(d) { return d.source.id + "-" + d.target.id; });
 	link.exit().remove();
 	// Removing the nodes //
 	Fnode = vis.selectAll("g.node")
   		.data(Fnodes, function(d) {return d.name;});
-  	Fnode.exit().remove();	
+  	Fnode.exit().remove();
+	// Pushing parent to market links //
+	for(i = 0; i < parMarkNamePass.length; i++){
+		for(j = 0; j < Fnodes.length; j++){
+			if(parMarkNamePass[i] == Fnodes[j]['name']){
+				links.push({source: Fnodes[facNamePass], target: Fnodes[j]})
+			}
+		}
+	}		
   	// Updating the links //	
 	var link = vis.selectAll("line.link")
 		.data(links, function(d) { return d.source.id + "-" + d.target.id; });
+	link.enter().insert("svg:line", "g.node")
+     	.attr("class", "link")
 		
 	force.start();
 	facilities[[facility]]['state'] = "closed";				
@@ -218,9 +238,29 @@ function hideChildren(facility){
 
 function showChildren(facility){
 	/*OPEN IT */
-	var childNamePass = [];
+	// Removing parent node to market links //
 	for(i = 0; i < Fnodes.length; i++){
-		if(Fnodes[i]['name'] == [facility]){
+		if(Fnodes[i]['name'] == nameStore[nameStoreBack[facility]]){
+			if(Fnodes[i]['children'].length > 0){
+				for(j = 0; j < links.length; j++){
+					if(links[j].source['name'] == nameStore[nameStoreBack[facility]]){
+						if(links[j].target['call'] == "mark"){
+							links.splice(j,1);
+							j = j-1;
+						}
+					}
+				}				
+			}
+		}
+	}
+	var link = vis.selectAll("line.link")
+		.data(links, function(d) { return d.source.id + "-" + d.target.id; });
+	link.exit().remove();
+	// Returning the parent to child nodes //
+	var childNamePass = [];
+	Tnodes.splice(0, Tnodes.length);
+	for(i = 0; i < Fnodes.length; i++){
+		if(Fnodes[i]['name'] == nameStore[nameStoreBack[facility]]){
 			for(j = 0; j < Fnodes[i]['children'].length; j++){
 				Fnodes.push(Fnodes[i]['children'][j]);
 				Tnodes.push(Fnodes[i]['children'][j]);
@@ -230,6 +270,38 @@ function showChildren(facility){
 			}
 		}
 	}
+	var link = vis.selectAll("line.link")
+		.data(Tlinks, function(d) { return d.source.id + "-" + d.target.id; });
+	link.enter().insert("svg:line", "g.node")
+		      .attr("class", "link")
+		      .style("stroke", "gray")
+		      .style("stroke-dasharray", "10, 5")
+	Fnode = vis.selectAll("g.node")
+  		.data(Tnodes, function(d) {return d.name;});
+	Fnode.enter().append("svg:g")
+	     .attr("class", "node")
+		 .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+		 .call(force.drag)
+		 .on("click", function(d){openFacilityForm(d.name);})
+	Fnode.append("title")
+		.text(function(d) {return d.name;})
+	Fnode.append("circle")
+		.attr("r", "40")
+		.style("fill", function() {return window.TYPE;})
+		.style("stroke", "white")
+		.style("stroke-width", "1.5px")
+		
+	Fnode.append("text")
+		.attr("text-anchor", "middle")
+		.attr("dy", "0.2em")
+		.attr("font-size", "10")
+		.text(function(d) {return nameStoreBack[d.name];})
+	force.start();
+	
+	Tnodes.splice(0, Tnodes.length);
+    Tlinks.splice(0, Tlinks.length);
+	
+	// Returning the markets //
 	var marketNamePass = [];
 	for(i = 0; i < childNamePass.length; i++){
 		if(facilities[childNamePass[i]]['inMarket']){
@@ -253,37 +325,15 @@ function showChildren(facility){
 		}
 		marketNamePass.splice(0,marketNamePass.length);	
 	}
-	
-	Fnode = vis.selectAll("g.node")
-  		.data(Tnodes, function(d) {return d.name;});
-	Fnode.enter().append("svg:g")
-	     .attr("class", "node")
-		 .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
-		 .call(force.drag)
-		 .on("click", function(d){openFacilityForm(d.name);})
-	Fnode.append("title")
-		.text(function(d) {return d.name;})
-	Fnode.append("circle")
-		.attr("r", "40")
-		.style("fill", function() {return window.TYPE;})
-		.style("stroke", "white")
-		.style("stroke-width", "1.5px")
-		
-	Fnode.append("text")
-		.attr("text-anchor", "middle")
-		.attr("dy", "0.2em")
-		.attr("font-size", "10")
-		.text(function(d) {return toTitleCase(d.name);})
   		
 	var link = vis.selectAll("line.link")
 		.data(Tlinks, function(d) { return d.source.id + "-" + d.target.id; });
 	link.enter().insert("svg:line", "g.node")
 		      .attr("class", "link")
-		      .style("stroke", "gray")
-		      .style("stroke-dasharray", "10, 5")
-		
-	facilities[[facility]]['state'] = "open"	
+		      .style("stroke", "black")
+			
 	Tnodes.splice(0, Tnodes.length);
     Tlinks.splice(0, Tlinks.length);
+    facilities[[facility]]['state'] = "open"
 	force.start();
 }
