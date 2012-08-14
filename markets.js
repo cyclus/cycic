@@ -52,8 +52,7 @@ function printOutMarket(){
     		x: 100,
     		y: 100,
     		id: nameStore[window.NAME],
-    		call: "mark",
-    		color: "steelblue"
+    		call: "mark"
 		};
 		return market;		
 	}

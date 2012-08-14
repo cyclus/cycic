@@ -28,6 +28,7 @@
 	<script src="http://code.jquery.com/jquery-1.7.1.min.js"> </script>
 	<script src="jquery.dform=1.0.0.min.js"> </script>
 	<script src="timeline-start.js"> </script>
+	<script src="facility_view.js"> </script>
 	<script src="functions.js"> </script>
 	<script src="facilities.js"> </script>
 	<script src="Nodes.js"> </script>	
@@ -57,6 +58,8 @@
 				<ul>
 					<li><a style ="cursor:hand; cursor:pointer" onclick = "switchToInfo()" class ="fuelCycleInfo"> Fuel Cycle Information </a></li>
 					<li><a style ="cursor:hand; cursor:pointer" onclick = "switchToVWindow()" class = "VWindow"> Window 3 </a></li>
+					<li><a style ="cursor:hand; cursor:pointer" onclick = "toFuelCyclView()" class = "FCWindow"> Full Fuel Cycle Window </a></li>
+					<li><a style ="cursor:hand; cursor:pointer" onclick = "toFacilityView()" class = "FWindow"> Facility View </a></li>
 				</ul>
 			</li>
 			<li><a href ="#"> Edit </a></li>
@@ -69,11 +72,11 @@
 			</li>
 			<li><a href = "#"><strike> New Facility Type </strike> </a></li>
 			<li><a style="cursor:hand; cursor: pointer" onclick ="testingFunction()" class = "testing"> dForms Test </a></li>
-			<li><a style="cursor:hand; cursor: pointer" onclick ="testingFunction()" class = "testing"> Help </a>
+			<li><a style="cursor:hand; cursor: pointer"  class = "testing"> Help </a>
 				<ul>
-					<li><a href = "#"> Documentation </a></li>
-					<li><a href = "#"> About Cycic </a></li>
-					<li><a href = "#"> Call Robert </a></li>
+					<li><a style ="cursor:hand; cursor:pointer"> Documentation </a></li>
+					<li><a style ="cursor:hand; cursor:pointer" onclick ="vegeta()"> About Cycic </a></li>
+					<li><a style ="cursor:hand; cursor:pointer" onclick ="callRobert()"> Call Robert </a></li>
 				</ul>
 			</li>
 		</ul>
@@ -175,8 +178,13 @@
 				<p> TABLE Or Other STUFF </p>
 			</div>
 		</div>
-		<div id = "sandbox_3">
-			<p align="center"> Fuel Cycle Diagram </p>
+		<div id = "fuel_cycle_sandbox">
+			<div id = "sandbox_3">
+				<p align="center"> Fuel Cycle Diagram </p>
+			</div>
+			<div id = "Facility_View">
+				<p align ="center"> Facility View </p>
+			</div>
 		</div>
 	</div>
 	
@@ -202,6 +210,14 @@
 		var PARENT;
 		var MODEL;
 		
+		var w = document.getElementById("sandbox_3").offsetWidth,
+		    h = document.getElementById("sandbox_3").offsetHeight,
+		    Fnodes = [],
+		    Tnodes= [],
+		    links = [],
+		    Tlinks = [],
+	    	Fnodes_f = [],
+	    	links_f = [];
 	</script>
 	<!-- Hiding the side menus -->
 	<script type ="text/javascript">
@@ -268,33 +284,18 @@
 	  			$(this).prev('a').find('.total').append('<div>'+ ($(this).find('li').length - $(this).find('li > ul > li').length - 1) +'</div>');
 			});
 		}
-		
-		function switchToInfo(){
-			document.getElementById('fuelCycleInfo').style.display = 'block';
-			document.getElementById('variableWindow').style.display = 'none';
-		}
-		function switchToVWindow(){
-			document.getElementById('fuelCycleInfo').style.display = 'none';
-			document.getElementById('variableWindow').style.display = 'block';
-		}
 	</script>
 	<!-- Bubbles!-->
     <script type="text/javascript">	
-		var w = document.getElementById("sandbox_3").offsetWidth,
-		    h = document.getElementById("sandbox_3").offsetHeight,
-		    Fnodes = [],
-		    Tnodes= [],
-		    links = [],
-		    Tlinks = [];
-		    
+		// Main Force //     
 		var vis = d3.select("#sandbox_3").append("svg:svg")
 		    .attr("width", w)
 		    .attr("height", h);
-		
+		    
 		var force = d3.layout.force()
 		    .linkStrength(function(d){if(d['target']['call'] == "child"){ return 1;} else{return 0;}})		
 			.linkDistance(150)
-			.charge(function(d){if(d['call'] == "child"){ return -20;} else{return 0;}})
+			.charge(function(d){if(d['call'] == "child"){return -220;}else{return 0;}})
 			.nodes(Fnodes)
 		    .links(links)
 		    .size([w, h])
@@ -311,98 +312,29 @@
 			      .attr("y2", function(d) { return d.target.y; });
 		});
 		
-		function updateLinks(){
-			// Removing all of focused node's old links //
-			var marketNamePass = []
-	      	for(i = 0; i < links.length; i ++){
-				if(links[i].source.name === nameStore[window.NAME]){
-					if(links[i]['target']['call'] == "mark"){
-						links.splice(i,1);
-						i = i-1;						
-					}
-				}
-			}
-			// Pushing new links for focus node //
-			for( i = 0; i < Fnodes.length; i ++){
-				if(Fnodes[i].name === facilities[window.NAME]['inMarket']){
-					marketNamePass.push(i);
-				}
-			}
-			for( i = 0; i < Fnodes.length; i ++){
-				if(Fnodes[i].name === facilities[window.NAME]['outMarket']){
-					marketNamePass.push(i);
-				}
-			}
-			// Finding Fnode for focus node //
-			for( j = 0; j < Fnodes.length; j++){
-				if(Fnodes[j].name === window.NAME){
-					var facNamePass = j;	
-				}
-			}
-			// Pushing focus node links //
-			for(k = 0; k < marketNamePass.length; k++){
-				links.push({source: Fnodes[facNamePass], target: Fnodes[marketNamePass[k]]});
-			}
-			
-			// Updating Parent Node with Child Node Links //
-			if(Fnodes[facNamePass]['call'] == "child"){
-				// Finding the parent node //
-				for(i = 0; i < Fnodes.length; i++){
-					if(Fnodes[i]['children']){
-						for(j = 0; j < Fnodes[i]['children'].length; j++){
-							if(Fnodes[i]['children'][j]['name'] == Fnodes[facNamePass]['name']){
-								var parNamePass = i;
-							}
-						}
-					}
-				}
-				// Removing the old Parent Node to Market Links //
-				for(i = 0; i < links.length; i++){
-					if(links[i].source['name'] == Fnodes[parNamePass]['name']){
-						if(links[i].target['call'] == "mark"){
-							links.splice(i,1);
-							i = i-1;
-						}
-					}
-				}
-				// Finding Parent Node Markets
-				var marketParNamePass = []
-				var childNamePass = []
-				for(i = 0; i < Fnodes[parNamePass]['children'].length; i++){
-					childNamePass.push(facilities[Fnodes[parNamePass]['children'][i]['name']]['Name'])
-				}
-				console.log(childNamePass);
-				for(i = 0; i < childNamePass.length; i++){
-					marketParNamePass.push(facilities[nameStore[childNamePass[i]]]['inMarket'])
-					for(j = 0; j < marketNamePass.length-1; j++){
-						if(marketParNamePass[j] == marketParNamePass[marketNamePass.length]){
-							marketParNamePass.pop();
-						}
-					}
-				}
-				console.log(marketParNamePass);
-				for(i = 0; i < childNamePass.length; i++){
-					marketParNamePass.push(facilities[nameStore[childNamePass[i]]]['outMarket'])
-					for(j = 0; j < marketParNamePass.length-1; j++){
-						if(marketParNamePass[j] == marketParNamePass[marketNamePass.length]){
-							marketParNamePass.pop();
-						}
-					}
-				}		
-			}
-			// Updating Force Layout Links //
-			var link = vis.selectAll("line.link")
-			      .data(links, function(d) { return d.source.id + "-" + d.target.id; });
-	      	link.exit().remove();
-			link.enter().insert("svg:line", "g.node")
-			      .attr("class", "link");    
-			var link = vis.selectAll("line.link")
-			      .data(links, function(d) { return d.source.id + "-" + d.target.id; });
-		    force.start();
-		}
-		
-
-
+		// Facility Force // 
+		var vis2 = d3.select("#Facility_View").append("svg:svg")
+		    .attr("width", w)
+		    .attr("height", h);		
+		    		    
+		var force2 = d3.layout.force()
+		    .linkStrength(function(d){if(d['target']['call'] == "child"){ return 1;} else{return 0;}})		
+			.linkDistance(200)
+			.nodes(Fnodes_f)
+		    .links(links_f)
+		    .size([w, h])
+		    .gravity(0)
+		    .friction(0)
+		    
+	    force2.on("tick", function(){
+  			vis2.selectAll("g.node")
+  				.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+			vis2.selectAll("line.link")
+			      .attr("x1", function(d) { return d.source.x; })
+			      .attr("y1", function(d) { return d.source.y; })
+			      .attr("x2", function(d) { return d.target.x; })
+			      .attr("y2", function(d) { return d.target.y; });
+		});   		    
 	</script>
 </body>
 </html>

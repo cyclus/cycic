@@ -17,7 +17,7 @@ function addParentCircle(){
 
 		if(facilities[nameStore[window.NAME]]['inMarket']){
 			for( i = 0; i < Fnodes.length; i ++){
-				if(toTitleCase(Fnodes[i].name) === toTitleCase(facilities[window.NAME]['inMarket'])){
+				if(Fnodes[i].name === facilities[window.NAME]['inMarket']){
 					var marketNamePass = i;
 				}
 			}
@@ -26,7 +26,7 @@ function addParentCircle(){
 	  	}
 	  	if(facilities[nameStore[window.NAME]]['outMarket']){
 			for( j = 0; j < Fnodes.length; j ++){
-				if(toTitleCase(Fnodes[j].name) === toTitleCase(facilities[nameStore[window.NAME]]['outMarket'])){
+				if(Fnodes[j].name === facilities[nameStore[window.NAME]]['outMarket']){
 					var marketNamePass = j;
 				}
 			}
@@ -71,8 +71,8 @@ function addParentCircle(){
 	    Fnode.append("ellipse")
 		 .attr("rx", function(d) {return d.size;})
 		 .attr("ry", function(d) {return d.size * 0.75;})
-		 .style("fill", function() {return d.color;})
-		 .style("stroke", "white")
+		 .style("fill", "steelblue")
+		 .style("stroke", "black")
 		 .style("stroke-width", "1.5px")
 		Fnode.append("text")
 		 .attr("text-anchor", "middle")
@@ -102,9 +102,16 @@ function addCloneCircle(){
 			test = true;
 		}
  	}
+ 	for(i = 0; i < Fnodes.length; i++){
+ 		if(Fnodes[i]['name'] == window.PARENT){
+ 		    if(facilities[Fnodes[i]['name']]['state'] == "closed"){
+ 				test = true;
+ 			}
+ 		}
+ 	}
 	if(test == false){
 		for(i = 0; i < Fnodes.length; i++){
-			if(Fnodes[i]['name'] === window.PARENT){
+			if(Fnodes[i]['name'] == window.PARENT){
 				var facNamePass = i;
 			}
 		}
@@ -130,6 +137,8 @@ function addCloneCircle(){
   			 .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
   			 .call(force.drag)
   			 .on("click", function(d){openFacilityForm(d.name);})
+	 		 .on("mouseover", nodeMouseOver)
+		 	 .on("mouseout", nodeMouseOut)
   		Fnode.append("title")
   			.text(function(d) {return nameStoreBack[d.name];})
 		Fnode.append("circle")
@@ -276,6 +285,7 @@ function showChildren(facility){
 		      .attr("class", "link")
 		      .style("stroke", "gray")
 		      .style("stroke-dasharray", "10, 5")
+		      
 	Fnode = vis.selectAll("g.node")
   		.data(Tnodes, function(d) {return d.name;});
 	Fnode.enter().append("svg:g")
@@ -283,10 +293,12 @@ function showChildren(facility){
 		 .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
 		 .call(force.drag)
 		 .on("click", function(d){openFacilityForm(d.name);})
+		 .on("mouseover", nodeMouseOver)
+		 .on("mouseout", nodeMouseOut)
 	Fnode.append("title")
 		.text(function(d) {return d.name;})
 	Fnode.append("circle")
-		.attr("r", "40")
+		.attr("r", function(d){return d.size})
 		.style("fill", function() {return window.TYPE;})
 		.style("stroke", "white")
 		.style("stroke-width", "1.5px")
@@ -325,7 +337,6 @@ function showChildren(facility){
 		}
 		marketNamePass.splice(0,marketNamePass.length);	
 	}
-  		
 	var link = vis.selectAll("line.link")
 		.data(Tlinks, function(d) { return d.source.id + "-" + d.target.id; });
 	link.enter().insert("svg:line", "g.node")
@@ -336,4 +347,80 @@ function showChildren(facility){
     Tlinks.splice(0, Tlinks.length);
     facilities[[facility]]['state'] = "open"
 	force.start();
+}
+
+function updateLinks(){
+	// Removing all of focused node's old links //
+	var marketNamePass = []
+  	for(i = 0; i < links.length; i ++){
+		if(links[i].source.name == window.NAME){
+			if(links[i]['target']['call'] == "mark"){
+				links.splice(i,1);
+				i = i-1;						
+			}
+		}
+	}
+	// Removing all of parent node's old links //
+	for(i = 0; i < Fnodes.length; i++){
+		if(Fnodes[i]['call'] == "fac"){
+			if(Fnodes[i]['name'] == window.NAME){
+				var parentNamePass = i;
+			}
+			for(j = 0; j < Fnodes[i]['children'].length; j++){
+				if(Fnodes[i]['children'][j]['name'] == window.NAME){
+					var parentNamePass = i;
+				}
+			}
+		}
+	}
+	for(i = 0; i < links.length; i++){
+		if(links[i].source['name'] == Fnodes[parentNamePass]['name']){
+			if(links[i].target['call'] == "mark"){
+				links.splice(i, 1);
+				i = i-1;
+			}
+		}
+	}	
+	// Pushing new links for focus node //
+	for( i = 0; i < Fnodes.length; i ++){
+		if(Fnodes[i].name === facilities[window.NAME]['inMarket']){
+			marketNamePass.push(i);
+		}
+	}
+	for( i = 0; i < Fnodes.length; i ++){
+		if(Fnodes[i].name === facilities[window.NAME]['outMarket']){
+			marketNamePass.push(i);
+		}
+	}
+	// Finding Fnode for focus node //
+	for( j = 0; j < Fnodes.length; j++){
+		if(Fnodes[j].name === window.NAME){
+			var facNamePass = j;	
+		}
+	}
+	// Pushing focus node links //
+	for(k = 0; k < marketNamePass.length; k++){
+		links.push({source: Fnodes[facNamePass], target: Fnodes[marketNamePass[k]]});
+	}
+	// Updating Force Layout Links //
+	var link = vis.selectAll("line.link")
+	      .data(links, function(d) { return d.source.id + "-" + d.target.id; });
+  	link.exit().remove();
+	link.enter().insert("svg:line", "g.node")
+	      .attr("class", "link");    
+	var link = vis.selectAll("line.link")
+	      .data(links, function(d) { return d.source.id + "-" + d.target.id; });
+    force.start();
+}
+
+function nodeMouseOver() {
+	d3.select(this).select("circle").transition()
+		.duration(250)
+		.attr("r", function(d) {return d.size*1.09} );
+}
+
+function nodeMouseOut() {
+	d3.select(this).select("circle").transition()
+    	.duration(250)
+	    .attr("r", function(d) {return d.size} );
 }

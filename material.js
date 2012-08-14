@@ -8,14 +8,14 @@ function newMaterialForm(){
 	$('#sandbox_1 form').append('<p> Material Name:  <input type = "text" name = "material_name"/>');
 	$('#sandbox_1 form').append('<p> Basis:  <input type = "text" name = "basis"/>');
 	$('#sandbox_1 form').append('<p> Unit:  <input type = "text" name = "unit"/>');
-	$('#sandbox_1 > form').append('<button id = "addIsotopeButton" name = "addIsotope" type="button" onClick="addNewIsotope()"> Add Isotope </button>');
+	$('#sandbox_1 > form').append('<p id = "addIsotopeButton"> <button name = "addIsotope" type="button" onClick="addNewIsotope()"> Add Isotope </button>');
 	$('#submit_area > form').append('<button name = "submit_New_Material" onClick="storeMaterial()"> Submit </button>');
 	document.getElementById('sandbox_1').style.display = 'none';					
 	document.getElementById('sandbox_1').style.display = 'block';
 }	
 
 function addNewIsotope(){
-	$('#addIsotopeButton').before('Isotope Number: <input type = "text" name= "isotope" /> Amount: <input type = "text" name ="fraction" />');
+	$('#addIsotopeButton').before('Isotope Number: <input type = "text" name= "isotope" /> Amount: <input type = "text" name ="fraction" /> <br/>');
 }
 
 function storeMaterial(){

@@ -89,6 +89,11 @@ function addNewCommodity(){
 	
 }
 function openFacilityForm(facility){
+	if(document.getElementById('Facility_View').style.display == "block"){
+		if(facilities[facility]['circle']['call'] == "fac"){
+			displayingFacility(facility);
+		}
+	}
 	window.TYPE = "green";
 	$('#form_sandbox div form').empty();
 	for(attribute in facilities[facility]){
@@ -136,7 +141,11 @@ function openFacilityForm(facility){
 	if(facilities[facility]['circle']['call'] == "fac"){
 		$('#submit_area > form').append('<button name = "submit_Facility" type="button" onClick="cloneFacilityForm()"> Clone Facility </button>');
 	}
-	$('#submit_area > form').append('<button name = "submit_Facility" type="button" onClick="printoutFacility()"> Submit </button>');
+	if(facilities[facility]['circle']['call'] == "child"){
+		$('#submit_area > form').append('<button name = "submit_Facility" type="button" onClick="printoutClone()"> Submit </button>');
+	}else{
+		$('#submit_area > form').append('<button name = "submit_Facility" type="button" onClick="printoutFacility()"> Submit </button>');
+	}
 	document.getElementById('sandbox_1').style.display = 'none';					
 	document.getElementById('sandbox_1').style.display = 'block';
 	
@@ -152,7 +161,7 @@ function printoutFacility(){
 		facility['Institution'] = window.INSTITUTION;
 		facility['model'] = window.MODEL
 		facility['state'] = "open"
-		for(i=0; i<length_2-1; i++){
+		for(i=0; i<length_2; i++){
 			facility[document.getElementById('sandbox_form')[i].name] = document.getElementById('sandbox_form')[i].value;
 		}
 		facility['circle'] = {
@@ -170,10 +179,10 @@ function printoutFacility(){
 		return facility;		
 	}
 	
-	if(!facilities[nameStore[window.NAME]]){
+	if(!facilities[window.NAME] && !facilities[nameStore[window.NAME]]){
 		window.facilities[nameStore[window.NAME]] = testing();
-		$('#'+facilities[nameStore[window.NAME]].Region +' ul').append('<li><a style ="cursor:hand; cursor:pointer" onClick = "openFacilityForm(facilities.' + window.NAME+'.Name)" >' + (window.NAME));
-		$('#'+facilities[nameStore[window.NAME]].Institution +' ul').append('<li><a style ="cursor:hand; cursor:pointer" onClick = "openFacilityForm(facilities.' + window.NAME+'.Name)" >' + window.NAME);
+		$('#'+facilities[nameStore[window.NAME]].Region +' ul').append('<li><a style ="cursor:hand; cursor:pointer" onClick = "openFacilityForm(facilities.'+nameConvert(window.NAME)+'.Name)" >' + window.NAME);
+		$('#'+facilities[nameStore[window.NAME]].Institution +' ul').append('<li><a style ="cursor:hand; cursor:pointer" onClick = "openFacilityForm(facilities.'+nameConvert(window.NAME)+'.Name)" >' + window.NAME);
 		addParentCircle();
 		updateSidebar();
 	}else{
@@ -214,10 +223,12 @@ function newCloneFacilityForm(){
 	facilities[nameStore[window.NAME]]['circle']['name'] = nameStore[window.NAME];
 	facilities[nameStore[window.NAME]]['circle']['id'] = nameStore[window.NAME];
 	facilities[nameStore[window.NAME]]['circle']['call'] = "child";
+	facilities[nameStore[window.NAME]]['circle']['size'] = 40;
 	var tempFacility = $.extend(true, {}, facilities[window.PARENT]['circle']);
 	tempFacility['id'] = nameStore[window.NAME];
 	tempFacility['name'] = nameStore[window.NAME];
 	tempFacility['call'] = "child";
+	tempFacility['size'] = 40;
 	facilities[window.PARENT]['circle']['children'].push(tempFacility);
 	$('#form_sandbox div form').empty();	
 	for(attribute in facilities[nameStore[window.NAME]]){
@@ -259,6 +270,43 @@ function newCloneFacilityForm(){
 	}
 	$('#submit_area > form').append('<button name = "submit_Facility" type="button" onClick="addCloneCircle()"> Submit </button>');
 	document.getElementById('sandbox_1').style.display = 'none';					
-	document.getElementById('sandbox_1').style.display = 'block';
+	document.getElementById('sandbox_1').style.display = 'block';	
+}
+function printoutClone(){
 	
+	function testing(){
+		var length_2 = document.getElementById('sandbox_form').length;
+		var facility = {};
+		facility['Name'] = nameStore[window.NAME];
+		facility['Region'] = window.REGION;
+		facility['Institution'] = window.INSTITUTION;
+		facility['model'] = window.MODEL
+		facility['state'] = "open"
+		for(i=0; i<length_2; i++){
+			facility[document.getElementById('sandbox_form')[i].name] = document.getElementById('sandbox_form')[i].value;
+		}
+		facility['circle'] = {
+			name: nameStore[window.NAME],
+  			type: d3.svg.symbol("circle"),
+    		size: 40,
+    		x: 100,
+    		y: 100,
+    		id: nameStore[window.NAME],
+    		call: "child",
+		};
+		facility['circle']['children'] = [];
+		delete facility[""];
+		delete facility['submit_Facility'];
+		return facility;		
+	}
+	window.facilities[window.NAME] = testing();
+	if(!facilities[window.NAME] && !facilities[nameStore[window.NAME]]){
+		$('#'+facilities[nameStore[window.NAME]].Region +' ul li ul').append('<li><a style ="cursor:hand; cursor:pointer" onClick = "openFacilityForm(' + nameStore[window.NAME]+')" >' + (window.NAME));
+		$('#'+facilities[nameStore[window.NAME]].Institution +' ul li ul').append('<li><a style ="cursor:hand; cursor:pointer" onClick = "openFacilityForm(' + nameStore[window.NAME]+')" >' + window.NAME);
+		updateSidebar();
+	}else{
+		updateLinks();
+	}
+	
+	return facilities;
 }

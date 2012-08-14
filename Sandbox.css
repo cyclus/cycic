@@ -63,6 +63,18 @@
 }
 #sandbox_3 {
 	background: #DBC59E;
+	height: 100%;
+	width: 100%;
+	display: block;
+}
+#Facility_View {
+	background: #DBC59E;
+	height: 100%;
+	width: 100%;
+	display: none;
+}
+#fuel_cycle_sandbox {
+	background: #DBC59E;
 	height: 55%;
 	width: 100%;
 	overflow:auto;
