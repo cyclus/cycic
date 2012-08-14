@@ -1,5 +1,5 @@
 /** main(); */
-mainGather();
+//mainGather();
 
 function main(){
 
@@ -25,7 +25,7 @@ function mainGather(){
      * gatherSchemas('../../cyclus')
      * gatherSchemas('http://raw.github.com/cyclus/core/master/src/Models/Facility/StorageFacility/StorageFacility.rng');
      */
-    gatherSchemas('file:///C:/Users/Kevin/Documents/GitHub/core');
+    gatherSchemas('file:///C:/Users/Kevin/Documents/GitHub/core', '.');
      
 }
 
@@ -296,8 +296,8 @@ function gatherSchemas(cyclusPath, rDumpPath){
         rngRelPath = rngPaths[i]
         
         /** Test to see if server request works. */
-        rngRelPath =
-            "\"https://raw.github.com/cyclus/core/master/src/Models/Facility/StorageFacility/StorageFacility.rng\""
+//        rngRelPath =
+//            "\"https://raw.github.com/cyclus/core/master/src/Models/Facility/StorageFacility/StorageFacility.rng\""
         if (rngRelPath.slice(0,4) == '\"htt'){
             $(document).ready(function() {
                 $.ajax({
@@ -319,7 +319,7 @@ function gatherSchemas(cyclusPath, rDumpPath){
                         
                             var parser = new Parser(doc);
                             var parsedObj = parser.parseObj();
-                            parser.printObject(parsedObj, 0);
+                            //parser.printObject(parsedObj, 0);
                         }
                         else{
                             alert('Response undefined; incorrect url');
