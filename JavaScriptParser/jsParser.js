@@ -1,3 +1,6 @@
+/** main(); */
+//mainGather();
+
 function main(){
 	 /**
      * Examples for using the parser:
@@ -14,9 +17,9 @@ function main(){
     var jsonObj = JSON.parse(response);
     var parser = new Parser(
         "file:///C:/Users/Kevin/Documents/GitHub/core/src/Models/Facility/SourceFacility/SourceFacility.rng");
-  
-    var parsed_obj = parser.parse_obj();
-    parser.printObject(parsed_obj, 0);	
+
+    var parsedObj = parser.parseObj();
+    /*parser.printObject(parsedObj, 0);*/	
 }
 
 function mainGather(){
@@ -26,8 +29,7 @@ function mainGather(){
      * gatherSchemas('../../cyclus')
      * gatherSchemas('http://raw.github.com/cyclus/core/master/src/Models/Facility/StorageFacility/StorageFacility.rng');
      */
-    gatherSchemas('file:///C:/Users/Kevin/Documents/GitHub/core');
-   
+    gatherSchemas('file:///C:/Users/Kevin/Documents/GitHub/core', '.');
 }
 
 function cycicXMLHttpRequest() {
@@ -157,7 +159,7 @@ Parser.prototype.printObject = function(parsedObject, spaces) {
             this.inputSpaces(spaces + 1);
             document.write("[<br>");
             this.inputSpaces(spaces + 2);
-            this.printObject(parsedObject[key], spaces + 2);
+            /*this.printObject(parsedObject[key], spaces + 2);*/
             this.inputSpaces(spaces + 1);
             document.write("]<br>");
             this.inputSpaces(spaces);
@@ -200,12 +202,12 @@ Parser.prototype.printObject = function(parsedObject, spaces) {
                 
                 if (this.getChildrenNum(parsedObject[key][tempKey]) ==1){
                     document.write("[");
-                    this.printObject(parsedObject[key], spaces + 1);
+                    /*this.printObject(parsedObject[key], spaces + 1);*/
                     this.inputSpaces(spaces);
                     document.write("]]<br>");
                 }
                 else{
-                    this.printObject(parsedObject[key], spaces + 1);
+                    /*this.printObject(parsedObject[key], spaces + 1);*/
                     this.inputSpaces(spaces);
                     document.write("]<br>");
                 }
@@ -267,8 +269,8 @@ Parser.prototype.inputSpaces = function(num) {
 	}
 }
 
-function gatherSchemas(cyclusPath){
   
+function gatherSchemas(cyclusPath, rDumpPath){
   /** Default arguments. */
   cyclusPath = typeof cyclusPath !== 'undefined' ? cyclusPath : ''
   if (cyclusPath == ''){
@@ -294,7 +296,9 @@ function gatherSchemas(cyclusPath){
 	rngRelPath = rngPaths[i]
         
         /** Test to see if server request works. */
-        
+//        rngRelPath =
+//            "\"https://raw.github.com/cyclus/core/master/src/Models/Facility/StorageFacility/StorageFacility.rng\""
+
         if (rngRelPath.slice(0,4) == '\"htt'){
             $(document).ready(function() {
                 $.ajax({
@@ -339,13 +343,11 @@ function gatherSchemas(cyclusPath){
         }
   }
 
-  /**
-  for (s in schemas) {
-	document.write(s + ":  " + "<br/>")
-	var parser = new Parser('blah')
-	parser.printObject(schemas[s],0)
-  }*/
-  return schemas
+    for (s in schemas) {
+        /*document.write(s + ":  " + "<br/>");*/
+        var parser = new Parser('blah');
+        parser.printObject(schemas[s],0);   }
+    return schemas;
 }
 
 main();

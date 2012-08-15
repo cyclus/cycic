@@ -28,3 +28,6 @@ d3.v2.min is copyrighted by
 Copyright (c) 2012, Michael Bostock
 All rights reserved.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+canvg and rgbcolor.js are copyrighted under the MIT license by
+Copyright (c) 2010-2011 Gabe Lerner (gabelerner@gmail.com)
+http://code.google.com/p/canvg/

@@ -12,8 +12,9 @@ function newRegionForm(){
 }
 function openNewRegionForm(){
 	window.NAME = document.getElementById('sandbox_form')[0].value;
+	nameStoreConvert(window.NAME);
 	$('#sandbox_form').empty();	
-	$('.region_type > ul').prepend('<li id = "' + window.NAME.trim() + '" class = "region"><a>' + window.NAME + '</a><ul>');
+	$('.region_type > ul').prepend('<li id = "' + nameStore[window.NAME] + '" class = "region"><a>' + window.NAME + '</a><ul>');
 	updateSidebar();
 	document.getElementById('wrapper').style.display = 'none';					
 	document.getElementById('wrapper').style.display = 'block';
@@ -23,10 +24,5 @@ function updateSidebar(){
 	$('ul li ul').each(function(){
 		$(this).prev('a').find('.total').find('div').remove()
 	  	$(this).prev('a').find('.total').append('<div>'+ ($(this).find('li').length - $(this).find('li > ul > li').length - 1) +'</div>');
-	});
-}
-function toTitleCase(str){
-	return str.replace(/\w\S*/g, function(txt){
-		return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
 	});
 }

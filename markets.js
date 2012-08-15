@@ -8,6 +8,7 @@ var REGION;
 var INSTITUTION;
 var links =[];
 var TYPE;
+var MODEL;
 
 function newMarketForm(){
 	$('#form_sandbox div form').empty();
@@ -19,8 +20,9 @@ function newMarketForm(){
 function openNewMarketForm(){
 	window.TYPE = "steelblue"
 	window.NAME = document.getElementById('sandbox_form')[0].value;
+	nameStoreConvert(window.NAME);
 	$('#form_sandbox div form').empty();
-	$('.market_type ul').prepend('<li id = "' + window.NAME.trim() + '"><a style ="cursor:hand; cursor:pointer">' + window.NAME);
+	$('.market_type ul').prepend('<li id = "' + nameStore[window.NAME] + '"><a style ="cursor:hand; cursor:pointer">' + window.NAME);
 	updateSidebar();
 	document.getElementById('wrapper').style.display = 'none';					
 	document.getElementById('wrapper').style.display = 'block';
@@ -39,26 +41,26 @@ function printOutMarket(){
 	function testing(){
 		var length_2 = document.getElementById('sandbox_form').length;
 		var market = {};
-		market['Name'] = window.NAME;
+		market['Name'] = nameStore[window.NAME];
 		for(i=0; i<length_2-1; i++){
 			market[document.getElementById('sandbox_form')[i].name] = document.getElementById('sandbox_form')[i].value;
 		}
 		market['circle'] = {
-			name: window.NAME,
+			name: nameStore[window.NAME],
   			type: d3.svg.symbol("square"),
     		size: 40,
     		x: 100,
     		y: 100,
-    		id: window.NAME,
+    		id: nameStore[window.NAME],
     		call: "mark"
 		};
 		return market;		
 	}
-	if(!MARKETS[window.NAME]){
-		window.MARKETS[window.NAME] = testing();
+	if(!MARKETS[nameStore[window.NAME]]){
+		window.MARKETS[nameStore[window.NAME]] = testing();
 		addParentCircle();
 	}
-	window.MARKETS[window.NAME] = testing();
+	window.MARKETS[nameStore[window.NAME]] = testing();
 	return MARKETS;
 }
 function openMarketForm(facility){
@@ -67,24 +69,7 @@ function openMarketForm(facility){
 	for(attribute in facilities[facility]){
 		var STR = attribute;
 		window.NAME = facility;
-		if(attribute == "inMarket"){
-			$('#sandbox_1 form').append('<p> Market: <select name ="inMarket" id = "market_select"> </select> </p>');
-			for(ii = 0; ii < $('.market_type ul li').length-1; ii ++){
-					$('#market_select').append('<option value ="'+$('.market_type ul li')[ii].id.toLowerCase()+'">' + $(".market_type ul li")[ii].id.toUpperCase() +'</option>');
-			}
-			continue;
-		}
-		if(attribute == "outMarket"){
-			$('#sandbox_1 form').append('<p> Out Market: <select name ="outMarket" id = "market__out_select"> </select> </p>');
-			for(ii = 0; ii < $('.market_type ul li').length-1; ii ++){
-					$('#market__out_select').append('<option value ="'+$('.market_type ul li')[ii].id.toLowerCase()+'">' + $(".market_type ul li")[ii].id.toUpperCase() +'</option>');
-			}
-			continue;
-		}
 		if(attribute === "circle"){
-			continue;
-		}
-		if(attribute === "children"){
 			continue;
 		}
 		$('#sandbox_1 form').append('<p>' + toTitleCase(attribute) + '<input type="text" name ="' + attribute +'" value ="' + toTitleCase(facilities[facility][STR]) + '"/>');
@@ -99,10 +84,5 @@ function updateSidebar(){
 	$('ul li ul').each(function(){
 		$(this).prev('a').find('.total').find('div').remove()
 	  	$(this).prev('a').find('.total').append('<div>'+ ($(this).find('li').length - $(this).find('li > ul > li').length - 1) +'</div>');
-	});
-}
-function toTitleCase(str){
-	return str.replace(/\w\S*/g, function(txt){
-		return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
 	});
 }
