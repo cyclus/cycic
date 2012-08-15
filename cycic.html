@@ -364,17 +364,22 @@
         });
 
 	</script>
-	<!-- save fc as png -->
+	<!-- save fuel cycle diagram as png -->
 	<script type="text/javascript">
     function saveFCDiagramPng(fcsvg){
         var pngCanvas = document.getElementById("pngCanvas");
         pngCanvas.width = fcsvg.width;
         pngCanvas.height = fcsvg.height;
 
-        canvg(pngCanvas, fcsvg);
+        //var pngCanvasContex = pngCanvas.getContext('2d');
+        //pngCanvasContex.drawSvg(fcsvg, 0, 0);
+        //canvg(pngCanvas, fcsvg);
+        var fcsvgstr = new XMLSerializer().serializeToString(fcsvg);
+        console.log(fcsvgstr);
+        canvg(pngCanvas, fcsvgstr);
         var img = pngCanvas.toDataURL("image/png");
-        //document.write('<a href="'+img+'">Save as!</a>');
-        window.open(img)
+        document.write('<a href="'+img+'">Save as!</a>');
+        //window.open(img)
     };
 	</script>
 </body>
