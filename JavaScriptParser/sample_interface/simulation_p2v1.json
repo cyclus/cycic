@@ -8,7 +8,7 @@
       922380: 4.82e+28
       }
     },
-  'spent_PWR_uo2: {
+  'spent_PWR_uo2': {
     'basis': 'atom',
     'unit': 'batch',
     'total': 5.27844242131e+28,

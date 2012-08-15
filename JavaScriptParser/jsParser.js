@@ -6,12 +6,17 @@ function main(){
 	 * var parser = new Parser("recipereactor.xml");
      * var parser = new Parser("file:///home/scopatz/cyclus/src/Models/Facility/StorageFacility/StorageFacility.rng");
      */
+    var path = "file:///C:/Users/Kevin/Documents/GitHub/cycic/JavaScriptParser/sample_interface/simulation_p2v1.json";
+    var xhttp = cycicXMLHttpRequest();
+    xhttp.open("GET", path, false)
+    xhttp.send()
+    var response = xhttp.responseText
+    var jsonObj = JSON.parse(response);
     var parser = new Parser(
         "file:///C:/Users/Kevin/Documents/GitHub/core/src/Models/Facility/SourceFacility/SourceFacility.rng");
   
-  
-  var parsed_obj = parser.parse_obj();
-  parser.printObject(parsed_obj, 0);	
+    var parsed_obj = parser.parse_obj();
+    parser.printObject(parsed_obj, 0);	
 }
 
 function mainGather(){
@@ -29,7 +34,6 @@ function cycicXMLHttpRequest() {
     if (window.XMLHttpRequest) {
         var xhttp = new XMLHttpRequest();
     }
-    
     /** IE 5/6 */
     else { 
         var xhttp = new ActiveXObject("Microsoft.XMLHTTP");
@@ -290,8 +294,7 @@ function gatherSchemas(cyclusPath){
 	rngRelPath = rngPaths[i]
         
         /** Test to see if server request works. */
-        rngRelPath =
-            "\"https://raw.github.com/cyclus/core/master/src/Models/Facility/StorageFacility/StorageFacility.rng\""
+        
         if (rngRelPath.slice(0,4) == '\"htt'){
             $(document).ready(function() {
                 $.ajax({
@@ -312,8 +315,8 @@ function gatherSchemas(cyclusPath){
                             }
                         
                             var parser = new Parser(doc);
-                            var parsedObj = parser.parse_obj();
-                            parser.printObject(parsedObj, 0);
+                            schemas[rngRelPath] = parser.parse_obj();
+                            //parser.printObject(parsedObj, 0);
                         }
                         else{
                             alert('Response undefined; incorrect url');
@@ -336,11 +339,12 @@ function gatherSchemas(cyclusPath){
         }
   }
 
+  /**
   for (s in schemas) {
 	document.write(s + ":  " + "<br/>")
 	var parser = new Parser('blah')
 	parser.printObject(schemas[s],0)
-  }
+  }*/
   return schemas
 }
 
