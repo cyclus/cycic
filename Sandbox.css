@@ -5,7 +5,10 @@
  Version: 0.1
  Author: Robert Flanagan
  */
-
+line.link {
+  stroke: #000000;
+  stroke-width: 1.5px;
+}
 #sandbox {
 	background: #4C4E5A;
 	margin-left: 203px;
@@ -14,25 +17,25 @@
 	overflow: hidden;
 }
 #form_sandbox {
-	background: #F89406;
+	background: #CF5300;
 	height: 45%;
 	width: 29.95%;
 	float: left;
 	border: 1px solid #4C4E5A;
 }
 #sandbox_1 {
-	background: #F89406;
+	background: #CF5300;
 	height: 90%;
 	width: 100%;
 	overflow: auto;
 }
 #submit_area {
-	background: #F89406;
+	background: #CF5300;
 	max-height: 10%;
 	width: 100%;
 }	
 #sandbox_2 {
-	background: #878D95;
+	background: #CF5300;
 	height: 45%;
 	width: 29.95%;
 	float: left;
@@ -40,7 +43,7 @@
 	border: 1px solid #4C4E5A;
 }
 #sandbox_4 {
-	background: #2D6987;
+	background: #BBBBBB;
 	height: 45%;
 	width: auto;
 	right: 0px;
@@ -48,23 +51,47 @@
 	border: 1px solid #4C4E5A;
 }
 #fuelCycleInfo {
-	background: #2D6987;
+	background: #BBBBBB;
 	height: 100%;
 	width: 95%;
 	margin-left: 5%;
-	display: block;
+	display: none;
 }
 #variableWindow{
-	background: #2D6987;
+	background: #BBBBBB;
 	height: 100%;
 	width: 95%;
 	margin-left: 5%;
 	display: none;
 }
 #sandbox_3 {
-	background: #DBC59E;
+	background: #FFFFFF;
+	height: 100%;
+	width: 100%;
+	display: block;
+}
+#Facility_View {
+	background: #FFFFFF;
+	height: 100%;
+	width: 100%;
+	display: none;
+}
+#pgnImage {
+	background: #FFFFFF;
+	height: 100%;
+	width: 100%;
+	display: none;
+}
+#fuel_cycle_sandbox {
+	background: #FFFFFF;
 	height: 55%;
 	width: 100%;
 	overflow:auto;
 	border: 1px solid #4C4E5A;
+}
+#timeline {
+	background: #BBBBBB;
+	height: 100%;
+	width: 100%;
+	display: block;
 }
