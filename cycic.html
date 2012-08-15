@@ -1,6 +1,6 @@
 <!DOCTYPE = HTML>
 <html lang="en">
-	<title> Cycic GUI </title>
+	<title> Cycic</title>
 <head>
 	<meta charset="utf-8"/>
 	<!-- Banner Style Sheet -->
@@ -10,7 +10,7 @@
 	<!-- Sidebar Style Sheet -->
 	<link rel="stylesheet" type ="text/css" href="sidebar.css" />
 	<!-- Timeline Style Steet -->
-	<link rel="stylesheet" type ="text/css" href="timeline.css"/>
+	<link rel="stylesheet" type ="text/css" href="timeline-start.css"/>
 	<!-- Stylesheet for custumization -->
 	<link rel="stylesheet" type ="text/css" href="style.css"/>
 	<!-- Stylesheet for sandbox -->
@@ -19,15 +19,11 @@
 	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Dancing+Script|Antic+Slab"/>
 	<!--if IE 9-->
 	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"> </script>
-	<!-- d3.js
-    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.js?1.25.0"> </script>
-    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.geom.js?1.25.0"> </script>
-    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.layout.js?1.25.0"> </script> -->
 	<!-- JavaScript + jQuery-->
 	<script src="d3.v2.min.js"> </script>
 	<script src="http://code.jquery.com/jquery-1.7.1.min.js"> </script>
 	<script src="jquery.dform=1.0.0.min.js"> </script>
-	<script src="timeline-start.js"> </script>
+	<script src="http://static.simile.mit.edu/timeline/api-2.3.0/timeline-api.js" type ="text/javascript"> </script>
 	<script src="facility_view.js"> </script>
 	<script src="functions.js"> </script>
 	<script src="facilities.js"> </script>
@@ -58,6 +54,7 @@
 				<ul>
 					<li><a style ="cursor:hand; cursor:pointer" onclick = "switchToInfo()" class ="fuelCycleInfo"> Fuel Cycle Information </a></li>
 					<li><a style ="cursor:hand; cursor:pointer" onclick = "switchToVWindow()" class = "VWindow"> Window 3 </a></li>
+					<li><a style ="cursor:hand; cursor:pointer" onclick = "switchToTimeline()" class = "Timeline"> Timeline </a></li>
 					<li><a style ="cursor:hand; cursor:pointer" onclick = "toFuelCyclView()" class = "FCWindow"> Full Fuel Cycle Window </a></li>
 					<li><a style ="cursor:hand; cursor:pointer" onclick = "toFacilityView()" class = "FWindow"> Facility View </a></li>
 				</ul>
@@ -177,6 +174,7 @@
 			<div id = "variableWindow">
 				<p> TABLE Or Other STUFF </p>
 			</div>
+			<div id = "timeline"></div>
 		</div>
 		<div id = "fuel_cycle_sandbox">
 			<div id = "sandbox_3">
@@ -185,6 +183,7 @@
 			<div id = "Facility_View">
 				<p align ="center"> Facility View </p>
 			</div>
+			<div id = "pgnImage"></div>
 		</div>
 	</div>
 	
@@ -335,6 +334,31 @@
 			      .attr("x2", function(d) { return d.target.x; })
 			      .attr("y2", function(d) { return d.target.y; });
 		});   		    
+	</script>
+	<!-- Timeline scripts -->
+	<script type="text/javascript">
+		var tl;
+		var eventSource = new Timeline.DefaultEventSource(0);
+		var bands = [
+     		Timeline.createBandInfo({
+		         width:          "10%", 
+		         intervalUnit:   Timeline.DateTime.YEAR, 
+		         intervalPixels: 40
+		     }),
+		     Timeline.createBandInfo({
+		         width:          "90%", 
+		         intervalUnit:   Timeline.DateTime.MONTH, 
+		         intervalPixels: 100,
+		         eventSource: eventSource
+		     })
+   		];
+   		bands[1].syncWith = 0;
+   		bands[1].highlight = true;
+   		tl = Timeline.create(document.getElementById('timeline'), bands);
+        tl.loadJSON("cubism.js?"+ (new Date().getTime()), function(json, url) {
+                eventSource.loadJSON(json, url);
+        });
+
 	</script>
 </body>
 </html>

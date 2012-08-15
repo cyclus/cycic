@@ -16,15 +16,22 @@ function nameConvert(str){
 	return str.replace(/[^a-zA-z 0-9]/g, "").replace(/ /g, "");	
 }
 function vegeta(){
-	alert("Cycic Version: 9000.01!!!!!! \nConstructed by the Cyclus Team:\n   Frodo \n   Legolas \n   Gollum" );
+	alert("Cycic Version: 9001!!!!!! \nConstructed by the Cyclus Team:\n		Frodo \n		Legolas \n		Gollum" );
 }
 function switchToInfo(){
 	document.getElementById('fuelCycleInfo').style.display = 'block';
 	document.getElementById('variableWindow').style.display = 'none';
+	document.getElementById('timeline').style.display = 'none';
 }
 function switchToVWindow(){
 	document.getElementById('fuelCycleInfo').style.display = 'none';
 	document.getElementById('variableWindow').style.display = 'block';
+	document.getElementById('timeline').style.display = 'none';
+}
+function switchToTimeline(){
+	document.getElementById('fuelCycleInfo').style.display = 'none';
+	document.getElementById('variableWindow').style.display = 'none';
+	document.getElementById('timeline').style.display = 'block';
 }
 function toFacilityView(){
 	document.getElementById('sandbox_3').style.display = "none";

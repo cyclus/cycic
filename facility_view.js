@@ -7,7 +7,8 @@ function displayingFacility(facility){
 	// Removing excess links //
 	var link_f = vis2.selectAll("line.link")
 		.data(links_f, function(d){return d.source.id + "-" + d.target.id; });
-	link_f.exit().remove();
+	link_f.exit().remove()
+	
 	// Removing the nodes //
 	Fnode_f = vis2.selectAll("g.node")
   		.data(Fnodes_f, function(d) {return d.name;});
