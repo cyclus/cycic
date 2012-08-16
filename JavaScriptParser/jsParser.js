@@ -1,6 +1,3 @@
-/** main(); */
-//mainGather();
-
 function main(){
 	 /**
      * Examples for using the parser:
@@ -9,17 +6,12 @@ function main(){
 	 * var parser = new Parser("recipereactor.xml");
      * var parser = new Parser("file:///home/scopatz/cyclus/src/Models/Facility/StorageFacility/StorageFacility.rng");
      */
-    var path = "file:///C:/Users/Kevin/Documents/GitHub/cycic/JavaScriptParser/sample_interface/simulation_p2v1.json";
-    var xhttp = cycicXMLHttpRequest();
-    xhttp.open("GET", path, false)
-    xhttp.send()
-    var response = xhttp.responseText
-    var jsonObj = JSON.parse(response);
     var parser = new Parser(
         "file:///C:/Users/Kevin/Documents/GitHub/core/src/Models/Facility/SourceFacility/SourceFacility.rng");
-
-    var parsedObj = parser.parseObj();
-    /*parser.printObject(parsedObj, 0);*/	
+  
+  
+  var parsed_obj = parser.parse_obj();
+   //parser.printObject(parsed_obj, 0);	
 }
 
 function mainGather(){
@@ -29,13 +21,15 @@ function mainGather(){
      * gatherSchemas('../../cyclus')
      * gatherSchemas('http://raw.github.com/cyclus/core/master/src/Models/Facility/StorageFacility/StorageFacility.rng');
      */
-    gatherSchemas('file:///C:/Users/Kevin/Documents/GitHub/core', '.');
+    gatherSchemas('file:///C:/Users/Kevin/Documents/GitHub/core');
+   
 }
 
 function cycicXMLHttpRequest() {
     if (window.XMLHttpRequest) {
         var xhttp = new XMLHttpRequest();
     }
+    
     /** IE 5/6 */
     else { 
         var xhttp = new ActiveXObject("Microsoft.XMLHTTP");
@@ -159,7 +153,7 @@ Parser.prototype.printObject = function(parsedObject, spaces) {
             this.inputSpaces(spaces + 1);
             document.write("[<br>");
             this.inputSpaces(spaces + 2);
-            /*this.printObject(parsedObject[key], spaces + 2);*/
+            this.printObject(parsedObject[key], spaces + 2);
             this.inputSpaces(spaces + 1);
             document.write("]<br>");
             this.inputSpaces(spaces);
@@ -202,12 +196,12 @@ Parser.prototype.printObject = function(parsedObject, spaces) {
                 
                 if (this.getChildrenNum(parsedObject[key][tempKey]) ==1){
                     document.write("[");
-                    /*this.printObject(parsedObject[key], spaces + 1);*/
+                    this.printObject(parsedObject[key], spaces + 1);
                     this.inputSpaces(spaces);
                     document.write("]]<br>");
                 }
                 else{
-                    /*this.printObject(parsedObject[key], spaces + 1);*/
+                    this.printObject(parsedObject[key], spaces + 1);
                     this.inputSpaces(spaces);
                     document.write("]<br>");
                 }
@@ -269,8 +263,8 @@ Parser.prototype.inputSpaces = function(num) {
 	}
 }
 
+function gatherSchemas(cyclusPath){
   
-function gatherSchemas(cyclusPath, rDumpPath){
   /** Default arguments. */
   cyclusPath = typeof cyclusPath !== 'undefined' ? cyclusPath : ''
   if (cyclusPath == ''){
@@ -290,15 +284,14 @@ function gatherSchemas(cyclusPath, rDumpPath){
   xhttp.open("GET", "rngdump.json", false)
   xhttp.send()
   var rngPaths = JSON.parse(xhttp.responseText)
-  document.write(typeof(rngPaths) + "<br/>")
-  document.write(Object.prototype.toString.call(rngPaths) + "<br/>")
+  //document.write(typeof(rngPaths) + "<br/>")
+  //document.write(Object.prototype.toString.call(rngPaths) + "<br/>")
   for (i in rngPaths) {
 	rngRelPath = rngPaths[i]
         
         /** Test to see if server request works. */
-//        rngRelPath =
-//            "\"https://raw.github.com/cyclus/core/master/src/Models/Facility/StorageFacility/StorageFacility.rng\""
-
+        rngRelPath =
+            "\"https://raw.github.com/cyclus/core/master/src/Models/Facility/StorageFacility/StorageFacility.rng\""
         if (rngRelPath.slice(0,4) == '\"htt'){
             $(document).ready(function() {
                 $.ajax({
@@ -319,7 +312,8 @@ function gatherSchemas(cyclusPath, rDumpPath){
                             }
                         
                             var parser = new Parser(doc);
-                            schemas[rngRelPath] = parser.parse_obj();
+                            var parsedObj = parser.parse_obj();
+                            schemas[rngRelPath] = parse_obj();
                             //parser.printObject(parsedObj, 0);
                         }
                         else{
@@ -333,7 +327,7 @@ function gatherSchemas(cyclusPath, rDumpPath){
         else{
             rngFullPath = cyclusPath + '/' + rngRelPath;
             parser = new Parser(rngFullPath);
-            schemas[rngRelPath] = parser.parseObj();
+            schemas[rngRelPath] = parser.parse_obj();
             
             /** 
              * if (rngRelPath.match(reFac) !== null) {
@@ -343,15 +337,17 @@ function gatherSchemas(cyclusPath, rDumpPath){
         }
   }
 
-    for (s in schemas) {
-        /*document.write(s + ":  " + "<br/>");*/
-        var parser = new Parser('blah');
-        parser.printObject(schemas[s],0);   }
-    return schemas;
+  for (s in schemas) {
+	document.write(s + ":  " + "<br/>")
+	//var parser = new Parser('blah')
+	//parser.printObject(schemas[s],0)
+  }
+  //document.write(schemas);
+  return schemas;
 }
 
-main();
-//mainGather();
+//main();
+mainGather();
 
 /**
  * MENTAL NOTES TO SELF
@@ -374,6 +370,5 @@ document.write(xmlDoc.getElementsByTagName('element')[1].childNodes[1].nodeName)
 //prints inrecipt.. why
 document.write(xmlDoc.getElementsByTagName('element')[1].childNodes[1].nextSibling.nextSibling.getAttribute('name'));
 **/
-
 
 
