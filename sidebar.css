@@ -22,7 +22,7 @@ ul, ul ul {
 	height:97%;
 	margin: 0px left;
 	font-size: 0.8125em;
-	background:#CC7000;
+	background:#FF9331;
 	border: 1px solid #4C4E5A;
 	float: left;
 }
@@ -34,7 +34,7 @@ ul, ul ul {
 	-o-box-shadow: 0px 1px 3px 0px rgba(0,0,0,.73), 0px 0px 18px 0px rgba(0,0,0,.13);
 	-ms-box-shadow: 0px 1px 3px 0px rgba(0,0,0,.73), 0px 0px 18px 0px rgba(0,0,0,.13);
     box-shadow: 0px 1px 3px 0px rgba(0,0,0,.73), 0px 0px 18px 0px rgba(0,0,0,.13);
-}*
+}
 .sidebar_menu li a {
 	background-color: #AAAAAA;
     border: #33373d;   
@@ -53,10 +53,13 @@ ul, ul ul {
     line-height: 20px;
     text-indent: 0px;
     font-family: "Arial Black";
-    font-size: 18px;
+    font-size: 16px;
     display:block;
-    color: #1F2024;
+    color: #FFFFFF;
     text-shadow: 0px 1px 0px rgba(0,0,0,.5);
+}
+.sidebar_menu li ul li a{
+	color: #000000;
 }
 .sidebar_menu ul li a{
 	background:#FFFFFF;
@@ -78,7 +81,7 @@ ul, ul ul {
 	font-family: "Arial Black";
 	font-size: 12px;
 	font-weight: 400;
-	color:#00000;
+	color:#000000;
 }
 .sidebar_menu li  a:hover, .sidebar_menu li a.active{
 	background-color: #8FDE62;
@@ -185,9 +188,9 @@ ul, ul ul {
     line-height: 20px;
     text-indent: 0px;
     font-family: "Arial Black";
-    font-size: 18px;
+    font-size: 16px;
     display:block;
-    color: #1F2024;
+    color: #FFFFFF;
     text-shadow: 0px 1px 0px rgba(0,0,0,.5);
 }
 
@@ -203,9 +206,6 @@ ul, ul ul {
 	display:block;
 	color:#000000;
 	border-bottom: 1px solid #999999;
-}
-.facilities_menu li a:hover {
-    background: #1BDFF0;
 }
 .facilities_menu ul li{
 	background:#FFFFFF;

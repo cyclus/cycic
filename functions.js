@@ -45,3 +45,19 @@ function toFuelCyclView(){
 function callRobert(){
 	alert("What? Did you really think I'd give you my number? \nFor questions please send an email to flanny65@gmail.com\nThanks!");
 }
+function saveFCDiagramPng(fcsvg){
+    var pngCanvas = document.getElementById("pngCanvas");
+    pngCanvas.width = fcsvg.width;
+    pngCanvas.height = fcsvg.height;
+
+    var fcsvgstr = new XMLSerializer().serializeToString(fcsvg);
+    canvg(pngCanvas, fcsvgstr);
+    var img = pngCanvas.toDataURL("image/png");
+    var popupHTML = '<div align="center" style="width:'+pngCanvas.width+'px;height:'+(150+pngCanvas.height)+'">';
+    popupHTML = popupHTML + '<h1>Right-click and select <i>"Save Target As."</i></h1>';
+    popupHTML = popupHTML + '<h2><a href="'+img+'">png</a> or ';
+    popupHTML = popupHTML + "<a href='data:image/svg+xml,"+fcsvgstr+"'>svg</a></h2>";
+    popupHTML = popupHTML + '<img src="'+img+'"/>';
+    popupHTML = popupHTML + '</div>';
+    $.facybox(popupHTML);
+};

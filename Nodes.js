@@ -89,6 +89,8 @@ function addParentCircle(){
 	
 	link.enter().insert("svg:line", "g.node")
 	      .attr("class", "link")
+  	      .style("stroke", "black")
+  	      .style("stroke-width", "1px")
       
     force.start();
     Tnodes.splice(0, Tnodes.length);
@@ -240,6 +242,8 @@ function hideChildren(facility){
 		.data(links, function(d) { return d.source.id + "-" + d.target.id; });
 	link.enter().insert("svg:line", "g.node")
      	.attr("class", "link")
+        .style("stroke", "black")
+        .style("stroke-width", "1px")
 		
 	force.start();
 	facilities[[facility]]['state'] = "closed";				
@@ -342,6 +346,7 @@ function showChildren(facility){
 	link.enter().insert("svg:line", "g.node")
 		      .attr("class", "link")
 		      .style("stroke", "black")
+  	          .style("stroke-width", "1px")
 			
 	Tnodes.splice(0, Tnodes.length);
     Tlinks.splice(0, Tlinks.length);
