@@ -9,9 +9,15 @@ function main(){
 	 * var parser = new Parser("recipereactor.xml");
      * var parser = new Parser("file:///home/scopatz/cyclus/src/Models/Facility/StorageFacility/StorageFacility.rng");
      */
+    var path = "file:///C:/Users/Kevin/Documents/GitHub/cycic/JavaScriptParser/sample_interface/simulation_p2v1.json";
+    var xhttp = cycicXMLHttpRequest();
+    xhttp.open("GET", path, false)
+    xhttp.send()
+    var response = xhttp.responseText
+    var jsonObj = JSON.parse(response);
     var parser = new Parser(
         "file:///C:/Users/Kevin/Documents/GitHub/core/src/Models/Facility/SourceFacility/SourceFacility.rng");
-  
+
     var parsedObj = parser.parseObj();
     /*parser.printObject(parsedObj, 0);*/	
 }
@@ -30,7 +36,6 @@ function cycicXMLHttpRequest() {
     if (window.XMLHttpRequest) {
         var xhttp = new XMLHttpRequest();
     }
-    
     /** IE 5/6 */
     else { 
         var xhttp = new ActiveXObject("Microsoft.XMLHTTP");
@@ -293,6 +298,7 @@ function gatherSchemas(cyclusPath, rDumpPath){
         /** Test to see if server request works. */
 //        rngRelPath =
 //            "\"https://raw.github.com/cyclus/core/master/src/Models/Facility/StorageFacility/StorageFacility.rng\""
+
         if (rngRelPath.slice(0,4) == '\"htt'){
             $(document).ready(function() {
                 $.ajax({
@@ -313,7 +319,7 @@ function gatherSchemas(cyclusPath, rDumpPath){
                             }
                         
                             var parser = new Parser(doc);
-                            var parsedObj = parser.parseObj();
+                            schemas[rngRelPath] = parser.parse_obj();
                             //parser.printObject(parsedObj, 0);
                         }
                         else{
