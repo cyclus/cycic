@@ -263,6 +263,8 @@ Parser.prototype.inputSpaces = function(num) {
 	}
 }
 
+var schemas = {}
+
 function gatherSchemas(cyclusPath){
   
   /** Default arguments. */
@@ -291,7 +293,7 @@ function gatherSchemas(cyclusPath){
         
         /** Test to see if server request works. */
         rngRelPath =
-            "\"https://raw.github.com/cyclus/core/master/src/Models/Facility/StorageFacility/StorageFacility.rng\""
+            "\"https://raw.github.com/cyclus/cyclus/master/src/Models/Facility/StorageFacility/StorageFacility.rng\""
         if (rngRelPath.slice(0,4) == '\"htt'){
             $(document).ready(function() {
                 $.ajax({
@@ -313,7 +315,7 @@ function gatherSchemas(cyclusPath){
                         
                             var parser = new Parser(doc);
                             var parsedObj = parser.parse_obj();
-                            schemas[rngRelPath] = parse_obj();
+                            schemas[rngRelPath] = parsedObj;
                             //parser.printObject(parsedObj, 0);
                         }
                         else{
