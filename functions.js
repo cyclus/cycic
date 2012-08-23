@@ -60,4 +60,9 @@ function saveFCDiagramPng(fcsvg){
     popupHTML = popupHTML + '<img src="'+img+'"/>';
     popupHTML = popupHTML + '</div>';
     $.facybox(popupHTML);
-};
+}
+function populateFacilities(passList){
+	$('').replaceAll('.facilities_menu > li > ul > li');
+	$("'#"+passList+" > ul > li'").clone().prependTo($('.facilities_menu > li > ul'));
+	$('.facilities_menu > li > ul').append('<li><a style ="cursor:hand; cursor:pointer" onClick = "newFacilityForm()"> Add New Facility </a></li>');
+}

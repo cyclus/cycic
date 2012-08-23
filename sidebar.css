@@ -83,6 +83,9 @@ ul, ul ul {
 	font-weight: 400;
 	color:#000000;
 }
+.sidebar_menu > li > ul > li > ul {
+	display: none;
+}
 .sidebar_menu li  a:hover, .sidebar_menu li a.active{
 	background-color: #8FDE62;
     background-image: -webkit-gradient(linear, left top, left bottom, from(rgb(69, 199, 235)),to(rgb(38, 152, 219)));

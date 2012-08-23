@@ -18,11 +18,12 @@ function newMarketForm(){
 	document.getElementById('sandbox_1').style.display = 'block';			
 }
 function openNewMarketForm(){
-	window.TYPE = "steelblue"
+	window.TYPE = "market"
 	window.NAME = document.getElementById('sandbox_form')[0].value;
 	nameStoreConvert(window.NAME);
+	window.NAME = nameStore[window.NAME];
 	$('#form_sandbox div form').empty();
-	$('.market_type ul').prepend('<li id = "' + nameStore[window.NAME] + '"><a style ="cursor:hand; cursor:pointer">' + window.NAME);
+	$('.market_type ul').prepend('<li id = "' + window.NAME + '"><a style ="cursor:hand; cursor:pointer">' + nameStoreBack[window.NAME]);
 	updateSidebar();
 	document.getElementById('wrapper').style.display = 'none';					
 	document.getElementById('wrapper').style.display = 'block';
@@ -46,25 +47,25 @@ function printOutMarket(){
 			market[document.getElementById('sandbox_form')[i].name] = document.getElementById('sandbox_form')[i].value;
 		}
 		market['circle'] = {
-			name: nameStore[window.NAME],
+			name: window.NAME,
   			type: d3.svg.symbol("square"),
     		size: 40,
     		x: 100,
     		y: 100,
-    		id: nameStore[window.NAME],
+    		id: window.NAME,
     		call: "mark"
 		};
 		return market;		
 	}
-	if(!MARKETS[nameStore[window.NAME]]){
-		window.MARKETS[nameStore[window.NAME]] = testing();
+	if(!MARKETS[window.NAME]){
+		window.MARKETS[window.NAME] = testing();
 		addParentCircle();
 	}
-	window.MARKETS[nameStore[window.NAME]] = testing();
+	window.MARKETS[window.NAME] = testing();
 	return MARKETS;
 }
 function openMarketForm(facility){
-	window.TYPE = "steelblue";
+	window.TYPE = "market";
 	$('#form_sandbox div form').empty();		
 	for(attribute in facilities[facility]){
 		var STR = attribute;

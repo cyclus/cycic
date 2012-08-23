@@ -5,10 +5,7 @@
  Version: 0.1
  Author: Robert Flanagan
  */
-line.link {
-  stroke: #000000;
-  stroke-width: 1.5px;
-}
+
 #sandbox {
 	background: #4C4E5A;
 	margin-left: 203px;
@@ -26,8 +23,9 @@ line.link {
 #sandbox_1 {
 	background: #FF9331;
 	height: 90%;
-	width: 100%;
+	width: 95%;
 	overflow: auto;
+	margin-left: 5%;
 }
 #submit_area {
 	background: #FF9331;

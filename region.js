@@ -14,7 +14,7 @@ function openNewRegionForm(){
 	window.NAME = document.getElementById('sandbox_form')[0].value;
 	nameStoreConvert(window.NAME);
 	$('#sandbox_form').empty();	
-	$('.region_type > ul').prepend('<li id = "' + nameStore[window.NAME] + '" class = "region"><a>' + window.NAME + '</a><ul style="">');
+	$('.region_type > ul').prepend('<li id = "' + nameStore[window.NAME] + '" class = "region"><a style ="cursor:hand; cursor:pointer" onclick ="populateFacilities('+nameStore[window.NAME]+')">' + window.NAME + '</a><ul>');
 	updateSidebar();
 	document.getElementById('wrapper').style.display = 'none';					
 	document.getElementById('wrapper').style.display = 'block';

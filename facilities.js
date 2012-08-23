@@ -41,6 +41,7 @@ function openNewFacilityForm(){
 	window.TYPE = "green";
 	window.NAME = document.getElementById('sandbox_form')[0].value;
 	nameStoreConvert(window.NAME);
+	window.NAME = nameStore[window.NAME];
 	window.REGION = document.getElementById('sandbox_form')[1].value;
 	window.INSTITUTION = document.getElementById('sandbox_form')[2].value;
 	window.MODEL = document.getElementById('sandbox_form')[3].value;
@@ -100,7 +101,7 @@ function openFacilityForm(facility){
 		var STR = attribute;
 		window.NAME = facility;
 		if(attribute === "Name"){
-			$('#sandbox_1 form').append('<p>' + toTitleCase(attribute) + '<input type="text" name ="' + attribute +'" value ="' + nameStoreBack[facilities[facility][STR]] + '"/>');
+			$('#sandbox_1 form').append('<p>' + attribute.toUpperCase() + '<input type="text" name ="' + attribute +'" value ="' + nameStoreBack[facilities[facility][STR]] + '"/>');
 			continue;	
 		}
 		if(attribute === "inMarket"){
@@ -136,7 +137,7 @@ function openFacilityForm(facility){
 		if(attribute === "state"){
 			continue;
 		}
-		$('#sandbox_1 form').append('<p>' + toTitleCase(attribute) + '<input type="text" name ="' + attribute +'" value ="' + toTitleCase(facilities[facility][STR]) + '"/>');
+		$('#sandbox_1 form').append('<p>' + attribute.toUpperCase() + '<input type="text" name ="' + attribute +'" value ="' + facilities[facility][STR].toUpperCase() + '"/>');
 	}
 	if(facilities[facility]['circle']['call'] == "fac"){
 		$('#submit_area > form').append('<button name = "submit_Facility" type="button" onClick="cloneFacilityForm()"> Clone Facility </button>');
@@ -156,7 +157,7 @@ function printoutFacility(){
 	function testing(){
 		var length_2 = document.getElementById('sandbox_form').length;
 		var facility = {};
-		facility['Name'] = nameStore[window.NAME];
+		facility['Name'] = window.NAME;
 		facility['Region'] = window.REGION;
 		facility['Institution'] = window.INSTITUTION;
 		facility['model'] = window.MODEL
@@ -165,12 +166,12 @@ function printoutFacility(){
 			facility[document.getElementById('sandbox_form')[i].name] = document.getElementById('sandbox_form')[i].value;
 		}
 		facility['circle'] = {
-			name: nameStore[window.NAME],
+			name: window.NAME,
   			type: d3.svg.symbol("circle"),
     		size: 50,
     		x: 100,
     		y: 100,
-    		id: nameStore[window.NAME],
+    		id: window.NAME,
     		call: "fac",
 		};
 		facility['circle']['children'] = [];
@@ -180,13 +181,13 @@ function printoutFacility(){
 	}
 	
 	if(!facilities[window.NAME] && !facilities[nameStore[window.NAME]]){
-		window.facilities[nameStore[window.NAME]] = testing();
-		$('#'+facilities[nameStore[window.NAME]].Region +' ul').append('<li><a style ="cursor:hand; cursor:pointer" onClick = "openFacilityForm(facilities.'+nameConvert(window.NAME)+'.Name)" >' + window.NAME);
-		$('#'+facilities[nameStore[window.NAME]].Institution +' ul').append('<li><a style ="cursor:hand; cursor:pointer" onClick = "openFacilityForm(facilities.'+nameConvert(window.NAME)+'.Name)" >' + window.NAME);
+		window.facilities[window.NAME] = testing();
+		$('#'+facilities[window.NAME].Region +' ul').append('<li><a style ="cursor:hand; cursor:pointer" onClick = "openFacilityForm(facilities.'+nameConvert(window.NAME)+'.Name)" >' + window.NAME);
+		$('#'+facilities[window.NAME].Institution +' ul').append('<li><a style ="cursor:hand; cursor:pointer" onClick = "openFacilityForm(facilities.'+nameConvert(window.NAME)+'.Name)" >' + window.NAME);
 		addParentCircle();
 		updateSidebar();
 	}else{
-		window.facilities[nameStore[window.NAME]] = testing();
+		window.facilities[window.NAME] = testing();
 		updateLinks();
 	}
 	
@@ -197,11 +198,6 @@ function updateSidebar(){
 	$('ul li ul').each(function(){
 		$(this).prev('a').find('.total').find('div').remove()
 	  	$(this).prev('a').find('.total').append('<div>'+ ($(this).find('li').length - $(this).find('li > ul > li').length - 1) +'</div>');
-	});
-}
-function toTitleCase(str){
-	return str.replace(/\w\S*/g, function(txt){
-		return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
 	});
 }
 
@@ -218,25 +214,25 @@ function newCloneFacilityForm(){
 	window.PARENT = window.NAME;
 	window.NAME = document.getElementById('sandbox_form')[0].value;
 	nameStoreConvert(window.NAME)
-	facilities[nameStore[window.NAME]] = $.extend(true, {}, facilities[window.PARENT])
-	facilities[nameStore[window.NAME]]['Name'] = nameStore[window.NAME];
-	facilities[nameStore[window.NAME]]['circle']['name'] = nameStore[window.NAME];
-	facilities[nameStore[window.NAME]]['circle']['id'] = nameStore[window.NAME];
-	facilities[nameStore[window.NAME]]['circle']['call'] = "child";
-	facilities[nameStore[window.NAME]]['circle']['size'] = 40;
+	window.NAME = nameStore[window.NAME];
+	facilities[window.NAME] = $.extend(true, {}, facilities[window.PARENT])
+	facilities[window.NAME]['Name'] = window.NAME;
+	facilities[window.NAME]['circle']['name'] = window.NAME;
+	facilities[window.NAME]['circle']['id'] = window.NAME;
+	facilities[window.NAME]['circle']['call'] = "child";
+	facilities[window.NAME]['circle']['size'] = 40;
 	var tempFacility = $.extend(true, {}, facilities[window.PARENT]['circle']);
-	tempFacility['id'] = nameStore[window.NAME];
-	tempFacility['name'] = nameStore[window.NAME];
+	tempFacility['id'] = window.NAME;
+	tempFacility['name'] = window.NAME;
 	tempFacility['call'] = "child";
 	tempFacility['size'] = 40;
 	facilities[window.PARENT]['circle']['children'].push(tempFacility);
 	$('#form_sandbox div form').empty();	
-	for(attribute in facilities[nameStore[window.NAME]]){
-		var STR = attribute;
+	for(attribute in facilities[window.NAME]){
 		if(attribute === "inMarket"){
 			$('#sandbox_1 form').append('<p> Market: <select name ="inMarket" id = "market_select"> </select> </p>');
 			for(ii = 0; ii < $('.market_type ul li').length-1; ii ++){
-				if(facilities[nameStore[window.NAME]]['inMarket'] == $('.market_type ul li')[ii].id){
+				if(facilities[window.NAME]['inMarket'] == $('.market_type ul li')[ii].id){
 					$('#market_select').append('<option value ="'+$('.market_type ul li')[ii].id +'" selected = "selected">' + nameStoreBack[$(".market_type ul li")[ii].id] +'</option>');
 				}
 				else{
@@ -248,7 +244,7 @@ function newCloneFacilityForm(){
 		if(attribute === "outMarket"){
 			$('#sandbox_1 form').append('<p> Market: <select name ="outMarket" id = "market_out_select"> </select> </p>');
 			for(ii = 0; ii < $('.market_type ul li').length-1; ii ++){
-				if(facilities[nameStore[window.NAME]]['outMarket'] == $('.market_type ul li')[ii].id){
+				if(facilities[window.NAME]['outMarket'] == $('.market_type ul li')[ii].id){
 					$('#market_out_select').append('<option value ="'+$('.market_type ul li')[ii].id +'" selected = "selected">' + nameStoreBack[$(".market_type ul li")[ii].id] +'</option>');
 				}
 				else{
@@ -266,7 +262,7 @@ function newCloneFacilityForm(){
 		if(attribute === "state"){
 			continue;
 		}
-		$('#sandbox_1 form').append('<p>' + toTitleCase(attribute) + '<input type="text" name ="' + attribute +'" value ="' + toTitleCase(facilities[nameStore[window.NAME]][STR]) + '"/>');
+		$('#sandbox_1 form').append('<p>' + attribute.toUpperCase() + '<input type="text" name ="' + attribute +'" value ="' + facilities[window.NAME][attribute] + '"/>');
 	}
 	$('#submit_area > form').append('<button name = "submit_Facility" type="button" onClick="addCloneCircle()"> Submit </button>');
 	document.getElementById('sandbox_1').style.display = 'none';					
@@ -277,7 +273,7 @@ function printoutClone(){
 	function testing(){
 		var length_2 = document.getElementById('sandbox_form').length;
 		var facility = {};
-		facility['Name'] = nameStore[window.NAME];
+		facility['Name'] = window.NAME;
 		facility['Region'] = window.REGION;
 		facility['Institution'] = window.INSTITUTION;
 		facility['model'] = window.MODEL
@@ -286,12 +282,12 @@ function printoutClone(){
 			facility[document.getElementById('sandbox_form')[i].name] = document.getElementById('sandbox_form')[i].value;
 		}
 		facility['circle'] = {
-			name: nameStore[window.NAME],
+			name: window.NAME,
   			type: d3.svg.symbol("circle"),
     		size: 40,
     		x: 100,
     		y: 100,
-    		id: nameStore[window.NAME],
+    		id: window.NAME,
     		call: "child",
 		};
 		facility['circle']['children'] = [];
@@ -301,8 +297,8 @@ function printoutClone(){
 	}
 	window.facilities[window.NAME] = testing();
 	if(!facilities[window.NAME] && !facilities[nameStore[window.NAME]]){
-		$('#'+facilities[nameStore[window.NAME]].Region +' ul li ul').append('<li><a style ="cursor:hand; cursor:pointer" onClick = "openFacilityForm(' + nameStore[window.NAME]+')" >' + (window.NAME));
-		$('#'+facilities[nameStore[window.NAME]].Institution +' ul li ul').append('<li><a style ="cursor:hand; cursor:pointer" onClick = "openFacilityForm(' + nameStore[window.NAME]+')" >' + window.NAME);
+		/*$('#'+facilities[window.NAME].Region +' ul li ul').append('<li><a style ="cursor:hand; cursor:pointer" onClick = "openFacilityForm(' + nameStore[window.NAME]+')" >' + (window.NAME));
+		$('#'+facilities[window.NAME].Institution +' ul li ul').append('<li><a style ="cursor:hand; cursor:pointer" onClick = "openFacilityForm(' + nameStore[window.NAME]+')" >' + window.NAME);*/
 		updateSidebar();
 	}else{
 		updateLinks();
