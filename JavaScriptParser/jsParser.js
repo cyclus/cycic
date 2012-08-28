@@ -6,6 +6,9 @@ function main(){
 	 * var parser = new Parser("recipereactor.xml");
      * var parser = new Parser("file:///home/scopatz/cyclus/src/Models/Facility/StorageFacility/StorageFacility.rng");
      */
+    var hi = new JsonToXmlParser('file:///C:/Users/Kevin/Documents/GitHub/cycic/JavaScriptParser/sample_interface/simulation_p2v1.json');
+    hi.parse_obj();
+    
     var parser = new Parser(
         "file:///C:/Users/Kevin/Documents/GitHub/core/src/Models/Facility/SourceFacility/SourceFacility.rng");
   
@@ -15,7 +18,7 @@ function main(){
 }
 
 function mainGather(){
-  /**
+   /**
      * Examples for using mainGather
      * gatherSchemas('/home/scopatz/cyclus')
      * gatherSchemas('../../cyclus')
@@ -42,7 +45,7 @@ function cycicXMLHttpRequest() {
 
 function Parser(word){
 	this.currentIndex = new Array();
-	this.jsObjName = new Array();
+	this.jsObjName = new Object();
 	this.elementTrace = new Array();
 	this.file = word;
 }
@@ -263,6 +266,50 @@ Parser.prototype.inputSpaces = function(num) {
 	}
 }
 
+/**************************************************************************************
+  *                               JSON to XML Parser                                  *
+  *************************************************************************************/
+  
+function JsonToXmlParser(word){
+    this.currentIndex = new Array();
+    if (window.XMLHttpRequest) {
+        this.xmlObj = (new DOMParser()).parseFromString("<simulation/>", "text/xml");
+    }
+    
+    /** IE 5/6 */
+    else { 
+        this.xmlObj = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    
+    
+    this.elementTrace = new Array();
+    
+    var xhttp = cycicXMLHttpRequest();
+    xhttp.open("GET", word, false);
+    xhttp.send();
+    this.jsonObj = JSON.parse(xhttp.responseText);
+    
+    
+}
+
+/** Should make an error check of JSON format */
+JsonToXmlParser.prototype.parse_obj = function() {
+    this.xmlObj.createElement('hello')
+    this.xmlObj.createElement('world')
+}
+
+JsonToXmlParser.prototype.parseObject = function(elements) {
+    
+}
+
+
+
+
+
+
+
+
+
 var schemas = {}
 
 function gatherSchemas(cyclusPath){
@@ -324,7 +371,7 @@ function gatherSchemas(cyclusPath){
                     }
                 })
             });
-            break;
+            
         }
         else{
             rngFullPath = cyclusPath + '/' + rngRelPath;
@@ -348,8 +395,8 @@ function gatherSchemas(cyclusPath){
   return schemas;
 }
 
-//main();
-mainGather();
+main();
+//mainGather();
 
 /**
  * MENTAL NOTES TO SELF
