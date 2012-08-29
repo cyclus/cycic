@@ -283,7 +283,6 @@ function JsonToXmlParser(word){
     
     
     this.elementTrace = new Array();
-    
     var xhttp = cycicXMLHttpRequest();
     xhttp.open("GET", word, false);
     xhttp.send();
@@ -294,8 +293,18 @@ function JsonToXmlParser(word){
 
 /** Should make an error check of JSON format */
 JsonToXmlParser.prototype.parse_obj = function() {
-    this.xmlObj.createElement('hello')
-    this.xmlObj.createElement('world')
+    var x = this.xmlObj.getElementsByTagName('simulation')
+    
+    var hello = this.xmlObj.createElement('hello')
+    
+    
+    var world = this.xmlObj.createElement('world')
+    
+    x[0].appendChild(hello)
+    x[0].appendChild(world)
+    
+    document.write(this.xmlObj.childNodes[0].childNodes.length)
+    
 }
 
 JsonToXmlParser.prototype.parseObject = function(elements) {
