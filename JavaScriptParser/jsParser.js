@@ -307,7 +307,18 @@ JsonToXmlParser.prototype.parse_obj = function() {
 }
 
 JsonToXmlParser.prototype.parseObject = function(elements) {
-    
+    for (i=0; i<elements.length;i++){
+        document.write(elements[i] + '<br>');
+        
+        for (var key in this.jsonObj[elements[i]]){
+            document.write(key + '<br>')
+            if (this.getLength(this.jsonObj[elements[i]][key]) != 0){
+                document.write(this.objectToArray(this.jsonObj[elements[i]][key]));
+            }
+            document.write('<br><br>');
+        }
+        
+    }
     
 }
 
@@ -321,8 +332,21 @@ JsonToXmlParser.prototype.print_obj = function(xmlObject){
     }
 }
 
+JsonToXmlParser.prototype.getLength = function(object) {
+	var length = 0;
+	for (var key in object){
+		length++;
+	}
+	return length;
+}
 
-
+JsonToXmlParser.prototype.objectToArray = function(object){
+    var list = new Array()
+    for (var element in object){
+        list.push(element);
+    }
+    return list
+}
 
 
 
