@@ -293,24 +293,33 @@ function JsonToXmlParser(word){
 
 /** Should make an error check of JSON format */
 JsonToXmlParser.prototype.parse_obj = function() {
+    var elements = new Array();
     var x = this.xmlObj.getElementsByTagName('simulation')
+
+    for (var key in this.jsonObj) {
+        elements.push(key)
+        x[0].appendChild(this.xmlObj.createElement(key));
+    }
     
-    var hello = this.xmlObj.createElement('hello')
-    
-    
-    var world = this.xmlObj.createElement('world')
-    
-    x[0].appendChild(hello)
-    x[0].appendChild(world)
-    
-    document.write(this.xmlObj.childNodes[0].childNodes.length)
+    //this.print_obj(this.xmlObj);
+    x[0].append(this.parseObject(elements))
     
 }
 
 JsonToXmlParser.prototype.parseObject = function(elements) {
     
+    
 }
 
+JsonToXmlParser.prototype.print_obj = function(xmlObject){
+    var listOfNodes = xmlObject.childNodes[0].childNodes;
+
+    document.write('Number of Elements in xmlObj: ' + this.xmlObj.childNodes[0].childNodes.length + '<br>')
+
+    for (i=0; i<listOfNodes.length; i++){
+        document.write(listOfNodes[i].nodeName + '<br>');
+    }
+}
 
 
 
