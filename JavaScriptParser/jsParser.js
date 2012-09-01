@@ -307,11 +307,25 @@ JsonToXmlParser.prototype.parse_obj = function() {
 }
 
 JsonToXmlParser.prototype.parseObject = function(elements) {
+    var x = this.xmlObj.getElementsByTagName('simulation');
+    var result;
     for (i=0; i<elements.length;i++){
         document.write(elements[i] + '<br>');
         
         for (var key in this.jsonObj[elements[i]]){
             document.write(key + '<br>')
+            
+            if (elements[i] == 'commodities'){
+               var node = x[0].getElementsByTagName(elements[i]); 
+               var elmt = this.xmlObj.createElement('name');
+               elmt.textContent = key;
+               node[0].appendChild(elmt);
+            }
+            
+            else if (elements[i] = 'markets'){
+            
+            }
+            
             if (this.getLength(this.jsonObj[elements[i]][key]) != 0){
                 document.write(this.objectToArray(this.jsonObj[elements[i]][key]));
             }
@@ -319,7 +333,7 @@ JsonToXmlParser.prototype.parseObject = function(elements) {
         }
         
     }
-    
+    return result
 }
 
 JsonToXmlParser.prototype.print_obj = function(xmlObject){
