@@ -325,6 +325,7 @@ JsonToXmlParser.prototype.parseObject = function(elements) {
                 x[0].appendChild(elmt);
             }
             
+            // If the node is of type 'market', add its name and any other attributes.
             else if (elements[i] = 'markets'){
                 var elmt = this.xmlObj.createElement('market');
                 var elmtName = this.xmlObj.createElement('name');
