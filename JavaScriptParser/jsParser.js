@@ -298,7 +298,7 @@ JsonToXmlParser.prototype.parse_obj = function() {
 
     for (var key in this.jsonObj) {
         elements.push(key)
-        x[0].appendChild(this.xmlObj.createElement(key));
+        //x[0].appendChild(this.xmlObj.createElement(key));
     }
     
     //this.print_obj(this.xmlObj);
@@ -314,12 +314,16 @@ JsonToXmlParser.prototype.parseObject = function(elements) {
         
         for (var key in this.jsonObj[elements[i]]){
             document.write(key + '<br>')
-            
+
+            // If the node is of type 'commodity', add its name.
             if (elements[i] == 'commodities'){
-               var node = x[0].getElementsByTagName(elements[i]); 
-               var elmt = this.xmlObj.createElement('name');
-               elmt.textContent = key;
-               node[0].appendChild(elmt);
+                
+                var elmt = this.xmlObj.createElement('commodity');
+                var elmtName = this.xmlObj.createElement('name');
+                elmtName.textContent = key;
+                elmt.childNodes[0] = elmtName;
+                x[0].appendChild(elmt);
+                
             }
             
             else if (elements[i] = 'markets'){
