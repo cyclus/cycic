@@ -317,21 +317,36 @@ JsonToXmlParser.prototype.parseObject = function(elements) {
 
             // If the node is of type 'commodity', add its name.
             if (elements[i] == 'commodities'){
-                
                 var elmt = this.xmlObj.createElement('commodity');
                 var elmtName = this.xmlObj.createElement('name');
+
                 elmtName.textContent = key;
                 elmt.childNodes[0] = elmtName;
                 x[0].appendChild(elmt);
-                
             }
             
             else if (elements[i] = 'markets'){
-            
+                var elmt = this.xmlObj.createElement('market');
+                var elmtName = this.xmlObj.createElement('name');
+                var childNodeIndex = 0;
+                
+                elmtName.textContent = key;
+                elmt.childNodes[childNodeIndex] = elmtName;
+                childNodeIndex++;
+                for (var attribute in this.jsonObj[elements[i]][key]){
+                    subElmt = this.xmlObj.createElement(attribute);
+                    subElmt.textContext = this.jsonObj[elements[i]][key][attribute];
+                    elmt.childNodes[childNodeIndex] = subElmt;
+                    childNodeIndex++;
+                   
+                    document.write(attribute);
+                
+                }
+                x[0].appendChild(elmt);
             }
             
             if (this.getLength(this.jsonObj[elements[i]][key]) != 0){
-                document.write(this.objectToArray(this.jsonObj[elements[i]][key]));
+                //document.write(this.objectToArray(this.jsonObj[elements[i]][key]));
             }
             document.write('<br><br>');
         }
