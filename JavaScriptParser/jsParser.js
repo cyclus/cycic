@@ -1,6 +1,3 @@
-/** main(); */
-//mainGather();
-
 function main(){
 	 /**
      * Examples for using the parser:
@@ -9,33 +6,33 @@ function main(){
 	 * var parser = new Parser("recipereactor.xml");
      * var parser = new Parser("file:///home/scopatz/cyclus/src/Models/Facility/StorageFacility/StorageFacility.rng");
      */
-    var path = "file:///C:/Users/Kevin/Documents/GitHub/cycic/JavaScriptParser/sample_interface/simulation_p2v1.json";
-    var xhttp = cycicXMLHttpRequest();
-    xhttp.open("GET", path, false)
-    xhttp.send()
-    var response = xhttp.responseText
-    var jsonObj = JSON.parse(response);
+    var hi = new JsonToXmlParser('file:///C:/Users/Kevin/Documents/GitHub/cycic/JavaScriptParser/sample_interface/simulation_p2v1.json');
+    hi.parse_obj();
+    
     var parser = new Parser(
         "file:///C:/Users/Kevin/Documents/GitHub/core/src/Models/Facility/SourceFacility/SourceFacility.rng");
-
-    var parsedObj = parser.parseObj();
-    /*parser.printObject(parsedObj, 0);*/	
+  
+  
+  var parsed_obj = parser.parse_obj();
+   //parser.printObject(parsed_obj, 0);	
 }
 
 function mainGather(){
-  /**
+   /**
      * Examples for using mainGather
      * gatherSchemas('/home/scopatz/cyclus')
      * gatherSchemas('../../cyclus')
      * gatherSchemas('http://raw.github.com/cyclus/core/master/src/Models/Facility/StorageFacility/StorageFacility.rng');
      */
-    gatherSchemas('file:///C:/Users/Kevin/Documents/GitHub/core', '.');
+    gatherSchemas('file:///C:/Users/Kevin/Documents/GitHub/core');
+   
 }
 
 function cycicXMLHttpRequest() {
     if (window.XMLHttpRequest) {
         var xhttp = new XMLHttpRequest();
     }
+    
     /** IE 5/6 */
     else { 
         var xhttp = new ActiveXObject("Microsoft.XMLHTTP");
@@ -48,7 +45,7 @@ function cycicXMLHttpRequest() {
 
 function Parser(word){
 	this.currentIndex = new Array();
-	this.jsObjName = new Array();
+	this.jsObjName = new Object();
 	this.elementTrace = new Array();
 	this.file = word;
 }
@@ -159,7 +156,7 @@ Parser.prototype.printObject = function(parsedObject, spaces) {
             this.inputSpaces(spaces + 1);
             document.write("[<br>");
             this.inputSpaces(spaces + 2);
-            /*this.printObject(parsedObject[key], spaces + 2);*/
+            this.printObject(parsedObject[key], spaces + 2);
             this.inputSpaces(spaces + 1);
             document.write("]<br>");
             this.inputSpaces(spaces);
@@ -202,12 +199,12 @@ Parser.prototype.printObject = function(parsedObject, spaces) {
                 
                 if (this.getChildrenNum(parsedObject[key][tempKey]) ==1){
                     document.write("[");
-                    /*this.printObject(parsedObject[key], spaces + 1);*/
+                    this.printObject(parsedObject[key], spaces + 1);
                     this.inputSpaces(spaces);
                     document.write("]]<br>");
                 }
                 else{
-                    /*this.printObject(parsedObject[key], spaces + 1);*/
+                    this.printObject(parsedObject[key], spaces + 1);
                     this.inputSpaces(spaces);
                     document.write("]<br>");
                 }
@@ -269,8 +266,130 @@ Parser.prototype.inputSpaces = function(num) {
 	}
 }
 
+/**************************************************************************************
+  *                               JSON to XML Parser                                  *
+  *************************************************************************************/
   
-function gatherSchemas(cyclusPath, rDumpPath){
+function JsonToXmlParser(word){
+    this.currentIndex = new Array();
+    if (window.XMLHttpRequest) {
+        this.xmlObj = (new DOMParser()).parseFromString("<simulation/>", "text/xml");
+    }
+    
+    /** IE 5/6 */
+    else { 
+        this.xmlObj = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    
+    
+    this.elementTrace = new Array();
+    var xhttp = cycicXMLHttpRequest();
+    xhttp.open("GET", word, false);
+    xhttp.send();
+    this.jsonObj = JSON.parse(xhttp.responseText);
+    
+    
+}
+
+/** Should make an error check of JSON format */
+JsonToXmlParser.prototype.parse_obj = function() {
+    var elements = new Array();
+    var x = this.xmlObj.getElementsByTagName('simulation')
+
+    for (var key in this.jsonObj) {
+        elements.push(key)
+        //x[0].appendChild(this.xmlObj.createElement(key));
+    }
+    
+    //this.print_obj(this.xmlObj);
+    x[0].append(this.parseObject(elements))
+    
+}
+
+JsonToXmlParser.prototype.parseObject = function(elements) {
+    var x = this.xmlObj.getElementsByTagName('simulation');
+    var result;
+    for (i=0; i<elements.length;i++){
+        document.write(elements[i] + '<br>');
+        
+        for (var key in this.jsonObj[elements[i]]){
+            document.write(key + '<br>')
+
+            // If the node is of type 'commodity', add its name.
+            if (elements[i] == 'commodities'){
+                var elmt = this.xmlObj.createElement('commodity');
+                var elmtName = this.xmlObj.createElement('name');
+
+                elmtName.textContent = key;
+                elmt.childNodes[0] = elmtName;
+                x[0].appendChild(elmt);
+            }
+            
+            // If the node is of type 'market', add its name and any other attributes.
+            else if (elements[i] = 'markets'){
+                var elmt = this.xmlObj.createElement('market');
+                var elmtName = this.xmlObj.createElement('name');
+                var childNodeIndex = 0;
+                
+                elmtName.textContent = key;
+                elmt.childNodes[childNodeIndex] = elmtName;
+                childNodeIndex++;
+                for (var attribute in this.jsonObj[elements[i]][key]){
+                    subElmt = this.xmlObj.createElement(attribute);
+                    subElmt.textContext = this.jsonObj[elements[i]][key][attribute];
+                    elmt.childNodes[childNodeIndex] = subElmt;
+                    childNodeIndex++;
+                   
+                    document.write(attribute);
+                
+                }
+                x[0].appendChild(elmt);
+            }
+            
+            if (this.getLength(this.jsonObj[elements[i]][key]) != 0){
+                //document.write(this.objectToArray(this.jsonObj[elements[i]][key]));
+            }
+            document.write('<br><br>');
+        }
+        
+    }
+    return result
+}
+
+JsonToXmlParser.prototype.print_obj = function(xmlObject){
+    var listOfNodes = xmlObject.childNodes[0].childNodes;
+
+    document.write('Number of Elements in xmlObj: ' + this.xmlObj.childNodes[0].childNodes.length + '<br>')
+
+    for (i=0; i<listOfNodes.length; i++){
+        document.write(listOfNodes[i].nodeName + '<br>');
+    }
+}
+
+JsonToXmlParser.prototype.getLength = function(object) {
+	var length = 0;
+	for (var key in object){
+		length++;
+	}
+	return length;
+}
+
+JsonToXmlParser.prototype.objectToArray = function(object){
+    var list = new Array()
+    for (var element in object){
+        list.push(element);
+    }
+    return list
+}
+
+
+
+
+
+var schemas = {}
+
+function gatherSchemas(cyclusPath){
+  
   /** Default arguments. */
   cyclusPath = typeof cyclusPath !== 'undefined' ? cyclusPath : ''
   if (cyclusPath == ''){
@@ -290,15 +409,14 @@ function gatherSchemas(cyclusPath, rDumpPath){
   xhttp.open("GET", "rngdump.json", false)
   xhttp.send()
   var rngPaths = JSON.parse(xhttp.responseText)
-  document.write(typeof(rngPaths) + "<br/>")
-  document.write(Object.prototype.toString.call(rngPaths) + "<br/>")
+  //document.write(typeof(rngPaths) + "<br/>")
+  //document.write(Object.prototype.toString.call(rngPaths) + "<br/>")
   for (i in rngPaths) {
 	rngRelPath = rngPaths[i]
         
         /** Test to see if server request works. */
-//        rngRelPath =
-//            "\"https://raw.github.com/cyclus/core/master/src/Models/Facility/StorageFacility/StorageFacility.rng\""
-
+        rngRelPath =
+            "\"https://raw.github.com/cyclus/cyclus/master/src/Models/Facility/StorageFacility/StorageFacility.rng\""
         if (rngRelPath.slice(0,4) == '\"htt'){
             $(document).ready(function() {
                 $.ajax({
@@ -319,7 +437,8 @@ function gatherSchemas(cyclusPath, rDumpPath){
                             }
                         
                             var parser = new Parser(doc);
-                            schemas[rngRelPath] = parser.parse_obj();
+                            var parsedObj = parser.parse_obj();
+                            schemas[rngRelPath] = parsedObj;
                             //parser.printObject(parsedObj, 0);
                         }
                         else{
@@ -328,12 +447,12 @@ function gatherSchemas(cyclusPath, rDumpPath){
                     }
                 })
             });
-            break;
+            
         }
         else{
             rngFullPath = cyclusPath + '/' + rngRelPath;
             parser = new Parser(rngFullPath);
-            schemas[rngRelPath] = parser.parseObj();
+            schemas[rngRelPath] = parser.parse_obj();
             
             /** 
              * if (rngRelPath.match(reFac) !== null) {
@@ -343,11 +462,13 @@ function gatherSchemas(cyclusPath, rDumpPath){
         }
   }
 
-    for (s in schemas) {
-        /*document.write(s + ":  " + "<br/>");*/
-        var parser = new Parser('blah');
-        parser.printObject(schemas[s],0);   }
-    return schemas;
+  for (s in schemas) {
+	document.write(s + ":  " + "<br/>")
+	//var parser = new Parser('blah')
+	//parser.printObject(schemas[s],0)
+  }
+  //document.write(schemas);
+  return schemas;
 }
 
 main();
@@ -374,6 +495,5 @@ document.write(xmlDoc.getElementsByTagName('element')[1].childNodes[1].nodeName)
 //prints inrecipt.. why
 document.write(xmlDoc.getElementsByTagName('element')[1].childNodes[1].nextSibling.nextSibling.getAttribute('name'));
 **/
-
 
 
