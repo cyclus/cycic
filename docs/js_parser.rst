@@ -59,8 +59,8 @@ call the method "printObject."  Going back to our example, to print parsedObj, w
 
     parser.printObject();
 	
-This will print the entire JSON-mapped object to the screen or console.  Please notice
-that the parser will only print out the JSON version of the RNG object that it was 
+NOTICE: This will print the entire JSON-mapped object to the screen or console.  Please 
+notice that the parser will only print out the JSON version of the RNG object that it was 
 assigned to upon instantiation.
 
 Reversing The Process: JSON to RNG
@@ -69,4 +69,19 @@ Reversing The Process: JSON to RNG
 With the communication between both Cyclus and our GUI, we must also account for 
 backwards compatibility.  That is, the ability to take in a JSON file and output 
 an RNG / XML file must be considered.  This feature has only been partially implemented 
-and thus, may not fully work.  
+and thus, will not fully work.  Its usage is very similar to the JavaScript parser.  We 
+instantiate it by calling::
+
+    var parser = JsonToXmlParser(RNG_OR_XML_OBJECT);
+	
+To parse the RNG / XML object, we call "parse_obj," just like the JS parser::
+
+    var parsedJSONObject = parser.parse_obj();
+	
+The Json to XML / RNG parser also contains a printing method.  Due to its incompleteness, 
+however, we cannot truly make use of it.  Nonetheless, to call it, simply do::
+
+    parser.print_obj();
+
+This parser was modeled after the JS parser, so please keep in mind all of the aforementioned 
+notices.
