@@ -67,3 +67,10 @@ This will print the entire JSON-mapped object to the screen or console.  Please 
 that the parser will only print out the JSON version of the RNG object that it was 
 assigned to upon instantiation.
 
+Reversing The Process: JSON to RNG
+==================================
+
+With the communication between both Cyclus and our GUI, we must also account for 
+backwards compatibility.  That is, the ability to take in a JSON file and output 
+an RNG / XML file must be considered.  This feature has only been partially implemented 
+and thus, may not fully work.  
