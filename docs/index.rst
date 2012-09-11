@@ -4,8 +4,10 @@ cycic: a fuel cycle interface
 Contents:
 
 .. toctree::
-   :maxdepth: 2
-
+    :maxdepth: 2
+    overview
+    walkthrough
+    js_parser
 
 
 Indices and tables
