@@ -6,8 +6,8 @@ var Fnodes = [],
 
 function addParentCircle(){
 	if(window.TYPE ==="green"){	
-		Fnodes.push(facilities[nameStore[window.NAME]]['circle']);
-		Tnodes.push(facilities[nameStore[window.NAME]]['circle']);
+		Fnodes.push(facilities[window.NAME]['circle']);
+		Tnodes.push(facilities[window.NAME]['circle']);
 		
 		for( k = 0; k < Fnodes.length; k ++){
 			if(Fnodes[k].name === window.NAME){
@@ -15,7 +15,7 @@ function addParentCircle(){
 			}
 		}
 
-		if(facilities[nameStore[window.NAME]]['inMarket']){
+		if(facilities[window.NAME]['inMarket']){
 			for( i = 0; i < Fnodes.length; i ++){
 				if(Fnodes[i].name === facilities[window.NAME]['inMarket']){
 					var marketNamePass = i;
@@ -24,9 +24,9 @@ function addParentCircle(){
 	  		links.push({source: Fnodes[facilityNamePass], target: Fnodes[marketNamePass]});
 	  		Tlinks.push({source: Fnodes[facilityNamePass], target: Fnodes[marketNamePass]});
 	  	}
-	  	if(facilities[nameStore[window.NAME]]['outMarket']){
+	  	if(facilities[window.NAME]['outMarket']){
 			for( j = 0; j < Fnodes.length; j ++){
-				if(Fnodes[j].name === facilities[nameStore[window.NAME]]['outMarket']){
+				if(Fnodes[j].name === facilities[window.NAME]['outMarket']){
 					var marketNamePass = j;
 				}
 			}
@@ -34,9 +34,9 @@ function addParentCircle(){
 	  		Tlinks.push({source: Fnodes[facilityNamePass], target: Fnodes[marketNamePass]});
 	  	}			  	
 	}
-	if(window.TYPE ==="steelblue"){
-		Fnodes.push(MARKETS[nameStore[window.NAME]]['circle']);
-		Tnodes.push(MARKETS[nameStore[window.NAME]]['circle']);
+	if(window.TYPE ==="market"){
+		Fnodes.push(MARKETS[window.NAME]['circle']);
+		Tnodes.push(MARKETS[window.NAME]['circle']);
 	}
 	
   	var Fnode = vis.selectAll("g.node")
@@ -62,7 +62,7 @@ function addParentCircle(){
 		 .attr("font-size", "12")
 		 .text(function(d) {return nameStoreBack[d.name];})
   	}
-  	if(window.TYPE === "steelblue"){
+  	if(window.TYPE === "market"){
   		Fnode.enter().append("svg:g")
 	     .attr("class", "node")
 		 .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
@@ -89,6 +89,8 @@ function addParentCircle(){
 	
 	link.enter().insert("svg:line", "g.node")
 	      .attr("class", "link")
+  	      .style("stroke", "black")
+  	      .style("stroke-width", "1px")
       
     force.start();
     Tnodes.splice(0, Tnodes.length);
@@ -98,7 +100,7 @@ function addParentCircle(){
 function addCloneCircle(){
  	var test = false;
  	for(i = 0; i < Fnodes.length; i++){
-		if(Fnodes[i]['name'] == nameStore[window.NAME]){
+		if(Fnodes[i]['name'] == window.NAME){
 			test = true;
 		}
  	}
@@ -115,17 +117,17 @@ function addCloneCircle(){
 				var facNamePass = i;
 			}
 		}
-		Fnodes.push(facilities[nameStore[window.NAME]]['circle']);
+		Fnodes.push(facilities[window.NAME]['circle']);
 		var test1 = false;
 		for(i = 0; i < Fnodes[facNamePass]['children'].length; i++){
-			if(Fnodes[facNamePass]['children'][i]['name'] === nameStore[window.NAME]){
+			if(Fnodes[facNamePass]['children'][i]['name'] === window.NAME){
 				test1 = true;
 			}
 		}
 		if(test1 == false){
-			Fnodes[facNamePass]['children'].push(facilities[nameStore[window.NAME]]['circle']);
+			Fnodes[facNamePass]['children'].push(facilities[window.NAME]['circle']);
 		}
-		Tnodes.push(facilities[nameStore[window.NAME]]['circle']);
+		Tnodes.push(facilities[window.NAME]['circle']);
 		
   		links.push({source: Fnodes[facNamePass], target: Fnodes[Fnodes.length-1]});
   		Tlinks.push({source: Fnodes[facNamePass], target: Fnodes[Fnodes.length-1]});	
@@ -240,6 +242,8 @@ function hideChildren(facility){
 		.data(links, function(d) { return d.source.id + "-" + d.target.id; });
 	link.enter().insert("svg:line", "g.node")
      	.attr("class", "link")
+        .style("stroke", "black")
+        .style("stroke-width", "1px")
 		
 	force.start();
 	facilities[[facility]]['state'] = "closed";				
@@ -342,6 +346,7 @@ function showChildren(facility){
 	link.enter().insert("svg:line", "g.node")
 		      .attr("class", "link")
 		      .style("stroke", "black")
+  	          .style("stroke-width", "1px")
 			
 	Tnodes.splice(0, Tnodes.length);
     Tlinks.splice(0, Tlinks.length);
@@ -407,7 +412,9 @@ function updateLinks(){
 	      .data(links, function(d) { return d.source.id + "-" + d.target.id; });
   	link.exit().remove();
 	link.enter().insert("svg:line", "g.node")
-	      .attr("class", "link");    
+	      .attr("class", "link")
+	      .style("stroke", "black")
+  	      .style("stroke-width", "1px")    
 	var link = vis.selectAll("line.link")
 	      .data(links, function(d) { return d.source.id + "-" + d.target.id; });
     force.start();
@@ -423,4 +430,76 @@ function nodeMouseOut() {
 	d3.select(this).select("circle").transition()
     	.duration(250)
 	    .attr("r", function(d) {return d.size} );
+}
+
+function hideMarkets(){
+	var tempFnodes =[];
+	var templinks = [];
+	// Collapse the parent nodes //
+	for(ij = 0; ij < Fnodes.length; ij++){
+		if(Fnodes[ij]['call'] == "fac"){
+			hideChildren(Fnodes[ij]['name']);
+		}
+	}
+	// Adding facility to facility nodes //
+	for(i = 0; i < Fnodes.length; i++){
+		var facPass =[];
+		var markPass = [];
+		if(Fnodes[i]['call'] == "mark"){
+			for(j = 0; j < links.length; j++){
+				if(links[j]['target']['name'] == Fnodes[i]['name']){
+					facPass.push(links[j]['source']['name']);
+				}
+			}
+			console.log(facPass);
+			for(k = 0; k < facPass.length; k++){
+				for(ii = 0; ii < Fnodes.length; ii++){
+					if(facPass[k] == Fnodes[ii]['name']){
+						for(kk = 0; kk < facPass.length; kk++){
+							for(jj = 0; jj < Fnodes.length; jj++){
+								if(kk != k && ii != jj){
+									links.push({source: Fnodes[ii], target: Fnodes[jj]})
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		// Getting the market names //
+		for(k = 0; k < links.length; k++){
+			if(links[k].source['name'] == Fnodes[i]['name']){
+				if(links[k].target['call'] == "mark"){
+					markPass.push(links[k].target['name']);
+					templinks.push(links[k]);
+					links.splice(k, 1);
+					k = k - 1;
+				}
+			}
+		}
+		// splicing the market nodes // 
+		for(ii = 0; ii < Fnodes.length; ii++){
+			for(j = 0; j < markPass.length; j++){
+				if(Fnodes[ii]['name'] == markPass[j]){
+					tempFnodes.push(Fnodes[ii])
+					Fnodes.splice(ii, 1);
+					ii = ii - 1;
+				}
+			}
+		}
+	}
+	// Updating Force Layout Links //
+	var link = vis.selectAll("line.link")
+	      .data(links, function(d) { return d.source.id + "-" + d.target.id; });
+  	link.exit().remove();
+	link.enter().insert("svg:line", "g.node")
+	      .attr("class", "link")
+	      .style("stroke", "black")
+  	      .style("stroke-width", "1px")    
+	var link = vis.selectAll("line.link")
+	      .data(links, function(d) { return d.source.id + "-" + d.target.id; });
+  	Fnode = vis.selectAll("g.node")
+  		.data(Fnodes, function(d) {return d.name;});
+  	Fnode.exit().remove();
+    force.start();
 }

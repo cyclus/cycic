@@ -28,13 +28,13 @@
 	<script src="http://static.simile.mit.edu/timeline/api-2.3.0/timeline-api.js" type ="text/javascript"> </script>
 	<script src="facility_view.js"> </script>
 	<script src="functions.js"> </script>
-	<script src="facilities.js"> </script>
-	<script src="Nodes.js"> </script>	
+	<script src="Nodes.js"> </script>
+	<script src="facilities.js"> </script>	
 	<script src="script.js"> </script>
 	<script src="markets.js"> </script>
 	<script src="region.js"> </script>
 	<script src="institutions.js"> </script>
-	<script src="JavaScriptParser/jsParser.js"> </script>
+	<!-- script src="JavaScriptParser/jsParser.js"> </script> -->
 	<script src="material.js"> </script>
 	<!-- Kinetic Plug In -->
 	<script src="http://www.html5canvastutorials.com/libraries/kinetic-v3.10.2.js"> </script>
@@ -55,26 +55,23 @@
 					<li><a class="open_project"> Open Project </a></li>
 				</ul>
 			</li>
-			
 			<li><a href = "#"> Project </a>
 				<ul>
-					<li><a style ="cursor:hand; cursor:pointer" onclick = "switchToInfo()" class ="fuelCycleInfo"> Fuel Cycle Information </a></li>
-					<li><a style ="cursor:hand; cursor:pointer" onclick = "switchToVWindow()" class = "VWindow"> Window 3 </a></li>
-					<li><a style ="cursor:hand; cursor:pointer" onclick = "switchToTimeline()" class = "Timeline"> Timeline </a></li>
-					<li><a style ="cursor:hand; cursor:pointer" onclick = "toFuelCyclView()" class = "FCWindow"> Full Fuel Cycle Window </a></li>
-					<li><a style ="cursor:hand; cursor:pointer" onclick = "toFacilityView()" class = "FWindow"> Facility View </a></li>
+					<li><a style ="cursor:hand; cursor:pointer" onclick = "saveFCDiagramPng($('#sandbox_3').children()[1])" class = "FWindow"> Save Fuel Cycle Diagram </a></li>
+					<li><a style ="cursor:hand; cursor:pointer" onclick = "saveFCDiagramPng($('#Facility_View').children()[1])" class = "FWindow"> Save Facility View Diagram </a></li>
 				</ul>
 			</li>
 			<li><a href ="#"> Edit </a></li>
-			<li><a href ="#"> Mode </a>
+			<li><a href ="#"> View </a>
 				<ul>
-					<li><a href="#" class="market_mode"> Market Mode </a></li>
-					<li><a href="#" class="construction_mode"> Construction Mode</a></li>
-					<li><a href="#" class="time_depentent_mode"> Time Dependent Mode</a></li>
+					<li><a style ="cursor:hand; cursor:pointer" onclick = "toFuelCyclView()" class = "FCWindow"> Fuel Cycle View </a></li>
+					<li><a style ="cursor:hand; cursor:pointer" onclick = "toFacilityView()" class = "FWindow"> Facility View </a></li>
+					<li><a style ="cursor:hand; cursor:pointer" onclick = "switchToInfo()" class ="fuelCycleInfo"> Fuel Cycle Information </a></li>
+					<li><a style ="cursor:hand; cursor:pointer" onclick = "switchToVWindow()" class = "VWindow"> Table View </a></li>
+					<li><a style ="cursor:hand; cursor:pointer" onclick = "switchToTimeline()" class = "Timeline"> Timeline </a></li>
+					<li><a style ="cursor:hand; cursor:pointer" class="market_mode"> Market View </a></li>
 				</ul>
 			</li>
-			<li><a href = "#"><strike> New Facility Type </strike> </a></li>
-			<li><a style="cursor:hand; cursor: pointer" onclick ="testingFunction()" class = "testing"> dForms Test </a></li>
 			<li><a style="cursor:hand; cursor: pointer"  class = "testing"> Help </a>
 				<ul>
 					<li><a style ="cursor:hand; cursor:pointer"> Documentation </a></li>
@@ -84,11 +81,6 @@
 			</li>
 		</ul>
 	</header>
-	
-	<!-- Banner 2 Mark-up-->
-	
-	<!-- Timeline Mark-up -->
-	
 	<!-- Sidebar Wrapper Test -->
 	<div id="wrapper">
 		<ul class="sidebar_menu">
@@ -101,7 +93,7 @@
 					<li class="region" id = "country_of_texas"><a href="#"> Country of Texas </a>
 						<ul>
 						</ul>
-					</li>	
+					</li>
 					<li><a style ="cursor:hand; cursor:pointer" onClick = "newRegionForm()"> Add New Region </a></li>
 				</ul>
 			</li>
@@ -170,7 +162,7 @@
 			<div id ="fuelCycleInfo">
 				<p align = "center"> Fuel Cycle Information </p>
 				<form id = "fuel_cycle_information">
-					<p> Fuel Cycle Name:  <input type = "text" name = "fc_name" onsubmit=function(){return false;}/> </p>
+					<p> Fuel Cycle Name:  <input type = "text" name = "fc_name"/> </p>
 					<p> Fuel Cycle Abstract: </p> 
 					<textarea name = "fc_abstract" rows=4 cols=40> Enter Fuel Cycle Abstract </textarea> 
 					<p> Fuel Cycle Comments: </p>
@@ -190,7 +182,7 @@
 				<p align ="center"> Facility View </p>
 			</div>
 			<div id = "pngImage">
-                <canvas id="pngCanvas" width="800px" height="600px"></canvas> 
+                <canvas id="pngCanvas" width=w height=h> </canvas> 
             </div>
 		</div>
 	</div>
@@ -225,13 +217,32 @@
 		    Tlinks = [],
 	    	Fnodes_f = [],
 	    	links_f = [];
+    	
+    	var timelineJSON = {
+    		'dateTimeFormat': 'iso8601',
+			'wikiURL': ".",
+			'wikiSection': ".",
+			
+			'events' : [{'start': '2010',
+        				'title': 'Test Reactor',
+        				'description': 'Robert Flanagan Rules',
+        				'isDuration': false,
+        				'color': "blue"},
+        				{'start': '2012',
+        				'title': 'Fast Reactor Start Up',
+        				'description': 'Robert Flanagan Rules',
+        				'isDuration': false}]
+    	}
 	</script>
 	<!-- Hiding the side menus -->
 	<script type ="text/javascript">
-		$(function(){
-			var menu_ul = $('.sidebar_menu > li > ul'), 
-				menu_a = $('.sidebar_menu > li > a');
-			
+		var menu_ul = $('.sidebar_menu > li > ul'), 
+		menu_a = $('.sidebar_menu > li > a');
+		var menu_ul_1 = $('.sidebar_menu > li > ul > li > ul'),
+		menu_a_1 = $('.sidebar_menu > li > ul > li > a');
+		collapseTop();
+		/*collapseBottom();*/
+		function collapseTop(){
 			menu_ul.hide();
 			
 			menu_a.click(function(e){
@@ -246,12 +257,8 @@
 					$(this).next().stop(true,true).slideUp('normal');
 				}
 			});
-		});
-		
-		$(function(){
-			var menu_ul_1 = $('.sidebar_menu > li > ul > li > ul'),
-				menu_a_1 = $('.sidebar_menu > li > ul > li > a');
-			
+		}
+		function collapseBottom(){
 			menu_ul_1.hide();
 			
 			menu_a_1.click(function(e){
@@ -269,7 +276,10 @@
 					}					
 					$(this).closest('li').addClass('active_test');
 					$('.active_test > ul > li').clone().prependTo($('.facilities_menu > li > ul'));
-					updateSidebar();
+					$('ul li ul').each(function(){
+						$(this).prev('a').find('.total').find('div').remove()
+			  			$(this).prev('a').find('.total').append('<div>'+ ($(this).find('li').length - $(this).find('li > ul > li').length - 1) +'</div>');
+					});
 				}
 				else{
 					$(this).removeClass('active1');
@@ -278,12 +288,15 @@
 					document.getElementById('wrapper').style.display = 'none';
 					$('').replaceAll('.facilities_menu > li > ul > li');
 					$('.facilities_menu > li > ul').append('<li><a style ="cursor:hand; cursor:pointer" onClick = "newFacilityForm()"> Add New Facility </a></li>');
-					updateSidebar();								
+					$('ul li ul').each(function(){
+						$(this).prev('a').find('.total').find('div').remove()
+			  			$(this).prev('a').find('.total').append('<div>'+ ($(this).find('li').length - $(this).find('li > ul > li').length - 1) +'</div>');
+					});								
 					document.getElementById('wrapper').style.display = 'block';
 				}
 					
-			});	
-		});
+			});				
+		}
 		
 		function updateSidebar(){
 			$('ul li ul').each(function(){
@@ -346,16 +359,19 @@
 	<!-- Timeline scripts -->
 	<script type="text/javascript">
 		var tl;
-		var eventSource = new Timeline.DefaultEventSource(0);
+		var eventSource = new Timeline.DefaultEventSource();
+		var theme1 = new Timeline.ClassicTheme.create();
+			theme1.timeline_start = new Date(Date.UTC(1960, 0, 1));
 		var bands = [
      		Timeline.createBandInfo({
-		         width:          "10%", 
-		         intervalUnit:   Timeline.DateTime.YEAR, 
-		         intervalPixels: 40
+		         width:          "30%", 
+		         intervalUnit:   Timeline.DateTime.DECADE, 
+		         intervalPixels: 80,
+		         eventSource: eventSource
 		     }),
 		     Timeline.createBandInfo({
-		         width:          "90%", 
-		         intervalUnit:   Timeline.DateTime.MONTH, 
+		         width:          "70%", 
+		         intervalUnit:   Timeline.DateTime.YEAR, 
 		         intervalPixels: 100,
 		         eventSource: eventSource
 		     })
@@ -363,29 +379,12 @@
    		bands[1].syncWith = 0;
    		bands[1].highlight = true;
    		tl = Timeline.create(document.getElementById('timeline'), bands);
-        tl.loadJSON("cubism.js?"+ (new Date().getTime()), function(json, url) {
-                eventSource.loadJSON(json, url);
-        });
-
-	</script>
-	<!-- save fuel cycle diagram as png -->
-	<script type="text/javascript">
-    function saveFCDiagramPng(fcsvg){
-        var pngCanvas = document.getElementById("pngCanvas");
-        pngCanvas.width = fcsvg.width;
-        pngCanvas.height = fcsvg.height;
-
-        var fcsvgstr = new XMLSerializer().serializeToString(fcsvg);
-        canvg(pngCanvas, fcsvgstr);
-        var img = pngCanvas.toDataURL("image/png");
-        var popupHTML = '<div align="center" style="width:'+pngCanvas.width+'px;height:'+(150+pngCanvas.height)+'">';
-        popupHTML = popupHTML + '<h1>Right-click and select <i>"Save Target As."</i></h1>';
-        popupHTML = popupHTML + '<h2><a href="'+img+'">png</a> or ';
-        popupHTML = popupHTML + "<a href='data:image/svg+xml,"+fcsvgstr+"'>svg</a></h2>";
-        popupHTML = popupHTML + '<img src="'+img+'"/>';
-        popupHTML = popupHTML + '</div>';
-        $.facybox(popupHTML);
-    };
+   		var url = '.';
+   		eventSource.loadJSON(timelineJSON, url);
+   		
+		document.getElementById('fuelCycleInfo').style.display = 'block';
+		document.getElementById('variableWindow').style.display = 'none';
+		document.getElementById('timeline').style.display = 'none';
 	</script>
 </body>
 </html>
