@@ -9,7 +9,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>cycic: a fuel cycle interface &mdash; cycic 9001 documentation</title>
+    <title>JavaScript Parser &mdash; cycic 9001 documentation</title>
     
     <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -27,8 +27,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="cycic 9001 documentation" href="#" />
-    <link rel="next" title="Overview" href="overview.html" />
+    <link rel="top" title="cycic 9001 documentation" href="index.html" />
    
 <script type="text/javascript">
 
@@ -59,29 +58,14 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="overview.html" title="Overview"
-             accesskey="N">next</a> |</li>
-        <li><a href="#">cycic 9001 documentation</a> &raquo;</li> 
+        <li><a href="index.html">cycic 9001 documentation</a> &raquo;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="#">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">cycic: a fuel cycle interface</a><ul>
-</ul>
-</li>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
-<li><a class="reference internal" href="#acknowledgments">Acknowledgments</a></li>
-</ul>
-
-  <h4>Next topic</h4>
-  <p class="topless"><a href="overview.html"
-                        title="next chapter">Overview</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="_sources/index.txt"
+    <li><a href="_sources/js_parser.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
   <h3>Useful Pages</h3>
@@ -121,40 +105,14 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="cycic-a-fuel-cycle-interface">
-<h1>cycic: a fuel cycle interface<a class="headerlink" href="#cycic-a-fuel-cycle-interface" title="Permalink to this headline">¶</a></h1>
-<p>Contents:</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#models">Models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#views">Views</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="walkthrough.html">Walkthrough</a></li>
-<li class="toctree-l1"><a class="reference internal" href="js_parser.html">JavaScript Parser</a></li>
-</ul>
-</div>
-</div>
-<div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
-<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
-<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
-</ul>
-</div>
-<div class="section" id="acknowledgments">
-<h1>Acknowledgments<a class="headerlink" href="#acknowledgments" title="Permalink to this headline">¶</a></h1>
-<dl class="docutils">
-<dt>Support for this research has included funding received from:</dt>
-<dd><img alt="_images/neup_logo_large.jpg" class="first" src="_images/neup_logo_large.jpg" style="height: 100px;" />
-<img alt="_images/AnlLogo.png" src="_images/AnlLogo.png" style="height: 100px;" />
-<img alt="_images/USNRC.gif" src="_images/USNRC.gif" style="height: 100px;" />
-<img alt="_images/nsf_logo.jpg" src="_images/nsf_logo.jpg" style="height: 100px;" />
-<img alt="_images/crest.png" class="last" src="_images/crest.png" style="height: 100px;" />
-</dd>
-</dl>
+  <div class="section" id="javascript-parser">
+<h1>JavaScript Parser<a class="headerlink" href="#javascript-parser" title="Permalink to this headline">¶</a></h1>
+<p>The Relaxed NG schema (RNG), found within many of Cyclus&#8217; input files, must be read
+into a GUI which has its own input format.  With the differences in format,
+the JavaScript parser was created as an intermediate step to convert the RNG
+files into organized, readable JavaScript Object Notation (JSON).  The parser
+recursively parses through the RNG object, converting the components and elments
+into JSON, thereby allowing communication between the two modules.</p>
 </div>
 
 
@@ -169,10 +127,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
-        <li class="right" >
-          <a href="overview.html" title="Overview"
-             >next</a> |</li>
-        <li><a href="#">cycic 9001 documentation</a> &raquo;</li> 
+        <li><a href="index.html">cycic 9001 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

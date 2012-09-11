@@ -92,7 +92,7 @@ Parser.prototype.parseObject = function(a){
 			if(a[i].nodeName != '#comment'){
 				var currentElement = a[i];
                 
-				/** If the object has a 'name' attribute, print it. */
+				/** If the object has a 'name' attribute, record it. */
 				if(currentElement.getAttribute('name')){
 					this.currentIndex.push(i);
 					
@@ -105,7 +105,7 @@ Parser.prototype.parseObject = function(a){
 					i = this.currentIndex.pop(i);
 				}
 				
-				/** If the object has a 'type' attribute, print it. */
+				/** If the object has a 'type' attribute, record it. */
 				else if(currentElement.getAttribute('type')){
 					this.currentIndex.push(i);	
 					
