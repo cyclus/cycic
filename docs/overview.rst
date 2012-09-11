@@ -23,7 +23,7 @@ The cycic tool takes these RNG schema files and converts them to a JSON object
 representing the same information.  These in-memory JSON objects are then used 
 to generate facility, market, region, or institution specific forms for creating 
 instances of these models.  Once a new instance is created by the user, it 
-is stored in a simulation object.  These simulation objects may be presisted either 
+is stored in a simulation object.  These simulation objects may be persisted either 
 as JSON objects themselves or converted to XML.  This XML representation is 
 valid input for the cyclus itself.  See Figure 1 for a graphical display of 
 this process.
@@ -37,6 +37,27 @@ this process.
 
 Views
 -----
+The implementation of the views is separated from that of the models.  This 
+follows an MVC pattern, where cyclus itself is the controller and external to 
+cycic.  The basic views are forms for creating model instances based off of 
+provided schemas.  The model types are the same as in cycic:
+
+* facilities, 
+* markets, 
+* regions, 
+* and institutions.
+
+However, the value added by cycic is that the user may build up from model instances
+a fuel cycle simulation.  This is done by connecting concrete facilities, markets,
+etc to each other.  This connections may be made in a variety of ways, including 
+a drag-and-drop interface.  To enable the GUI interactions, the fuel cycle itself
+is displayed in a node-edge or network view.  Currently, this displays a 
+market-centered rendering of the state of the fuel cycle. Additional representations
+are possible, including region-based (map, lat-long, etc), institution-centric, 
+or a traditional mass flow diagram (using only the facilities from the market view).
+Further visualizations and interactions, such as the time line or the tables of
+existing model instance, also help the user interrogate and manipulate the state of 
+the simulation.
 
 
 .. _cyclus: http://cyclus.github.com/
