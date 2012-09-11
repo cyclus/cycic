@@ -18,13 +18,9 @@ The parse first takes in the RNG object, storing it.  When its internal method, 
 
 2.  Take the first child node of the object.
 	
-    a.  Find the name of the current node and append it onto the object's internal
-	    JSON object.
+    a.  Find the name of the current node and append it onto the object's internal JSON object.
 	
-    b.  Does the current node have any children?  If so, go call "parse_obj"
-	    again and use the current node as the new primary node, and repeat
-		step 2.  If not, move on to the next child node of the current primary
-		node.
+    b.  Does the current node have any children?  If so, go call "parse_obj" again and use the current node as the new primary node, and repeat step 2.  If not, move on to the next child node of the current primary node.
 
 As you can see, the parser simply recursively searches through the RNG object
 for nodes, adding them to a JSON object that is built into the parser object
