@@ -9,8 +9,7 @@ recursively parses through the RNG object, converting the components and elments
 into JSON, thereby allowing communication between the two modules. 
 
 How It Works
-============
-
+~~~~~~~~~~~~
 The parse first takes in the RNG object, storing it.  When its internal method, \
 "parse_obj" is called, it does the following:
 
@@ -27,7 +26,7 @@ for nodes, adding them to a JSON object that is built into the parser object
 upon instantiation.
 
 Example: How To Use It
-======================
+~~~~~~~~~~~~~~~~~~~~~~
 
 Parsing
 -------
@@ -64,8 +63,7 @@ notice that the parser will only print out the JSON version of the RNG object th
 assigned to upon instantiation.
 
 Reversing The Process: JSON to RNG
-==================================
-
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 With the communication between both Cyclus and our GUI, we must also account for 
 backwards compatibility.  That is, the ability to take in a JSON file and output 
 an RNG / XML file must be considered.  This feature has only been partially implemented 

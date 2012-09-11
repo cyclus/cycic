@@ -28,6 +28,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="cycic 9001 documentation" href="index.html" />
+    <link rel="prev" title="Walkthrough" href="walkthrough.html" />
    
 <script type="text/javascript">
 
@@ -58,11 +59,31 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="walkthrough.html" title="Walkthrough"
+             accesskey="P">previous</a> |</li>
         <li><a href="index.html">cycic 9001 documentation</a> &raquo;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">JavaScript Parser</a><ul>
+<li><a class="reference internal" href="#how-it-works">How It Works</a></li>
+<li><a class="reference internal" href="#example-how-to-use-it">Example: How To Use It</a><ul>
+<li><a class="reference internal" href="#parsing">Parsing</a></li>
+<li><a class="reference internal" href="#printing">Printing</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#reversing-the-process-json-to-rng">Reversing The Process: JSON to RNG</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="walkthrough.html"
+                        title="previous chapter">Walkthrough</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/js_parser.txt"
@@ -107,12 +128,79 @@
             
   <div class="section" id="javascript-parser">
 <h1>JavaScript Parser<a class="headerlink" href="#javascript-parser" title="Permalink to this headline">¶</a></h1>
-<p>The Relaxed NG schema (RNG), found within many of Cyclus&#8217; input files, must be read
+<p>The RELAX NG schema (RNG), found within many of Cyclus&#8217; input files, must be read
 into a GUI which has its own input format.  With the differences in format,
 the JavaScript parser was created as an intermediate step to convert the RNG
 files into organized, readable JavaScript Object Notation (JSON).  The parser
 recursively parses through the RNG object, converting the components and elments
 into JSON, thereby allowing communication between the two modules.</p>
+<div class="section" id="how-it-works">
+<h2>How It Works<a class="headerlink" href="#how-it-works" title="Permalink to this headline">¶</a></h2>
+<p>The parse first takes in the RNG object, storing it.  When its internal method, &#8220;parse_obj&#8221; is called, it does the following:</p>
+<ol class="arabic">
+<li><p class="first">Get the primary name of the object (source facility, storage facility, etc.).</p>
+</li>
+<li><p class="first">Take the first child node of the object.</p>
+<p>2a.  Find the name of the current node and append it onto the object&#8217;s internal JSON object.</p>
+<p>2b.  Does the current node have any children?  If so, go call &#8220;parse_obj&#8221; again and use the current node as the new primary node, and repeat step 2.  If not, move on to the next child node of the current primary node.</p>
+</li>
+</ol>
+<p>As you can see, the parser simply recursively searches through the RNG object
+for nodes, adding them to a JSON object that is built into the parser object
+upon instantiation.</p>
+</div>
+<div class="section" id="example-how-to-use-it">
+<h2>Example: How To Use It<a class="headerlink" href="#example-how-to-use-it" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="parsing">
+<h3>Parsing<a class="headerlink" href="#parsing" title="Permalink to this headline">¶</a></h3>
+<p>To use the JS Parser, you must first know which RNG document you will be using.
+For our example, we will use a source facility RNG object:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">sourcefacility</span><span class="o">.</span><span class="n">rng</span>
+</pre></div>
+</div>
+<p>First, we instantiate the parser object (assuming that the file is in the same
+directory as the JS Parser code):</p>
+<div class="highlight-python"><pre>var parser = new Parser("sourcefacility.rng");</pre>
+</div>
+<p>This will create the parser in memory.  We now tell the parser to parse the RNG object:</p>
+<div class="highlight-python"><pre>var parsedObj = parser.parse_obj();</pre>
+</div>
+<p>NOTICE: Please keep in mind that &#8220;parse_obj()&#8221; returns an object, which is the JSON object.</p>
+<p>From there, the variable &#8220;parsedObj&#8221; now contains the JSON object, which can thus be
+further processed by the GUI.</p>
+</div>
+<div class="section" id="printing">
+<h3>Printing<a class="headerlink" href="#printing" title="Permalink to this headline">¶</a></h3>
+<p>If a visual check is needed for confirmation that the parser has indeed done its job,
+call the method &#8220;printObject.&#8221;  Going back to our example, to print parsedObj, we do:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">parser</span><span class="o">.</span><span class="n">printObject</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>NOTICE: This will print the entire JSON-mapped object to the screen or console.  Please
+notice that the parser will only print out the JSON version of the RNG object that it was
+assigned to upon instantiation.</p>
+</div>
+</div>
+<div class="section" id="reversing-the-process-json-to-rng">
+<h2>Reversing The Process: JSON to RNG<a class="headerlink" href="#reversing-the-process-json-to-rng" title="Permalink to this headline">¶</a></h2>
+<p>With the communication between both Cyclus and our GUI, we must also account for
+backwards compatibility.  That is, the ability to take in a JSON file and output
+an RNG / XML file must be considered.  This feature has only been partially implemented
+and thus, will not fully work.  Its usage is very similar to the JavaScript parser.  We
+instantiate it by calling:</p>
+<div class="highlight-python"><pre>var parser = JsonToXmlParser(RNG_OR_XML_OBJECT);</pre>
+</div>
+<p>To parse the RNG / XML object, we call &#8220;parse_obj,&#8221; just like the JS parser:</p>
+<div class="highlight-python"><pre>var parsedJSONObject = parser.parse_obj();</pre>
+</div>
+<p>The Json to XML / RNG parser also contains a printing method.  Due to its incompleteness,
+however, we cannot truly make use of it.  Nonetheless, to call it, simply do:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">parser</span><span class="o">.</span><span class="n">print_obj</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>This parser was modeled after the JS parser, so please keep in mind all of the aforementioned
+notices.</p>
+</div>
 </div>
 
 
@@ -127,6 +215,9 @@ into JSON, thereby allowing communication between the two modules.</p>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
+        <li class="right" >
+          <a href="walkthrough.html" title="Walkthrough"
+             >previous</a> |</li>
         <li><a href="index.html">cycic 9001 documentation</a> &raquo;</li> 
       </ul>
     </div>
