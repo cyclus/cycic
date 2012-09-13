@@ -7,28 +7,102 @@
  */
 
 #sandbox {
-	background: #1BDFF0;
+	background: #4C4E5A;
 	margin-left: 203px;
 	height: 97%;
 	border: 1px solid #4C4E5A;
+	overflow: hidden;
+}
+#form_sandbox {
+	background: #FF9331;
+	height: 45%;
+	width: 29.95%;
+	float: left;
+	border: 1px solid #4C4E5A;
 }
 #sandbox_1 {
-	background: #F89406;
-	height: 45%;
-	width: 29.99%;
-	float: left;
-	overflow: scroll;
+	background: #FF9331;
+	height: 90%;
+	width: 95%;
+	overflow: auto;
+	margin-left: 5%;
+}
+#submit_area {
+	background: #FF9331;
+	max-height: 10%;
+	width: 100%;
 }	
 #sandbox_2 {
-	background: #004AB3;
+	background: #FF9331;
 	height: 45%;
-	width: 70%;
-	margin-left: 29.9%;
-	overflow:scroll;
-}	
+	width: 29.95%;
+	float: left;
+	overflow:auto;
+	border: 1px solid #4C4E5A;
+}
+#sandbox_4 {
+	background: #DDDDDD;
+	height: 45%;
+	width: auto;
+	right: 0px;
+	overflow:auto;
+	border: 1px solid #4C4E5A;
+}
+#fuelCycleInfo {
+	background: #DDDDDD;
+	height: 100%;
+	width: 95%;
+	margin-left: 5%;
+	display: none;
+}
+#variableWindow{
+	background: #DDDDDD;
+	height: 100%;
+	width: 95%;
+	margin-left: 5%;
+	display: none;
+}
 #sandbox_3 {
-	background: #DBC59E;
+	background: #DDDDDD;
+	height: 100%;
+	width: 100%;
+	display: block;
+}
+#Facility_View {
+	background: #DDDDDD;
+	height: 100%;
+	width: 100%;
+	display: none;
+}
+#pgnImage {
+	background: #DDDDDD;
+	height: 100%;
+	width: 100%;
+	display: none;
+}
+#fuel_cycle_sandbox {
+	background: #DDDDDD;
 	height: 55%;
 	width: 100%;
-	overflow:scroll;
+	overflow:auto;
+	border: 1px solid #4C4E5A;
+}
+#timeline {
+	background: #DDDDDD;
+	height: 100%;
+	width: 100%;
+	display: block;
+}
+#timeline img{
+	display: none;
+}
+#tableView table{
+	font-size: 14px;
+	border: 1px solid #000000;
+	margin-top: 5px;
+	margin-left: 10px;
+	text-align: center;
+}
+#dotted {
+	border: 1px dashed #48515C
 }

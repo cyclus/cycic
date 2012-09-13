@@ -1,0 +1,124 @@
+{"commodities": {
+  "fresh_PWR_uo2": {
+    "basis": "atom",
+    "unit": "batch",
+    "total": 5.038e+28,
+    "composition": {
+      "922350": 2.18e+27,
+      "922380": 4.82e+28
+      }
+    },
+  "spent_PWR_uo2": {
+    "basis": "atom",
+    "unit": "batch",
+    "total": 5.27844242131e+28,
+    "composition": {
+      "20040": 2.78e+24,
+      "902300": 1.042e+18,
+      "902320": 2.06e+19,
+      "912310": 1.036e+18,
+      "922320": 2.06e+18,
+      "922330": 1.028e+19,
+      "922340": 2.08e+23,
+      "922350": 3.6e+26,
+      "922360": 2.84e+26,
+      "922380": 4.64e+28,
+      "932370": 3.2e+25,
+      "942380": 1.484e+25,
+      "942390": 2.84e+26,
+      "942400": 1.434e+26,
+      "942410": 8.44e+25,
+      "942420": 4.4e+25,
+      "942440": 1.452e+21,
+      "952410": 3.02e+24,
+      "952421": 3.86e+22,
+      "952430": 9.78e+24,
+      "962420": 1.264e+24,
+      "962430": 3.68e+22,
+      "962440": 4.14e+24,
+      "962450": 2.58e+23,
+      "962460": 3.48e+22,
+      "962470": 4.58e+20,
+      "962480": 3.38e+19,
+      "982490": 4.8e+16,
+      "10030": 3.42e+23,
+      "60140": 3.42e+19,
+      "360850": 4.82e+24,
+      "1003": 8.06e+25,
+      "380900": 1.056e+26,
+      "1005": 7.88e+25,
+      "430970": 1.388e+26,
+      "1007": 9.62e+25,
+      "531290": 2.52e+25,
+      "1006": 2.3e+24,
+      "551340": 2.04e+25,
+      "551350": 5.46e+25,
+      "551370": 1.584e+26,
+      "1002": 1.458e+26,
+      "1008": 4.2e+27,
+      "1001": 4.36e+24
+      }
+    }
+  },
+"markets": {
+  "fresh_PWR_uo2market": {
+    "mktcommodity": "fresh_PWR_uo2",
+    "model": "NullMarket"
+    },
+  "spent_PWR_uo2market": {
+    "mktcommodity": "spent_PWR_uo2",
+    "model": "NullMarket"
+    }
+  },
+"facilities": {
+  "FrontEnd": {
+    "model": "SourceFacility",
+    "outcommodity": "fresh_PWR_uo2",
+    "capacity": 1e9, 
+    "inventorysize": 1e10,
+    "commodprice": 0,
+    "recipe": "fresh_PWR_uo2"
+    },
+  "Reactor": {
+    "model": "BatchReactor",
+    "fuelpair": {
+      "incommodity": "fresh_PWR_uo2",
+      "inrecipe": "fresh_PWR_uo2",
+      "outcommodity": "spent_PWR_uo2",
+      "outrecipe": "spent_PWR_uo2"
+      },
+    "cyclelength": 12,
+    "lifetime": 720,
+    "coreloading": 9.9459e04,
+    "batchespercore": 5
+    },
+  "BackEnd": {
+    "model": "SinkFacility",
+    "incommodity": "spent_PWR_uo2",
+    "capacity": 1e9,
+    "inventorysize": 1e10,
+    "commodprice": 0
+  },
+"regions": {
+  "oneRegion": {
+  "allowedfacilities": ["FrontEnd", "Reactor", "BackEnd"],
+  "model": {
+    "BuildRegion": {
+      "prototyperequirements": [
+        {"prototypename": "FrontEnd", "demandschedule": [[72, 1]]}, 
+        {"prototypename": "Reactor", "demandschedule": [[73, 10]]},
+        {"prototypename": "BackEnd", "demandschedule": [[72, 1]]}
+        ]
+      }
+    },
+  "institution": {
+    "oneInst": {
+      "model": {
+        "BuildInst": {"availableprototypes": ["FrontEnd", "Reactor", "BackEnd"]}
+          }
+        }
+      }
+    }
+  }
+}
+}
