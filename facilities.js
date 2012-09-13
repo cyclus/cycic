@@ -12,24 +12,13 @@ var links = [];
 var PARENT;
 
 function newFacilityForm(){
-	$('#form_sandbox div form').empty();
+	$('#form_sandbox form').empty();
 	$('#sandbox_1 form').prepend('<p> Facility Name:  <input type = "text" name = "region_name"/> </p>');			
-	$('#sandbox_1 form').append('<p> Region: <select id = "region_select"> </select> </p>');
-	$('#sandbox_1 form').append('<p> Institution: <select id = "institution_select"> </select> </p>');
 	$('#sandbox_1 form').append('<p> Facility Type: <select id = "facility_select"> </select> </p>');
-	for(i = 0; i < $('.region_type ul li').length-1; i ++){
-		if($('.region_type ul li')[i].hasAttribute('class')===true){
-			$('#region_select').append('<option value ="'+$('.region_type ul li')[i].id+'">' + nameStoreBack[$('.region_type ul li')[i].id] +'</option>');
-		}
-	}
-	for(i = 0; i < $('.institution_type ul li').length-1; i ++){
-		if($('.institution_type ul li')[i].hasAttribute('class')===true){
-			$('#institution_select').append('<option value ="'+$('.institution_type ul li')[i].id+'">' + nameStoreBack[$(".institution_type ul li")[i].id] +'</option>');
-		}
-	}
-	for(i = 0; i < $('.custom_facilities ul li').length-1; i ++){
-		$('#facility_select').append('<option value ="'+$('.custom_facilities ul li')[i].className+'">' + nameStoreBack[$(".custom_facilities ul li")[i].className] +'</option>');
-		if(i = $('.custom_facilities ul li').length-1){
+
+	for(i = 0; i < customFac2.length; i ++){
+		$('#facility_select').append('<option value ="'+customFac2[i][0]+'">' + customFac2[i][0] +'</option>');
+		if(i == customFac.length-1){
 			$('#submit_area > form').append('<button name = "submit_New_Facility" type="submit" onClick="openNewFacilityForm()"> Submit </button>');
 		}
 	}
@@ -42,40 +31,16 @@ function openNewFacilityForm(){
 	window.NAME = document.getElementById('sandbox_form')[0].value;
 	nameStoreConvert(window.NAME);
 	window.NAME = nameStore[window.NAME];
-	window.REGION = document.getElementById('sandbox_form')[1].value;
-	window.INSTITUTION = document.getElementById('sandbox_form')[2].value;
-	window.MODEL = document.getElementById('sandbox_form')[3].value;
+	window.MODEL = document.getElementById('sandbox_form')[1].value;
 	$('#form_sandbox div form').empty();
-	$.getJSON("JavaScriptParser/sample_interface/storagefacility.json", function(data){				
-		for(var i =0; i < data[1].length; i++){
-			if(data[1][i][1] == "incommodity"){
-				$('#sandbox_1 form').append('<p> Market: <select name ="inMarket" id = "market_select"> </select> </p>');
-				for(ii = 0; ii < $('.market_type ul li').length-1; ii ++){
-						$('#market_select').append('<option value ="'+$('.market_type ul li')[ii].id+'">' + nameStoreBack[$(".market_type ul li")[ii].id] +'</option>');
-				}
-				/*$('#sandbox_1 form').append('<button onclick="addNewCommodity()" type ="button"> Add Additional Commodity </button>');*/
-				i++;
-			}
-			if(data[1][i][1] == "outcommodity"){
-				$('#sandbox_1 form').append('<p> Market: <select name ="outMarket" id = "market_out_select"> </select> </p>');
-				for(ii = 0; ii < $('.market_type ul li').length-1; ii ++){
-						$('#market_out_select').append('<option value ="'+$('.market_type ul li')[ii].id+'">' + nameStoreBack[$(".market_type ul li")[ii].id] +'</option>');
-				}
-				i++;
-			}
-			/*if(data[1][i][1][1][0] == "entry"){
-				$('#sandbox_1 form').append('<p> Initial Stocks: </p>');
-				for(ii = 0; ii < data[1][i][1][1][1][1].length; ii++){
-					$('#sandbox_1 form').append('<p style="text-indent : 20px">' + data[1][i][1][1][1][ii][0].toUpperCase() + '<input type="text" name ="' + data[1][i][1][1][1][ii][0] +'" value ="' + data[1][i][1][1][1][ii][1] + '"/> </p>');
-				}
-				if(i < data[1].length){
-					i++;
-				}
-			}*/
-			$('#sandbox_1 form').append('<p>' + data[1][i][0].toUpperCase() + '<input type="text" name ="' + data[1][i][0] +'" value ="' + data[1][i][1] + '"/> </p>');
+	/*jsonReaderFac(window.MODEL);*/
+	for(i = 0; i < customFac2.length; i++){
+		if(customFac2[i][0] == window.MODEL){
+			stor_i = i;
 		}
-		$('#submit_area > form').append('<button name = "submit_Facility" type="button" onClick="printoutFacility()"> Submit </button>');
-	});
+	}
+	JsonToRead(customFac2[stor_i][1], window.MODEL, 'sandbox_form');
+	$('#submit_area > form').append('<button name = "submit_Facility" type="button" onClick="printoutFacility()"> Submit </button>');
 	document.getElementById('sandbox_1').style.display = 'none';					
 	document.getElementById('sandbox_1').style.display = 'block';
 }
@@ -97,50 +62,10 @@ function openFacilityForm(facility){
 	}
 	window.TYPE = "green";
 	$('#form_sandbox div form').empty();
-	for(attribute in facilities[facility]){
-		var STR = attribute;
-		window.NAME = facility;
-		if(attribute === "Name"){
-			$('#sandbox_1 form').append('<p>' + attribute.toUpperCase() + '<input type="text" name ="' + attribute +'" value ="' + nameStoreBack[facilities[facility][STR]] + '"/>');
-			continue;	
-		}
-		if(attribute === "inMarket"){
-			$('#sandbox_1 form').append('<p> Market: <select name ="inMarket" id = "market_select"> </select> </p>');
-			for(ii = 0; ii < $('.market_type ul li').length-1; ii ++){
-				if(facilities[facility]['inMarket'] === $('.market_type ul li')[ii].id){
-					$('#market_select').append('<option value ="'+$('.market_type ul li')[ii].id+'" selected = "selected">' + nameStoreBack[$(".market_type ul li")[ii].id] +'</option>');
-					}
-				else{
-					$('#market_select').append('<option value ="'+$('.market_type ul li')[ii].id+'">' + nameStoreBack[$(".market_type ul li")[ii].id] +'</option>');
-				}
-			}
-			continue;
-		}
-		if(attribute === "outMarket"){
-			$('#sandbox_1 form').append('<p> Market: <select name ="outMarket" id = "market_out_select"> </select> </p>');
-			for(ii = 0; ii < $('.market_type ul li').length-1; ii ++){
-				if(facilities[facility]['outMarket'] === $('.market_type ul li')[ii].id){
-					$('#market_out_select').append('<option value ="'+$('.market_type ul li')[ii].id+'" selected = "selected">' + nameStoreBack[$(".market_type ul li")[ii].id] +'</option>');
-					}
-				else{
-					$('#market_out_select').append('<option value ="'+$('.market_type ul li')[ii].id+'">' + nameStoreBack[$(".market_type ul li")[ii].id] +'</option>');
-				}
-			}
-			continue;
-		}
-		if(attribute === "circle"){
-			continue;
-		}
-		if(attribute === "children"){
-			continue;
-		}
-		if(attribute === "state"){
-			continue;
-		}
-		$('#sandbox_1 form').append('<p>' + attribute.toUpperCase() + '<input type="text" name ="' + attribute +'" value ="' + facilities[facility][STR].toUpperCase() + '"/>');
-	}
+	JsonToRead(facilities[facility], window.MODEL, 'sandbox_form');
+	window.NAME = facility;
 	if(facilities[facility]['circle']['call'] == "fac"){
-		$('#submit_area > form').append('<button name = "submit_Facility" type="button" onClick="cloneFacilityForm()"> Clone Facility </button>');
+		$('#submit_area > form').append('<button name = "submit_Facility" type="button" onClick="cloneFacilityForm()"> Build Instance </button>');
 	}
 	if(facilities[facility]['circle']['call'] == "child"){
 		$('#submit_area > form').append('<button name = "submit_Facility" type="button" onClick="printoutClone()"> Submit </button>');
@@ -149,7 +74,6 @@ function openFacilityForm(facility){
 	}
 	document.getElementById('sandbox_1').style.display = 'none';					
 	document.getElementById('sandbox_1').style.display = 'block';
-	
 }
 
 function printoutFacility(){
@@ -158,13 +82,9 @@ function printoutFacility(){
 		var length_2 = document.getElementById('sandbox_form').length;
 		var facility = {};
 		facility['Name'] = window.NAME;
-		facility['Region'] = window.REGION;
-		facility['Institution'] = window.INSTITUTION;
 		facility['model'] = window.MODEL
 		facility['state'] = "open"
-		for(i=0; i<length_2; i++){
-			facility[document.getElementById('sandbox_form')[i].name] = document.getElementById('sandbox_form')[i].value;
-		}
+		objectBuilder($('#sandbox_1'), facility)
 		facility['circle'] = {
 			name: window.NAME,
   			type: d3.svg.symbol("circle"),
@@ -175,6 +95,7 @@ function printoutFacility(){
     		call: "fac",
 		};
 		facility['circle']['children'] = [];
+		delete facility[''];
 		delete facility[""];
 		delete facility['submit_Facility'];
 		return facility;		
@@ -184,7 +105,9 @@ function printoutFacility(){
 		window.facilities[window.NAME] = testing();
 		$('#'+facilities[window.NAME].Region +' ul').append('<li><a style ="cursor:hand; cursor:pointer" onClick = "openFacilityForm(facilities.'+nameConvert(window.NAME)+'.Name)" >' + window.NAME);
 		$('#'+facilities[window.NAME].Institution +' ul').append('<li><a style ="cursor:hand; cursor:pointer" onClick = "openFacilityForm(facilities.'+nameConvert(window.NAME)+'.Name)" >' + window.NAME);
+		$('#facility_types ul').append('<li><a style ="cursor:hand; cursor:pointer" onClick = "openFacilityForm(facilities.'+nameConvert(window.NAME)+'.Name)" >' + window.NAME);
 		addParentCircle();
+		objectBuilder($('#sandbox_1'), facilities[window.NAME])
 		updateSidebar();
 	}else{
 		window.facilities[window.NAME] = testing();
@@ -204,8 +127,20 @@ function updateSidebar(){
 // Clone Facilities // 
 function cloneFacilityForm(){
 	$('#form_sandbox div form').empty();
-	$('#sandbox_1 form').prepend('<p> Facility Name:  <input type = "text" name = "region_name"/> </p>');
+	$('#sandbox_1 form').prepend('<p> Facility Name:  <input type = "text" name = "facility_name"/> </p>');
+	$('#sandbox_1 form').append('<p> Region: <select id = "region_select"> </select> </p>');
+	$('#sandbox_1 form').append('<p> Institution: <select id = "institution_select"> </select> </p>');
 	$('#submit_area > form').append('<button name = "submit_Facility" type="button" onClick="newCloneFacilityForm()"> Submit </button>');
+	for(i = 0; i < $('.region_type ul li').length-1; i ++){
+		if($('.region_type ul li')[i].hasAttribute('class')===true){
+			$('#region_select').append('<option value ="'+$('.region_type ul li')[i].id+'">' + nameStoreBack[$('.region_type ul li')[i].id] +'</option>');
+		}
+	}
+	for(i = 0; i < $('.institution_type ul li').length-1; i ++){
+		if($('.institution_type ul li')[i].hasAttribute('class')===true){
+			$('#institution_select').append('<option value ="'+$('.institution_type ul li')[i].id+'">' + nameStoreBack[$(".institution_type ul li")[i].id] +'</option>');
+		}
+	}
 	document.getElementById('sandbox_1').style.display = 'none';					
 	document.getElementById('sandbox_1').style.display = 'block';
 }
@@ -215,6 +150,7 @@ function newCloneFacilityForm(){
 	window.NAME = document.getElementById('sandbox_form')[0].value;
 	nameStoreConvert(window.NAME)
 	window.NAME = nameStore[window.NAME];
+	window.MODEL = facilities[window.PARENT]['model']
 	facilities[window.NAME] = $.extend(true, {}, facilities[window.PARENT])
 	facilities[window.NAME]['Name'] = window.NAME;
 	facilities[window.NAME]['circle']['name'] = window.NAME;
@@ -227,43 +163,8 @@ function newCloneFacilityForm(){
 	tempFacility['call'] = "child";
 	tempFacility['size'] = 40;
 	facilities[window.PARENT]['circle']['children'].push(tempFacility);
-	$('#form_sandbox div form').empty();	
-	for(attribute in facilities[window.NAME]){
-		if(attribute === "inMarket"){
-			$('#sandbox_1 form').append('<p> Market: <select name ="inMarket" id = "market_select"> </select> </p>');
-			for(ii = 0; ii < $('.market_type ul li').length-1; ii ++){
-				if(facilities[window.NAME]['inMarket'] == $('.market_type ul li')[ii].id){
-					$('#market_select').append('<option value ="'+$('.market_type ul li')[ii].id +'" selected = "selected">' + nameStoreBack[$(".market_type ul li")[ii].id] +'</option>');
-				}
-				else{
-					$('#market_select').append('<option value ="'+$('.market_type ul li')[ii].id+'">' + nameStoreBack[$(".market_type ul li")[ii].id] +'</option>');
-				}
-			}
-			continue;
-		}
-		if(attribute === "outMarket"){
-			$('#sandbox_1 form').append('<p> Market: <select name ="outMarket" id = "market_out_select"> </select> </p>');
-			for(ii = 0; ii < $('.market_type ul li').length-1; ii ++){
-				if(facilities[window.NAME]['outMarket'] == $('.market_type ul li')[ii].id){
-					$('#market_out_select').append('<option value ="'+$('.market_type ul li')[ii].id +'" selected = "selected">' + nameStoreBack[$(".market_type ul li")[ii].id] +'</option>');
-				}
-				else{
-					$('#market_out_select').append('<option value ="'+$('.market_type ul li')[ii].id+'">' + nameStoreBack[$(".market_type ul li")[ii].id] +'</option>');
-				}
-			}
-			continue;
-		}
-		if(attribute === "circle"){
-			continue;
-		}
-		if(attribute === "children"){
-			continue;
-		}
-		if(attribute === "state"){
-			continue;
-		}
-		$('#sandbox_1 form').append('<p>' + attribute.toUpperCase() + '<input type="text" name ="' + attribute +'" value ="' + facilities[window.NAME][attribute] + '"/>');
-	}
+	$('#form_sandbox div form').empty();
+	JsonToRead(facilities[window.NAME], window.MODEL, 'sandbox_form');
 	$('#submit_area > form').append('<button name = "submit_Facility" type="button" onClick="addCloneCircle()"> Submit </button>');
 	document.getElementById('sandbox_1').style.display = 'none';					
 	document.getElementById('sandbox_1').style.display = 'block';	
@@ -278,9 +179,7 @@ function printoutClone(){
 		facility['Institution'] = window.INSTITUTION;
 		facility['model'] = window.MODEL
 		facility['state'] = "open"
-		for(i=0; i<length_2; i++){
-			facility[document.getElementById('sandbox_form')[i].name] = document.getElementById('sandbox_form')[i].value;
-		}
+		objectBuilder($('#sandbox_1'), facility)
 		facility['circle'] = {
 			name: window.NAME,
   			type: d3.svg.symbol("circle"),
@@ -296,6 +195,7 @@ function printoutClone(){
 		return facility;		
 	}
 	window.facilities[window.NAME] = testing();
+	updateLinks();
 	if(!facilities[window.NAME] && !facilities[nameStore[window.NAME]]){
 		/*$('#'+facilities[window.NAME].Region +' ul li ul').append('<li><a style ="cursor:hand; cursor:pointer" onClick = "openFacilityForm(' + nameStore[window.NAME]+')" >' + (window.NAME));
 		$('#'+facilities[window.NAME].Institution +' ul li ul').append('<li><a style ="cursor:hand; cursor:pointer" onClick = "openFacilityForm(' + nameStore[window.NAME]+')" >' + window.NAME);*/

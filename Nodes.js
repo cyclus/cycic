@@ -14,25 +14,21 @@ function addParentCircle(){
 				var facilityNamePass = k;
 			}
 		}
-
-		if(facilities[window.NAME]['inMarket']){
-			for( i = 0; i < Fnodes.length; i ++){
-				if(Fnodes[i].name === facilities[window.NAME]['inMarket']){
-					var marketNamePass = i;
+		marketNamePass = [];
+		marketNamePass = marketArrayBuilder(facilities[window.NAME])
+		marketNumPass = []
+		for(n = 0; n < Fnodes.length; n++){
+			for(j = 0; j < marketNamePass.length; j++){
+				if(Fnodes[n].name == marketNamePass[j]){
+					marketNumPass.push(n);
 				}
 			}
-	  		links.push({source: Fnodes[facilityNamePass], target: Fnodes[marketNamePass]});
-	  		Tlinks.push({source: Fnodes[facilityNamePass], target: Fnodes[marketNamePass]});
-	  	}
-	  	if(facilities[window.NAME]['outMarket']){
-			for( j = 0; j < Fnodes.length; j ++){
-				if(Fnodes[j].name === facilities[window.NAME]['outMarket']){
-					var marketNamePass = j;
-				}
-			}
-	  		links.push({source: Fnodes[facilityNamePass], target: Fnodes[marketNamePass]});
-	  		Tlinks.push({source: Fnodes[facilityNamePass], target: Fnodes[marketNamePass]});
-	  	}			  	
+		}
+		console.log(marketNumPass)
+		for(k = 0; k < marketNumPass.length; k++){
+			links.push({source: Fnodes[facilityNamePass], target: Fnodes[marketNumPass[k]]});
+			Tlinks.push({source: Fnodes[facilityNamePass], target: Fnodes[marketNumPass[k]]})
+		}		  		
 	}
 	if(window.TYPE ==="market"){
 		Fnodes.push(MARKETS[window.NAME]['circle']);
@@ -201,7 +197,7 @@ function hideChildren(facility){
 	}		
 	/* Finding and removing children nodes */
 	for(i = 0; i < Fnodes.length; i++){
-		if(Fnodes[i]['name'] == [facility]){
+		if(Fnodes[i]['name'] == facility){
 			for(ii = 0; ii < Fnodes[i]['children'].length; ii++){
 				for(j = 0; j < Fnodes.length; j++){
 					if(Fnodes[j]['name'] == Fnodes[i]['children'][ii]['name']){
@@ -214,7 +210,7 @@ function hideChildren(facility){
 	}
 	/* Finding and removing children links*/
 	for(i = 0; i < links.length; i++){
-		if(links[i]['source']['name'] == facilities[[facility]]['Name']){
+		if(links[i]['source']['name'] == facilities[facility]['Name']){
 			if(links[i]['target']['call'] == "child"){
 				links.splice(i, 1);
 				i = i-1;
@@ -269,7 +265,7 @@ function showChildren(facility){
 	var link = vis.selectAll("line.link")
 		.data(links, function(d) { return d.source.id + "-" + d.target.id; });
 	link.exit().remove();
-	// Returning the parent to child nodes //
+	// Returning the parent to child links //
 	var childNamePass = [];
 	Tnodes.splice(0, Tnodes.length);
 	for(i = 0; i < Fnodes.length; i++){
@@ -320,12 +316,7 @@ function showChildren(facility){
 	// Returning the markets //
 	var marketNamePass = [];
 	for(i = 0; i < childNamePass.length; i++){
-		if(facilities[childNamePass[i]]['inMarket']){
-			marketNamePass.push(facilities[childNamePass[i]]['inMarket']);
-		}
-		if(facilities[childNamePass[i]]['outMarket']){
-			marketNamePass.push(facilities[childNamePass[i]]['outMarket']);
-		}
+		marketNamePass = marketArrayBuilder(facilities[childNamePass[i]])
 		for(ii = 0; ii < Fnodes.length; ii++){
 			if(childNamePass[i] == Fnodes[ii]['name']){
 				var facNamePass = ii;
@@ -387,16 +378,7 @@ function updateLinks(){
 		}
 	}	
 	// Pushing new links for focus node //
-	for( i = 0; i < Fnodes.length; i ++){
-		if(Fnodes[i].name === facilities[window.NAME]['inMarket']){
-			marketNamePass.push(i);
-		}
-	}
-	for( i = 0; i < Fnodes.length; i ++){
-		if(Fnodes[i].name === facilities[window.NAME]['outMarket']){
-			marketNamePass.push(i);
-		}
-	}
+	marketNamePass = marketArrayBuilder(facilities[window.NAME])
 	// Finding Fnode for focus node //
 	for( j = 0; j < Fnodes.length; j++){
 		if(Fnodes[j].name === window.NAME){
@@ -404,8 +386,16 @@ function updateLinks(){
 		}
 	}
 	// Pushing focus node links //
-	for(k = 0; k < marketNamePass.length; k++){
-		links.push({source: Fnodes[facNamePass], target: Fnodes[marketNamePass[k]]});
+	marketNumPass = [];
+	for(n = 0; n < Fnodes.length; n++){
+		for(j = 0; j < marketNamePass.length; j++){
+			if(Fnodes[n].name === marketNamePass[j]){
+				marketNumPass.push(n);
+			}
+		}
+	}
+	for(k = 0; k < marketNumPass.length; k++){
+		links.push({source: Fnodes[facNamePass], target: Fnodes[marketNumPass[k]]});
 	}
 	// Updating Force Layout Links //
 	var link = vis.selectAll("line.link")

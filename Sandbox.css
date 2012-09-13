@@ -96,3 +96,13 @@
 #timeline img{
 	display: none;
 }
+#tableView table{
+	font-size: 14px;
+	border: 1px solid #000000;
+	margin-top: 5px;
+	margin-left: 10px;
+	text-align: center;
+}
+#dotted {
+	border: 1px dashed #48515C
+}
