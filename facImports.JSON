@@ -1,0 +1,138 @@
+customFac = [
+	["StorageFacility",
+	  [
+	    ["oneOrMore", "incommodity"],
+	    ["capacity", "double"],
+	    ["inventorysize", "double"],
+	    ["residencetime", "nonNegativeInteger"], 
+	    ["initialstocks", 
+	      ["zeroOrMore", 
+	        ["entry", 
+	          [
+	            ["facility", "string"],
+		        ["incommodity"],
+	            ["recipe", "string"],
+	            ["amount", "double"],
+	            ["age", "double"]
+	          ]
+	        ]
+	      ]
+	    ]
+	  ]
+	],
+	
+	['EnrichmentFacility', 
+		[
+	        ["incommodity"],
+	        ["outcommodity"],
+	        ["inventorysize"],
+	        ["capacity"],
+	        ["tailsassay"]
+        ]
+    ],
+    
+    ["RecipeReactor",
+    	[ 
+	        ["oneOrMore",
+		         ["fuelpair",
+		          	[
+			            ["incommodity"],
+			            ["inrecipe"],
+			            ["outcommodity"],
+			            ["outrecipe"]
+		            ]
+		         ]
+	     	 ],	
+	         ["startConstrYear", "nonNegativeInteger"],
+	         ["startConstrMonth", "nonNegativeInteger"],
+	         ["startOperYear"],
+	         ["startOperMonth"],
+	         ["licExpYear", "nonNegativeInteger"],
+	         ["licExpMonth", "nonNegativeInteger"],
+	         ["lifetime"],
+	         ["state", "string"],
+	         ["typeReac", "string"],
+	         ["capacity"],
+	         ["elecCF", "double"]
+         ]
+     ],
+    
+    ["SinkFacility", 
+    	[
+	        ['oneOrMore', "incommodity"],
+	        ["capacity"],
+	        ["inventorysize"],
+	        ["commodprice"]
+        ]
+    ],
+    
+ 	["SourceFacility",
+ 		[
+ 			['oneOrMore', "outcommodity"],
+        	["oneOrMore" , "capacity"],
+        	["oneOrMore" , "inventorysize"],
+        	["commodprice"],
+        	["recipe", "string"]
+    	]
+	]
+]
+customRegion = [
+     ["CapacityRegion",
+     	[
+	 	 	["input_file", "string"],
+	  	 	['oneOrMore',
+	  	 		[
+			    	["capacitydemand",
+			    		[
+				        	["capacitytype", "string"],
+				            ["capacityfunction", "string"],
+				            ["nominalvalue", "double"],
+				            ['oneOrMore',
+				            	[
+					          		["replacementlist"],
+					            	["replacementfacility", "string"]
+				            	]
+				            ]
+			            ]
+		            ]
+	            ]
+	        ]
+        ]
+    ]
+]
+
+customInst = [
+    ["FixedInst", 
+		[
+		    ['oneOrMore',
+		    	[
+			        ["facility",
+			        	[
+			            	["type", "string"],
+			          		["name", "string"]
+			          	]
+			        ]
+		    	]       
+			]
+		]
+    ]
+]
+
+customMark = [
+    ["ConverterMarket",
+    	[
+        	["offercommodity", "string"],
+        	["reqcommodity", "string"],
+        	["oneOrMore",
+        		[
+            		["converter",
+            			[
+            				["type", "string"],
+            				["name", "string"]
+            			]
+					]
+        		]      
+          	]
+    	]
+	]
+]
