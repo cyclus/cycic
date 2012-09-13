@@ -92,7 +92,7 @@ Parser.prototype.parseObject = function(a){
 			if(a[i].nodeName != '#comment'){
 				var currentElement = a[i];
                 
-				/** If the object has a 'name' attribute, print it. */
+				/** If the object has a 'name' attribute, record it. */
 				if(currentElement.getAttribute('name')){
 					this.currentIndex.push(i);
 					
@@ -105,7 +105,7 @@ Parser.prototype.parseObject = function(a){
 					i = this.currentIndex.pop(i);
 				}
 				
-				/** If the object has a 'type' attribute, print it. */
+				/** If the object has a 'type' attribute, record it. */
 				else if(currentElement.getAttribute('type')){
 					this.currentIndex.push(i);	
 					
@@ -315,7 +315,7 @@ JsonToXmlParser.prototype.parseObject = function(elements) {
         for (var key in this.jsonObj[elements[i]]){
             document.write(key + '<br>')
 
-            // If the node is of type 'commodity', add its name.
+            /** If the node is of type 'commodity', add its name. */
             if (elements[i] == 'commodities'){
                 var elmt = this.xmlObj.createElement('commodity');
                 var elmtName = this.xmlObj.createElement('name');
@@ -325,7 +325,7 @@ JsonToXmlParser.prototype.parseObject = function(elements) {
                 x[0].appendChild(elmt);
             }
             
-            // If the node is of type 'market', add its name and any other attributes.
+            /** If the node is of type 'market', add its name and any other attributes. */
             else if (elements[i] = 'markets'){
                 var elmt = this.xmlObj.createElement('market');
                 var elmtName = this.xmlObj.createElement('name');
@@ -345,10 +345,6 @@ JsonToXmlParser.prototype.parseObject = function(elements) {
                 }
                 x[0].appendChild(elmt);
             }
-            
-            if (this.getLength(this.jsonObj[elements[i]][key]) != 0){
-                //document.write(this.objectToArray(this.jsonObj[elements[i]][key]));
-            }
             document.write('<br><br>');
         }
         
@@ -356,6 +352,7 @@ JsonToXmlParser.prototype.parseObject = function(elements) {
     return result
 }
 
+/** Attempts to crudely print out the XML object. */
 JsonToXmlParser.prototype.print_obj = function(xmlObject){
     var listOfNodes = xmlObject.childNodes[0].childNodes;
 
@@ -366,6 +363,7 @@ JsonToXmlParser.prototype.print_obj = function(xmlObject){
     }
 }
 
+/** Determine the number of objects in the node. */ 
 JsonToXmlParser.prototype.getLength = function(object) {
 	var length = 0;
 	for (var key in object){
@@ -374,6 +372,7 @@ JsonToXmlParser.prototype.getLength = function(object) {
 	return length;
 }
 
+/** Convert the objects in the node into an array for further processing. */
 JsonToXmlParser.prototype.objectToArray = function(object){
     var list = new Array()
     for (var element in object){
@@ -470,30 +469,8 @@ function gatherSchemas(cyclusPath){
   //document.write(schemas);
   return schemas;
 }
-
+/******************************************************************************
+  *                        TOGGLE ONE OF THESE TWO TO USE                     *
+  *****************************************************************************/
 main();
 //mainGather();
-
-/**
- * MENTAL NOTES TO SELF
- */
-
-/**
-xmlDoc.childNodes[0].nodeName -- 'grammer'
-xmlDoc.childNodes[0].childNodes[1].nodeName -- 'define'
-xmlDoc.childNodes[0].childNodes[1].childNodes[1] --element RecipeReactor 
-xmlDoc.childNodes[0].childNodes[1].childNodes[1].childNodes[1].nodeName --oneOrMore
-
-for(i=0; i<elements.length; i++){
-	document.write(elements[1].childNodes[i]);
-}
-
-//print tag name and value of the name attribute. change 'name' to type to get the data type of the object
-document.write(xmlDoc.getElementsByTagName('element')[1].childNodes[1].getAttribute('name'));
-document.write(xmlDoc.getElementsByTagName('element')[1].childNodes[1].nodeName);
-
-//prints inrecipt.. why
-document.write(xmlDoc.getElementsByTagName('element')[1].childNodes[1].nextSibling.nextSibling.getAttribute('name'));
-**/
-
-
