@@ -1,7 +1,0 @@
-["SourceFacility",
-  ["oneOrMore", "outcommodity"],
-  ["oneOrMore", "capacity"],
-  ["oneOrMore", "inventorysize"],
-  "commodprice",
-  ["recipe", "string"]
-]
