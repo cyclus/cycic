@@ -1,0 +1,21 @@
+["StorageFacility",
+  [
+    ["oneOrMore", "incommodity"],
+    ["capacity", "double"],
+    ["inventorysize", "double"],
+    ["residencetime", "nonNegativeInteger"], 
+    ["initialstocks", 
+      [["zeroOrMore", 
+        ["entry", 
+          [
+            ["facility", "string"],
+            "incommodity",
+            ["recipe", "string"],
+            ["amount", "double"],
+            ["age", "double"]
+          ]
+        ]
+      ]]
+    ]
+  ]
+]

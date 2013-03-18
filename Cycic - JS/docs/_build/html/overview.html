@@ -1,0 +1,213 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Overview &mdash; cycic 9001 documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '9001',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="cycic 9001 documentation" href="index.html" />
+    <link rel="next" title="Walkthrough" href="walkthrough.html" />
+    <link rel="prev" title="cycic: a fuel cycle interface" href="index.html" />
+   
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-12222727-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+  </head>
+  <body>
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+  <a href="http://cyclus.github.com">
+    <img src="_static/logo1.png"/>
+  </a>
+</div>
+
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="walkthrough.html" title="Walkthrough"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="cycic: a fuel cycle interface"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">cycic 9001 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Overview</a><ul>
+<li><a class="reference internal" href="#models">Models</a></li>
+<li><a class="reference internal" href="#views">Views</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">cycic: a fuel cycle interface</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="walkthrough.html"
+                        title="next chapter">Walkthrough</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/overview.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+  <h3>Useful Pages</h3>
+    <li><a href="http://cyclus.github.com/basics/glossary.html">Glossary</a></li>
+    <li><a href="http://cyclus.github.com/basics/roadmap.html">Roadmap</a></li>
+    <li><a href="https://github.com/cyclus">Source Code</a></li>
+    <li><a href="http://cnergdata.engr.wisc.edu/cyclus/develop/docs/">Code Documentation</a></li>
+    
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+    <h3>Acknowledgements</h3>
+    Support for this research has included funding received from:
+    <img src=_images/neup_logo_large.jpg width=170px>
+    <img src=_images/AnlLogo.png height=100px>
+    <img src=_images/USNRC.gif height=100px>
+    <img src=_images/nsf_logo.jpg height=100px>
+    <img src=_images/crest.png height=100px>
+
+    
+
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="overview">
+<h1>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h1>
+<p>Cycic (pronounced &#8216;psychic&#8217;) is a fuel cycle input generator.  This tool is closely
+coupled to the data model of the discrete time nuclear fuel cycle code <a class="reference external" href="http://cyclus.github.com/">cyclus</a>.
+Currently, cycic is implemented in pure JavaScript and is accessible from any
+modern web browser.  This leverages a number of excellent libraries, such as <a class="reference external" href="http://jquery.com/">jQuery</a>
+and <a class="reference external" href="http://d3js.org/">d3</a> for building interfaces and graphs.</p>
+<p>Cycic&#8217;s design is broken up into two fundamental parts: the user-facing views and
+the backend model.  Previous incarnations of cycic were called <a class="reference external" href="http://bright-dev.github.com/">bright.ui</a> and were
+written in Python using - at various times - <a class="reference external" href="http://www.vistrails.org/index.php/Main_Page">VisTrails</a> and the
+<a class="reference external" href="http://code.enthought.com/projects/index.php">Enthought Tool Suite</a>.</p>
+<div class="section" id="models">
+<h2>Models<a class="headerlink" href="#models" title="Permalink to this headline">¶</a></h2>
+<p>Cyclus uses <a class="reference external" href="http://relaxng.org/">RelaxNG</a> (RNG) to create and validate fuel cycle components
+and the simulation as a whole.  Cyclus has a <a class="reference external" href="http://cyclus.github.com/basics/introduction.html#modeling-paradigm">multi-tiered modeling paradigm</a>,
+including facilities, markets, regions, and institutions.  Abstract schemas for
+each of these types of models are provided through associated RNG files to the
+underlying C++ code.</p>
+<p>The cycic tool takes these RNG schema files and converts them to a JSON object
+representing the same information.  These in-memory JSON objects are then used
+to generate facility, market, region, or institution specific forms for creating
+instances of these models.  Once a new instance is created by the user, it
+is stored in a simulation object.  These simulation objects may be persisted either
+as JSON objects themselves or converted to XML.  This XML representation is
+valid input for the cyclus itself.  See Figure 1 for a graphical display of
+this process.</p>
+<div class="figure align-center">
+<img src="_images/cycic_models.svg" width="75%" /><p class="caption"><strong>Figure 1:</strong> cycic and cyclus interaction and conversion workflow.</p>
+</div>
+</div>
+<div class="section" id="views">
+<h2>Views<a class="headerlink" href="#views" title="Permalink to this headline">¶</a></h2>
+<p>The implementation of the views is separated from that of the models.  This
+follows an MVC pattern, where cyclus itself is the controller and external to
+cycic.  The basic views are forms for creating model instances based off of
+provided schemas.  The model types are the same as in cycic:</p>
+<ul class="simple">
+<li>facilities,</li>
+<li>markets,</li>
+<li>regions,</li>
+<li>and institutions.</li>
+</ul>
+<p>However, the value added by cycic is that the user may build up from model instances
+a fuel cycle simulation.  This is done by connecting concrete facilities, markets,
+etc to each other.  This connections may be made in a variety of ways, including
+a drag-and-drop interface.  To enable the GUI interactions, the fuel cycle itself
+is displayed in a node-edge or network view.  Currently, this displays a
+market-centered rendering of the state of the fuel cycle. Additional representations
+are possible, including region-based (map, lat-long, etc), institution-centric,
+or a traditional mass flow diagram (using only the facilities from the market view).
+Further visualizations and interactions, such as the time line or the tables of
+existing model instance, also help the user interrogate and manipulate the state of
+the simulation.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="walkthrough.html" title="Walkthrough"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="cycic: a fuel cycle interface"
+             >previous</a> |</li>
+        <li><a href="index.html">cycic 9001 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, University of Texas Cyclus Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

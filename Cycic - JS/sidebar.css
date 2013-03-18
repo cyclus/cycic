@@ -1,0 +1,264 @@
+/*
+ Name: Side Bar CSS
+ Date: June 2012
+ Description: CSS for the GUI sidebar
+ Version: 0.1
+ Author: Robert Flanagan
+ */
+
+
+a {
+	text-decoration:none;
+}
+
+ul, ul ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+#wrapper {
+	width:200px;
+	height:97%;
+	margin: 0px left;
+	font-size: 0.8125em;
+	background:#FF9331;
+	border: 1px solid #4C4E5A;
+	float: left;
+}
+.sidebar_menu {
+	width: auto;
+	height: auto;
+	-webkit-box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.73), 0px 0px 18px 0px rgba(0,0,0,0.13);
+	-moz-box-shadow: 0px 1px 3px 0px rgba(0,0,0,.73), 0px 0px 18px 0px rgba(0,0,0,.13);
+	-o-box-shadow: 0px 1px 3px 0px rgba(0,0,0,.73), 0px 0px 18px 0px rgba(0,0,0,.13);
+	-ms-box-shadow: 0px 1px 3px 0px rgba(0,0,0,.73), 0px 0px 18px 0px rgba(0,0,0,.13);
+    box-shadow: 0px 1px 3px 0px rgba(0,0,0,.73), 0px 0px 18px 0px rgba(0,0,0,.13);
+}
+.sidebar_menu li a {
+	background-color: #AAAAAA;
+    border: #33373d;   
+	background-image: -webkit-gradient(linear, left top, left bottom, from(rgb(114, 122, 134)),to(rgb(80, 88, 100)));
+    background-image: -webkit-linear-gradient(top, rgb(114, 122, 134), rgb(80, 88, 100));
+    background-image: -moz-linear-gradient(top, rgb(114, 122, 134), rgb(80, 88, 100));
+    background-image: -o-linear-gradient(top, rgb(114, 122, 134), rgb(80, 88, 100));
+    background-image: -ms-linear-gradient(top, rgb(114, 122, 134), rgb(80, 88, 100));
+    background-image: linear-gradient(top, rgb(114, 122, 134), rgb(80, 88, 100));
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='#727a86', EndColorStr='#505864');
+    -webkit-box-shadow: inset 0px 1px 0px 0px #878e98;
+    -moz-box-shadow: inset 0px 1px 0px 0px #878e98;
+    box-shadow: inset 0px 1px 0px 0px #878e98;
+    width: 200px;
+    height: 25px;
+    line-height: 20px;
+    text-indent: 0px;
+    font-family: "Arial Black";
+    font-size: 16px;
+    display:block;
+    color: #FFFFFF;
+    text-shadow: 0px 1px 0px rgba(0,0,0,.5);
+}
+.sidebar_menu li ul li a{
+	color: #000000;
+}
+.sidebar_menu ul li a{
+	background:#FFFFFF;
+	width: 200px;
+	height: 20px; 
+	line-height: 20px;
+	text-indent: 20px;
+	font-family: "Arial Black";
+	font-size: 14px;
+	font-weight: 400;
+	color:#00000;
+}
+.sidebar_menu ul li ul li a{
+	background:#FFFFFF;
+	width: 200px;
+	height: 20px; 
+	line-height: 20px;
+	text-indent: 40px;
+	font-family: "Arial Black";
+	font-size: 12px;
+	font-weight: 400;
+	color:#000000;
+}
+.sidebar_menu > li > ul > li > ul {
+	display: none;
+}
+.sidebar_menu li  a:hover, .sidebar_menu li a.active{
+	background-color: #8FDE62;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(rgb(69, 199, 235)),to(rgb(38, 152, 219)));
+    background-image: -webkit-linear-gradient(top, rgb(69, 199, 235), rgb(38, 152, 219));
+    background-image: -moz-linear-gradient(top, rgb(69, 199, 235), rgb(38, 152, 219));
+    background-image: -o-linear-gradient(top, rgb(69, 199, 235), rgb(38, 152, 219));
+    background-image: -ms-linear-gradient(top, rgb(69, 199, 235), rgb(38, 152, 219));
+    background-image: linear-gradient(top, rgb(69, 199, 235), rgb(38, 152, 219));
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='#45c7eb', EndColorStr='#2698db');
+    -webkit-box-shadow: inset 0px 1px 0px 0px #6ad2ef;
+    -moz-box-shadow: inset 0px 1px 0px 0px #6ad2ef;
+    box-shadow: inset 0px 1px 0px 0px #6ad2ef;
+}
+.sidebar_menu li a span {
+    font-size: 0.857em;
+    display: inline-block;
+    position: right;
+    right: 0;
+    top: 50%;
+    background: #48515c;
+    line-height: .65em;
+    height: .7em;
+    padding: .3em .4em;
+    margin: -.5em 0 0 0;
+    color: #fff;
+    text-indent: 0;
+    text-align: right;
+    -webkit-border-radius: .769em;
+    -moz-border-radius: .769em;
+    border-radius: .769em;
+    -webkit-box-shadow: inset 0px 1px 3px 0px rgba(0, 0, 0, .26), 0px 1px 0px 0px rgba(255, 255, 255, .15);
+    -moz-box-shadow: inset 0px 1px 3px 0px rgba(0, 0, 0, .26), 0px 1px 0px 0px rgba(255, 255, 255, .15);
+    box-shadow: inset 0px 1px 3px 0px rgba(0, 0, 0, .26), 0px 1px 0px 0px rgba(255, 255, 255, .15);
+    text-shadow: 0px 1px 0px rgba(0,0,0,.5);
+    font-weight: 500;
+}
+.sidebar_menu li a:hover span, .sidebar_menu li a.active span {
+    background: #2173a1;
+}
+.sidebar_menu ul li a span {
+    font-size: 0.857em;
+    display: inline-block;
+    position: absolute;
+    right: 1em;
+    top: 50%;
+    background: #fff;
+    border: 1px solid #d0d0d3;
+    line-height: 1em;
+    height: 1em;
+    padding: .4em .7em;
+    margin: -.9em 0 0 0;
+    color: #878d95;
+    text-indent: 0;
+    text-align: center;
+    -webkit-border-radius: .769em;
+    -moz-border-radius: 769em;
+    border-radius: 769em;
+    text-shadow: 0px 0px 0px rgba(255,255,255,.01);
+}
+.sidebar_menu li ul li a:before {
+    content: '';
+    font-size: 8px;
+    color: #bcbcbf;
+    position: absolute;
+    width: 1em;
+    height: 1em;
+    top: 0;
+    left: -2.7em;
+}
+ 
+.sidebar_menu li ul li:hover a,
+.sidebar_menu li ul li:hover a span,
+.sidebar_menu li ul li:hover a:before {
+    color: #32373D;
+}
+
+/*  --- Facilities side bar --- */
+.facilities_menu {
+	width: auto;
+	height: auto;
+	-webkit-box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.73), 0px 0px 18px 0px rgba(0,0,0,0.13);
+	-moz-box-shadow: 0px 1px 3px 0px rgba(0,0,0,.73), 0px 0px 18px 0px rgba(0,0,0,.13);
+	-o-box-shadow: 0px 1px 3px 0px rgba(0,0,0,.73), 0px 0px 18px 0px rgba(0,0,0,.13);
+	-ms-box-shadow: 0px 1px 3px 0px rgba(0,0,0,.73), 0px 0px 18px 0px rgba(0,0,0,.13);
+    box-shadow: 0px 1px 3px 0px rgba(0,0,0,.73), 0px 0px 18px 0px rgba(0,0,0,.13);
+   }
+   
+.facilities_menu li {
+	background-color: #AAAAAA;
+    border: #33373d;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(rgb(114, 122, 134)),to(rgb(80, 88, 100)));
+    background-image: -webkit-linear-gradient(top, rgb(114, 122, 134), rgb(80, 88, 100));
+    background-image: -moz-linear-gradient(top, rgb(114, 122, 134), rgb(80, 88, 100));
+    background-image: -o-linear-gradient(top, rgb(114, 122, 134), rgb(80, 88, 100));
+    background-image: -ms-linear-gradient(top, rgb(114, 122, 134), rgb(80, 88, 100));
+    background-image: linear-gradient(top, rgb(114, 122, 134), rgb(80, 88, 100));
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='#727a86', EndColorStr='#505864');
+    -webkit-box-shadow: inset 0px 1px 0px 0px #878e98;
+    -moz-box-shadow: inset 0px 1px 0px 0px #878e98;
+    box-shadow: inset 0px 1px 0px 0px #878e98;
+    width: 200px;
+    height: 25px;
+    line-height: 20px;
+    text-indent: 0px;
+    font-family: "Arial Black";
+    font-size: 16px;
+    display:block;
+    color: #FFFFFF;
+    text-shadow: 0px 1px 0px rgba(0,0,0,.5);
+}
+
+.facilities_menu ul li a {
+	background:#FFFFFF;
+	width: 200px;
+	height: 20px; 
+	line-height: 20px;
+	text-indent: 20px;
+	font-family: "Arial Black";
+	font-size: 14px;
+	font-weight: 400;
+	display:block;
+	color:#000000;
+	border-bottom: 1px solid #999999;
+}
+.facilities_menu ul li{
+	background:#FFFFFF;
+	width: 200px;
+	height: 20px; 
+	line-height: 20px;
+	text-indent: 20px;
+	font-family: "Arial Black";
+	font-size: 14px;
+	font-weight: 400;
+	display:block;
+	color:#000000;
+	border-bottom: 1px solid #999999;
+}
+.facilities_menu li span {
+    font-size: 0.857em;
+    display: inline-block;
+    position: right;
+    right: 0;
+    top: 50%;
+    background: #48515c;
+    line-height: .65em;
+    height: .7em;
+    padding: .3em .4em;
+    margin: -.5em 0 0 0;
+    color: #fff;
+    text-indent: 0;
+    text-align: right;
+    -webkit-border-radius: .769em;
+    -moz-border-radius: .769em;
+    border-radius: .769em;
+    -webkit-box-shadow: inset 0px 1px 3px 0px rgba(0, 0, 0, .26), 0px 1px 0px 0px rgba(255, 255, 255, .15);
+    -moz-box-shadow: inset 0px 1px 3px 0px rgba(0, 0, 0, .26), 0px 1px 0px 0px rgba(255, 255, 255, .15);
+    box-shadow: inset 0px 1px 3px 0px rgba(0, 0, 0, .26), 0px 1px 0px 0px rgba(255, 255, 255, .15);
+    text-shadow: 0px 1px 0px rgba(0,0,0,.5);
+    font-weight: 500;
+}
+.facilities_menu li ul li a:before {
+    content: '';
+    font-size: 8px;
+    color: #bcbcbf;
+    position: absolute;
+    width: 1em;
+    height: 1em;
+    top: 0;
+    left: -2.7em;
+}
+ 
+.facilities_menu li ul li:hover a,
+.facilities_menu li ul li:hover a span,
+.facilities_menu li ul li:hover a:before {
+    color: #32373D;
+}
