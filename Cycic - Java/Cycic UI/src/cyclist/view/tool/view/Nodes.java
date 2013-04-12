@@ -7,7 +7,9 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.Image;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -50,6 +52,13 @@ public class Nodes{
 		final Menu menu1 = new Menu(circle.getId());
 		MenuItem facForm = new MenuItem("Facility Form");
 		MenuItem delete = new MenuItem("Delete");
+		
+		delete.setOnAction(new EventHandler<ActionEvent>(){
+			public void handle(ActionEvent e){
+				deleteNode(circle.getId());
+			}
+		});
+		
 		MenuItem cloneNode = new MenuItem("Clone Facility");
 		cloneNode.setOnAction(new EventHandler<ActionEvent>(){
 			@Override
@@ -57,16 +66,34 @@ public class Nodes{
 				Clones.addClone("Clone", circle.getId(), circle.childrenShow);
 			}
 		});
-		delete.setOnAction(new EventHandler<ActionEvent>(){
+		
+		MenuItem showImage = new MenuItem("Show Image");
+		showImage.setOnAction(new EventHandler<ActionEvent>(){
 			public void handle(ActionEvent e){
-				deleteNode(circle.getId());
+				circle.image.setVisible(true);
+				circle.image.toBack();
+				circle.setOpacity(0);			}
+		});
+		
+		MenuItem hideImage = new MenuItem("Hide Image");
+		hideImage.setOnAction(new EventHandler<ActionEvent>(){
+			public void handle(ActionEvent e){
+				circle.image.setVisible(false);
+				circle.setOpacity(100);
 			}
 		});
-		menu1.getItems().addAll(facForm, cloneNode, delete);
+		
+		menu1.getItems().addAll(facForm, cloneNode, delete, showImage, hideImage);
 		circle.menu.getMenus().add(menu1);
 		circle.menu.setLayoutX(circle.getCenterX());
 		circle.menu.setLayoutY(circle.getCenterY());
 		circle.menu.setVisible(false);
+		
+		circle.image.setImage(new Image("reactor.png"));
+		circle.image.setLayoutX(circle.getCenterX()-60);
+		circle.image.setLayoutY(circle.getCenterY()-60);
+		circle.image.setMouseTransparent(true);
+		circle.image.setVisible(false);
 
 		circle.setOnDragDetected(new EventHandler<MouseEvent>(){
 			@Override
@@ -83,6 +110,7 @@ public class Nodes{
 		circle.onMousePressedProperty().set(new EventHandler<MouseEvent>(){
 			@Override
 			public void handle(MouseEvent event){
+				Cycic.workingNode = circle;
 				circle.childrenDeltaX.clear();
 				circle.childrenDeltaY.clear();
 				for(int i = 0; i < circle.childrenList.size(); i++){
@@ -114,6 +142,10 @@ public class Nodes{
 				}
 				circle.menu.setLayoutX(circle.getCenterX());
 				circle.menu.setLayoutY(circle.getCenterY());
+				
+				circle.image.setLayoutX(circle.getCenterX()-60);
+				circle.image.setLayoutY(circle.getCenterY()-50);
+				
 				circle.text.setX(circle.getCenterX()-circle.getRadius()*0.6);
 				circle.text.setY(circle.getCenterY());
 				for(int i = 0; i < dataArrays.Links.size(); i++){
@@ -182,11 +214,32 @@ public class Nodes{
 			}
 		});
 		dataArrays.FacilityNodes.add(circle);
+		
+		circle.setOnDragDetected(new EventHandler<MouseEvent>(){
+			@Override
+			public void handle(MouseEvent event){
+				if(event.isShiftDown() == true){
+					Dragboard db = circle.startDragAndDrop(TransferMode.COPY);
+					ClipboardContent content = new ClipboardContent();
+					content.put( DnD.TOOL_FORMAT, "formBuilder");
+					content.put(new DataFormat("cyclist.view.tool"), circle.facilityData);
+					db.setContent(content);
+					event.consume();
+				}
+			}
+		});
+		
 		Cycic.pane.getChildren().add(circle);
 		Cycic.pane.getChildren().add(circle.menu);
 		Cycic.pane.getChildren().add(circle.text);
+		Cycic.pane.getChildren().add(circle.image);
+		circle.image.toBack();
 	}
 	
+	/**
+	 * 
+	 * @param name
+	 */
 	static void deleteNode(String name){
 		for(int i = 0; i < dataArrays.Links.size(); i++){
 			if(dataArrays.Links.get(i).source == name){

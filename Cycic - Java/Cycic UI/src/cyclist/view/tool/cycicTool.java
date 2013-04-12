@@ -6,7 +6,6 @@ import org.puremvc.java.multicore.patterns.mediator.Mediator;
 
 import cyclist.view.component.View;
 import cyclist.view.tool.view.Cycic;
-import cyclist.view.tool.view.Foo;
 
 public class cycicTool implements Tool {
 

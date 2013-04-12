@@ -21,10 +21,11 @@ public class dataArrays {
 
 class Nrecipe {
 	String Name = new String();
-	ArrayList<isotopes> Composition = new ArrayList<isotopes>();
+	String Basis = new String();
+	ArrayList<isotopeData> Composition = new ArrayList<isotopeData>();
 }
 
-class isotopes {
+class isotopeData {
 	String Name = new String();
 	double weightFrac;
 	double mass;

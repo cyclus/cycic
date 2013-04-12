@@ -1,6 +1,8 @@
 package cyclist.view.tool.view;
 
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -19,7 +21,7 @@ public class testForm extends View {
 		super();
 		init();
 	}
-	
+
 	public void init(){
 		GridPane grid = new GridPane();
 		grid.setAlignment(Pos.CENTER);
@@ -37,14 +39,33 @@ public class testForm extends View {
 		final TextField facNameField = new TextField();
 		grid.add(facNameField, 1, 1);
 		
+		final ComboBox<String> structureCB = new ComboBox<String>();
+		for(int i =0; i < practiceFacs.structureNames.size(); i++){
+			structureCB.getItems().add(practiceFacs.structureNames.get(i));
+		}
+		
+		structureCB.valueProperty().addListener(new ChangeListener<String>(){
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue){
+				structureCB.setValue(newValue);
+			}
+		});
+		grid.add(structureCB, 2, 1);
+		
 		Button submit1 = new Button("Submit");
 		submit1.setOnAction(new EventHandler<ActionEvent>(){
 			@Override
 			public void handle(ActionEvent event){
 				Nodes.addNode(facNameField.getText());
+				dataArrays.FacilityNodes.get(dataArrays.FacilityNodes.size()-1).facilityType = structureCB.getValue();
+				Integer tempPass  = practiceFacs.structureNames.indexOf(structureCB.getValue());
+				dataArrays.FacilityNodes.get(dataArrays.FacilityNodes.size()-1).facTypeIndex = tempPass;
+				formBuilder.formArrayBuilder(
+						practiceFacs.Structures.get(tempPass),
+						dataArrays.FacilityNodes.get(dataArrays.FacilityNodes.size()-1).facilityData
+						);
 			}
 		});
-		grid.add(submit1, 2, 1);
+		grid.add(submit1, 3, 1);
 		
 		// Adding a new Market
 		Text scenetitle3 = new Text("Market Stuff");

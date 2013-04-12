@@ -1,7 +1,5 @@
 package cyclist.view.tool.view;
 
-import java.util.ArrayList;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -11,7 +9,6 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -29,6 +26,7 @@ public class Cycic extends View{
 	}
 	
 	static Pane pane = new Pane();
+	static facilityCircle workingNode = null;
 	
 	private void init(){
 		VBox accordionBox = new VBox();
@@ -63,12 +61,7 @@ public class Cycic extends View{
 		grid.setStyle("-fx-background-color: #d6d6d6;");
 		final Button newNode = new Button();
 		newNode.setText("Add LWR Node");
-		newNode.setOnAction(new EventHandler<ActionEvent>(){
-			@Override
-			public void handle(ActionEvent event){
-				Nodes.addNode("LWR");
-			}
-		});
+
 		newNode.setOnDragDetected(new EventHandler<MouseEvent>(){
 			@Override
 			public void handle(MouseEvent event){
@@ -138,10 +131,6 @@ public class Cycic extends View{
 		cycicBox.getChildren().addAll(accordionBox, pane);
 		setContent(cycicBox);
 		practiceFacs.start();
-		System.out.println(practiceFacs.Structures.get(0).get(0));
-		if(practiceFacs.Structures.get(0) instanceof ArrayList){
-			System.out.print("YAY");
-		}
 		/*setContent(regions);
 		setContent(pane);*/
 	}

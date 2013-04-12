@@ -7,11 +7,17 @@ import javafx.scene.effect.Bloom;
 import javafx.scene.effect.ColorAdjust;
 
 public class visFunctions {
+	
+	/**
+	 * 
+	 * @param string
+	 * @return
+	 */
 	public static ArrayList<Integer> stringToColor(String string){
 		string = string.toLowerCase();
 		ArrayList<Integer> rgbArray = new ArrayList<Integer>();
 		double hashValue = Math.abs((double)string.hashCode()/2147483647);
-		while(hashValue*26 < 9){
+		while(hashValue*26 < 1){
 			hashValue = hashValue * 255.;
 		}
 		rgbArray.add((int)(hashValue*letterMultipliers.get(string.substring(0, 1))));
@@ -20,6 +26,11 @@ public class visFunctions {
 		return rgbArray;
 	}
 	
+	/**
+	 * 
+	 * @param array
+	 * @return
+	 */
 	public static boolean colorTest(ArrayList<Integer> array){
 		int tally = 0;
 		for(int i = 0; i < array.size(); i++){
@@ -34,6 +45,11 @@ public class visFunctions {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param color
+	 * @return
+	 */
 	public static double colorMultiplierTest(Integer color){
 		if(color < 185){
 			return 1.3;
@@ -42,7 +58,11 @@ public class visFunctions {
 		}
 	}
 	
-	
+	/**
+	 * 
+	 * @param source
+	 * @param target
+	 */
 	static void linkNodes(String source, String target){
 		Integer nodeIndex = 0;
 		Integer markIndex = 0;
@@ -84,6 +104,11 @@ public class visFunctions {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param parentInt
+	 * @param marketInt
+	 */
 	static void addHiddenLink(Integer parentInt, Integer marketInt){
 		nodeLink hiddenLink = new nodeLink();
 		hiddenLink.source = dataArrays.FacilityNodes.get(parentInt).getId();
@@ -99,12 +124,16 @@ public class visFunctions {
 		}
 	}
 	
+	/**
+	 * 
+	 */
 	static void reloadPane(){
 		Cycic.pane.getChildren().remove(0, Cycic.pane.getChildren().size());
 		for(int i = 0; i < dataArrays.FacilityNodes.size(); i++){
 			Cycic.pane.getChildren().add(dataArrays.FacilityNodes.get(i));
 			Cycic.pane.getChildren().add(dataArrays.FacilityNodes.get(i).menu);
 			Cycic.pane.getChildren().add(dataArrays.FacilityNodes.get(i).text);
+			Cycic.pane.getChildren().add(dataArrays.FacilityNodes.get(i).image);
 			if(dataArrays.FacilityNodes.get(i).childrenShow == false){
 				for(int ii = 0; ii < dataArrays.hiddenLinks.size(); ii++){
 					if(dataArrays.FacilityNodes.get(i).getId() == dataArrays.hiddenLinks.get(ii).source){
@@ -132,6 +161,9 @@ public class visFunctions {
 		}
 	}
 	
+	/**
+	 * 
+	 */
 	static ColorAdjust colorAdjust = new ColorAdjust(){
 		{
 			setBrightness(0.2);
@@ -139,6 +171,9 @@ public class visFunctions {
 		}
 	};
 	
+	/**
+	 * 
+	 */
 	static Bloom bloom = new Bloom(){
 		{
 			setThreshold(1.0);
@@ -146,6 +181,9 @@ public class visFunctions {
 	};
 	
 	@SuppressWarnings("serial")
+	/**
+	 * 
+	 */
 	public static HashMap<String, Integer> letterMultipliers = new HashMap<String, Integer>()
 	{
 		{
