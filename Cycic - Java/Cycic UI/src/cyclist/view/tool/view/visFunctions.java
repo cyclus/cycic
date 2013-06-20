@@ -75,17 +75,19 @@ public class visFunctions {
 				link.line.setStartX(dataArrays.FacilityNodes.get(i).getCenterX());
 				link.line.setStartY(dataArrays.FacilityNodes.get(i).getCenterY());
 			}
-			if(dataArrays.FacilityNodes.get(i).getId() == target){
-				link.line.setEndX(dataArrays.FacilityNodes.get(i).getCenterX());
-				link.line.setEndY(dataArrays.FacilityNodes.get(i).getCenterY());
-				markIndex = i;
-			}
 			for(int ii = 0; ii < dataArrays.FacilityNodes.get(i).childrenList.size(); ii++){
 				if(dataArrays.FacilityNodes.get(i).childrenList.get(ii).getId() == source){
 					nodeIndex = dataArrays.FacilityNodes.get(i).childrenList.get(ii).parentIndex;
 					link.line.setStartX(dataArrays.FacilityNodes.get(i).childrenList.get(ii).getCenterX());
 					link.line.setStartY(dataArrays.FacilityNodes.get(i).childrenList.get(ii).getCenterY());
 				}
+			}
+		}
+		for(int i = 0; i < dataArrays.marketNodes.size(); i++){
+			if(dataArrays.marketNodes.get(i).getId() == target){
+				link.line.setEndX(dataArrays.marketNodes.get(i).getCenterX());
+				link.line.setEndY(dataArrays.marketNodes.get(i).getCenterY());
+				markIndex = i;
 			}
 		}
 		// Adding the Parent to childMarket link //
@@ -112,11 +114,11 @@ public class visFunctions {
 	static void addHiddenLink(Integer parentInt, Integer marketInt){
 		nodeLink hiddenLink = new nodeLink();
 		hiddenLink.source = dataArrays.FacilityNodes.get(parentInt).getId();
-		hiddenLink.target = dataArrays.FacilityNodes.get(marketInt).getId();
+		hiddenLink.target = dataArrays.marketNodes.get(marketInt).getId();
 		hiddenLink.line.setStartX(dataArrays.FacilityNodes.get(parentInt).getCenterX());
 		hiddenLink.line.setStartY(dataArrays.FacilityNodes.get(parentInt).getCenterY());
-		hiddenLink.line.setEndX(dataArrays.FacilityNodes.get(marketInt).getCenterX());
-		hiddenLink.line.setEndY(dataArrays.FacilityNodes.get(marketInt).getCenterY());
+		hiddenLink.line.setEndX(dataArrays.marketNodes.get(marketInt).getCenterX());
+		hiddenLink.line.setEndY(dataArrays.marketNodes.get(marketInt).getCenterY());
 		dataArrays.hiddenLinks.add(hiddenLink);
 		if(dataArrays.FacilityNodes.get(parentInt).childrenShow == false){
 			Cycic.pane.getChildren().addAll(hiddenLink.line);
@@ -146,6 +148,7 @@ public class visFunctions {
 					Cycic.pane.getChildren().add(dataArrays.FacilityNodes.get(i).childrenList.get(ii));
 					Cycic.pane.getChildren().add(dataArrays.FacilityNodes.get(i).childrenList.get(ii).menu);
 					Cycic.pane.getChildren().add(dataArrays.FacilityNodes.get(i).childrenList.get(ii).text);
+					Cycic.pane.getChildren().add(dataArrays.FacilityNodes.get(i).childrenList.get(ii).image);
 					for(int n = 0; n < dataArrays.Links.size(); n++){
 						if(dataArrays.Links.get(n).source == dataArrays.FacilityNodes.get(i).childrenList.get(ii).getId()){
 							Cycic.pane.getChildren().add(dataArrays.Links.get(n).line);
@@ -158,6 +161,11 @@ public class visFunctions {
 					dataArrays.FacilityNodes.get(i).childrenLinks.get(n).line.toBack();
 				}
 			}
+		}
+		for(int i = 0; i < dataArrays.marketNodes.size(); i++){
+			Cycic.pane.getChildren().add(dataArrays.marketNodes.get(i));
+			Cycic.pane.getChildren().add(dataArrays.marketNodes.get(i).menu);
+			Cycic.pane.getChildren().add(dataArrays.marketNodes.get(i).text);			
 		}
 	}
 	

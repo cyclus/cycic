@@ -50,10 +50,8 @@ public class recipeForm extends View{
 		recipiesList.valueProperty().addListener(new ChangeListener<String>(){
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue){
 				if(newValue == "Add New Recipe"){
-					recipeGrid.getChildren().clear();
 					recipeGenInfo();
 				} else {
-					recipeGrid.getChildren().clear();
 					loadRecipe(dataArrays.Recipes.get(recipiesList.getItems().indexOf(newValue)));
 				}
 			}
@@ -79,6 +77,7 @@ public class recipeForm extends View{
 	 * 
 	 */
 	public void recipeGenInfo(){
+		recipeGrid.getChildren().clear();
 		final Nrecipe recipe = new Nrecipe();
 		dataArrays.Recipes.add(recipe);
 		Label name = new Label("Recipe Name");
@@ -127,7 +126,7 @@ public class recipeForm extends View{
 		recipeGrid.add(isotope, 0, rowNumber);
 		
 		TextField isotopeNumber = new TextField();
-		isotopeNumber.setText("ZZZAAA");
+		isotopeNumber.setText("ZZAAA");
 		isotopeNumber.textProperty().addListener(new ChangeListener<String>(){
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue){
 				isoData.Name = newValue;
@@ -167,6 +166,7 @@ public class recipeForm extends View{
 	 * @param recipe
 	 */
 	public void loadRecipe(final Nrecipe recipe){
+		recipeGrid.getChildren().clear();
 		rowNumber = 3;
 		Label name = new Label("Recipe Name");
 		recipeGrid.add(name, 0, 0);

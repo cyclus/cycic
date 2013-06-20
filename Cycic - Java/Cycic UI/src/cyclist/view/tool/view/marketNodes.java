@@ -23,30 +23,24 @@ public class marketNodes{
 	protected static double y;
 	
 	static void addMarket(String name) {
-		final facilityCircle circle = new facilityCircle();
+		final marketCircle circle = new marketCircle();
 		circle.setId(name);
-		circle.setRadius(30);
+		circle.setRadiusX(30);
+		circle.setRadiusY(20);
 		circle.setCenterX(40);
 		circle.setCenterY(40);
-		circle.childrenShow = true;
-		circle.clickIndex = 0;
-		circle.type = "Market";
 		circle.text = new Text(name);
-		circle.childrenShow = true;
-		circle.text.setX(circle.getCenterX()-circle.getRadius()*0.6);
-		circle.text.setY(circle.getCenterY());		
+		circle.name = name;
+		circle.text.setX(circle.getCenterX()-circle.text.getBoundsInLocal().getWidth()/2);
+		circle.text.setY(circle.getCenterY());
+		
 		// Setting the circle color //
 		circle.setStroke(Color.BLACK);
-		circle.rgbColor=visFunctions.stringToColor(circle.getId());
-		circle.setFill(Color.rgb(circle.rgbColor.get(0), circle.rgbColor.get(1), circle.rgbColor.get(2)));
-		// Setting font color for visibility //
-		if(visFunctions.colorTest(circle.rgbColor) == true){
-			circle.text.setFill(Color.WHITE);
-		}else{
-			circle.text.setFill(Color.WHITE);
-		}
+		circle.setFill(Color.rgb(100, 150, 200));
+		circle.text.setFill(Color.WHITE);
+		
 		final Menu menu1 = new Menu(circle.getId());
-		MenuItem facForm = new MenuItem("Facility Form");
+		MenuItem facForm = new MenuItem("Market Form");
 		MenuItem delete = new MenuItem("Delete");
 		delete.setOnAction(new EventHandler<ActionEvent>(){
 			@Override
@@ -66,21 +60,16 @@ public class marketNodes{
 				if(event.isShiftDown() == true){
 					Dragboard db = circle.startDragAndDrop(TransferMode.COPY);
 					ClipboardContent content = new ClipboardContent();
-					content.put( DnD.TOOL_FORMAT, "testForm");
+					content.put( DnD.TOOL_FORMAT, "marketView");
 					db.setContent(content);
 					event.consume();
 				}
 			}
 		});
+		
 		circle.onMousePressedProperty().set(new EventHandler<MouseEvent>(){
 			@Override
 			public void handle(MouseEvent event){
-				circle.childrenDeltaX.clear();
-				circle.childrenDeltaY.clear();
-				for(int i = 0; i < circle.childrenList.size(); i++){
-					circle.childrenDeltaX.add(circle.getCenterX() - circle.childrenList.get(i).getCenterX());
-					circle.childrenDeltaY.add(circle.getCenterY() - circle.childrenList.get(i).getCenterY());
-				}
 				x = circle.getCenterX() - event.getX();
 				y = circle.getCenterY() - event.getY();
 				mousex = event.getX();
@@ -92,22 +81,25 @@ public class marketNodes{
 			public void handle(MouseEvent event){
 				circle.setCenterX(mousex+x);
 				circle.setCenterY(mousey+y);
-				if(circle.getCenterX() <= Cycic.pane.getLayoutBounds().getMinX()+circle.getRadius()){
-					circle.setCenterX(Cycic.pane.getLayoutBounds().getMinX()+circle.getRadius());
+				if(circle.getCenterX() <= Cycic.pane.getLayoutBounds().getMinX()+circle.getRadiusX()){
+					circle.setCenterX(Cycic.pane.getLayoutBounds().getMinX()+circle.getRadiusX());
 				}
-				if(circle.getCenterY() <= Cycic.pane.getLayoutBounds().getMinY()+circle.getRadius()){
-					circle.setCenterY(Cycic.pane.getLayoutBounds().getMinY()+circle.getRadius());
+				if(circle.getCenterX() >= Cycic.pane.getLayoutBounds().getMaxX()-circle.getRadiusX()){
+					circle.setCenterX(Cycic.pane.getLayoutBounds().getMaxX()-circle.getRadiusX());
 				}
-				if(circle.getCenterY() >= Cycic.pane.getLayoutBounds().getMaxY()-circle.getRadius()){
-					circle.setCenterY(Cycic.pane.getLayoutBounds().getMaxY()-circle.getRadius());
+				if(circle.getCenterY() <= Cycic.pane.getLayoutBounds().getMinY()+circle.getRadiusY()){
+					circle.setCenterY(Cycic.pane.getLayoutBounds().getMinY()+circle.getRadiusY());
 				}
-				if(circle.getCenterX() >= Cycic.pane.getLayoutBounds().getMaxX()-circle.getRadius()){
-					circle.setCenterX(Cycic.pane.getLayoutBounds().getMaxX()-circle.getRadius());
+				if(circle.getCenterY() >= Cycic.pane.getLayoutBounds().getMaxY()-circle.getRadiusY()){
+					circle.setCenterY(Cycic.pane.getLayoutBounds().getMaxY()-circle.getRadiusY());
 				}
+
 				circle.menu.setLayoutX(circle.getCenterX());
 				circle.menu.setLayoutY(circle.getCenterY());
-				circle.text.setX(circle.getCenterX()-circle.getRadius()*0.6);
+				
+				circle.text.setX(circle.getCenterX()-circle.text.getBoundsInLocal().getWidth()/2);
 				circle.text.setY(circle.getCenterY());
+				
 				for(int i = 0; i < dataArrays.Links.size(); i++){
 					if(dataArrays.Links.get(i).target == circle.getId()){
 						dataArrays.Links.get(i).line.setEndX(circle.getCenterX());
@@ -137,7 +129,7 @@ public class marketNodes{
 				}
 			}
 		});
-		dataArrays.FacilityNodes.add(circle);
+		dataArrays.marketNodes.add(circle);
 		Cycic.pane.getChildren().add(circle);
 		Cycic.pane.getChildren().add(circle.menu);
 		Cycic.pane.getChildren().add(circle.text);
@@ -150,9 +142,9 @@ public class marketNodes{
 				i = i-1;
 			}
 		}
-		for(int i = 0; i < dataArrays.FacilityNodes.size(); i++){
-			if(dataArrays.FacilityNodes.get(i).getId() == name){
-				dataArrays.FacilityNodes.remove(i);
+		for(int i = 0; i < dataArrays.marketNodes.size(); i++){
+			if(dataArrays.marketNodes.get(i).getId() == name){
+				dataArrays.marketNodes.remove(i);
 			}
 		}
 		visFunctions.reloadPane();

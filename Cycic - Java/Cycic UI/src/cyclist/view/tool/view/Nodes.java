@@ -34,6 +34,7 @@ public class Nodes{
 		circle.childrenShow = true;
 		circle.clickIndex = 0;
 		circle.text = new Text(name);
+		circle.name = name;
 		circle.text.setX(circle.getCenterX()-circle.getRadius()*0.6);
 		circle.text.setY(circle.getCenterY());		
 		
@@ -95,18 +96,6 @@ public class Nodes{
 		circle.image.setMouseTransparent(true);
 		circle.image.setVisible(false);
 
-		circle.setOnDragDetected(new EventHandler<MouseEvent>(){
-			@Override
-			public void handle(MouseEvent event){
-				if(event.isShiftDown() == true){
-					Dragboard db = circle.startDragAndDrop(TransferMode.COPY);
-					ClipboardContent content = new ClipboardContent();
-					content.put( DnD.TOOL_FORMAT, "testForm");
-					db.setContent(content);
-					event.consume();
-				}
-			}
-		});
 		circle.onMousePressedProperty().set(new EventHandler<MouseEvent>(){
 			@Override
 			public void handle(MouseEvent event){
@@ -123,11 +112,13 @@ public class Nodes{
 				mousey = event.getY();
 			}
 		});
+		
 		circle.onMouseDraggedProperty().set(new EventHandler<MouseEvent>(){
 			@Override
 			public void handle(MouseEvent event){
 				circle.setCenterX(mousex+x);
 				circle.setCenterY(mousey+y);
+				
 				if(circle.getCenterX() <= Cycic.pane.getLayoutBounds().getMinX()+circle.getRadius()){
 					circle.setCenterX(Cycic.pane.getLayoutBounds().getMinX()+circle.getRadius());
 				}
@@ -140,6 +131,7 @@ public class Nodes{
 				if(circle.getCenterX() >= Cycic.pane.getLayoutBounds().getMaxX()-circle.getRadius()){
 					circle.setCenterX(Cycic.pane.getLayoutBounds().getMaxX()-circle.getRadius());
 				}
+				
 				circle.menu.setLayoutX(circle.getCenterX());
 				circle.menu.setLayoutY(circle.getCenterY());
 				
@@ -148,6 +140,7 @@ public class Nodes{
 				
 				circle.text.setX(circle.getCenterX()-circle.getRadius()*0.6);
 				circle.text.setY(circle.getCenterY());
+				
 				for(int i = 0; i < dataArrays.Links.size(); i++){
 					if(dataArrays.Links.get(i).source == circle.getId()){
 						dataArrays.Links.get(i).line.setStartX(circle.getCenterX());
@@ -213,6 +206,7 @@ public class Nodes{
 				}
 			}
 		});
+		
 		dataArrays.FacilityNodes.add(circle);
 		
 		circle.setOnDragDetected(new EventHandler<MouseEvent>(){

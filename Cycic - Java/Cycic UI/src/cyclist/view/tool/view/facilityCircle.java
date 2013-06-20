@@ -11,6 +11,7 @@ public class facilityCircle extends Circle {
 	String facilityType = "";
 	Integer facTypeIndex = 0;
 	ArrayList<Object> facilityData = new ArrayList<Object>();
+	ArrayList<Object> facilityStructure = new ArrayList<Object>();
 	ArrayList<facilityCircle> childrenList = new ArrayList<facilityCircle>();
 	ArrayList<nodeLink> childrenLinks = new ArrayList<nodeLink>();
 	ArrayList<Double> childrenDeltaX = new ArrayList<Double>();
@@ -23,5 +24,6 @@ public class facilityCircle extends Circle {
 	String parent = new String();
 	Integer parentIndex;
 	Integer clickIndex;
+	String name; 
 	Boolean childrenShow;
 }

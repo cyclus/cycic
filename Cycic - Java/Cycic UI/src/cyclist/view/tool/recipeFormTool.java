@@ -16,7 +16,7 @@ public class recipeFormTool implements Tool {
 
 	@Override
 	public String getName() {
-		return "recipeForm";
+		return "Recipe Builder";
 	}
 
 	@Override

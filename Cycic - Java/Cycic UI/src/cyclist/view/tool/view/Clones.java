@@ -5,6 +5,7 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -24,14 +25,16 @@ public class Clones {
 		clone.setRadius(25);
 		clone.parent = parent;
 		clone.type = "Child";
+		
 		for(int i = 0; i < dataArrays.FacilityNodes.size(); i++){
 			if(dataArrays.FacilityNodes.get(i).getId() == parent){
 				clone.parentIndex = i;
 			}
 		}
+		clone.facilityStructure = dataArrays.FacilityNodes.get(clone.parentIndex).facilityStructure;
 		
 		dataArrays.FacilityNodes.get(clone.parentIndex).childrenList.add(clone);
-		
+		clone.facTypeIndex = dataArrays.FacilityNodes.get(clone.parentIndex).facTypeIndex;
 		clone.setCenterX(dataArrays.FacilityNodes.get(clone.parentIndex).getCenterX()+60);
 		clone.setCenterY(dataArrays.FacilityNodes.get(clone.parentIndex).getCenterY()+60);
 		clone.facilityType = dataArrays.FacilityNodes.get(clone.parentIndex).facilityType;
@@ -67,6 +70,7 @@ public class Clones {
 		clone.menu.setLayoutY(clone.getCenterY());
 		clone.menu.setVisible(false);
 		clone.text.setText(name.toString());
+		clone.name = name;
 		clone.text.setX(clone.getCenterX()-clone.getRadius()*0.6);
 		clone.text.setY(clone.getCenterY());
 		clone.text.setWrappingWidth(clone.getRadius()*1.6);
@@ -90,15 +94,18 @@ public class Clones {
 				if(event.isShiftDown() == true){
 					Dragboard db = clone.startDragAndDrop(TransferMode.COPY);
 					ClipboardContent content = new ClipboardContent();
-					content.put( DnD.TOOL_FORMAT, "testForm");
+					content.put( DnD.TOOL_FORMAT, "formBuilder");
+					content.put(new DataFormat("cyclist.view.tool"), clone.facilityData);
 					db.setContent(content);
 					event.consume();
 				}
 			}
 		});
+		
 		clone.onMousePressedProperty().set(new EventHandler<MouseEvent>(){
 			@Override
 			public void handle(MouseEvent event){
+				Cycic.workingNode = clone;
 				x = clone.getCenterX() - event.getX();
 				y = clone.getCenterY() - event.getY();
 				mousex = event.getX();

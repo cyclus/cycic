@@ -1,6 +1,8 @@
 package cyclist.view.tool.view;
 
 
+import java.util.ArrayList;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -40,8 +42,9 @@ public class testForm extends View {
 		grid.add(facNameField, 1, 1);
 		
 		final ComboBox<String> structureCB = new ComboBox<String>();
-		for(int i =0; i < practiceFacs.structureNames.size(); i++){
-			structureCB.getItems().add(practiceFacs.structureNames.get(i));
+
+		for(int i = 0; i < realFacs.alfredStructs.size(); i++){
+			structureCB.getItems().add((String) realFacs.alfredStructsNames.get(i));	
 		}
 		
 		structureCB.valueProperty().addListener(new ChangeListener<String>(){
@@ -52,19 +55,24 @@ public class testForm extends View {
 		grid.add(structureCB, 2, 1);
 		
 		Button submit1 = new Button("Submit");
+		
 		submit1.setOnAction(new EventHandler<ActionEvent>(){
 			@Override
 			public void handle(ActionEvent event){
 				Nodes.addNode(facNameField.getText());
 				dataArrays.FacilityNodes.get(dataArrays.FacilityNodes.size()-1).facilityType = structureCB.getValue();
-				Integer tempPass  = practiceFacs.structureNames.indexOf(structureCB.getValue());
-				dataArrays.FacilityNodes.get(dataArrays.FacilityNodes.size()-1).facTypeIndex = tempPass;
-				formBuilder.formArrayBuilder(
-						practiceFacs.Structures.get(tempPass),
+				for (int i = 0; i < realFacs.alfredStructs.size(); i++){
+					if (realFacs.alfredStructsNames.get(i) == structureCB.getValue()){
+						dataArrays.FacilityNodes.get(dataArrays.FacilityNodes.size()-1).facilityStructure = realFacs.alfredStructs.get(i);
+					}
+				}
+				formBuilderFunctions.formArrayBuilder(
+						dataArrays.FacilityNodes.get(dataArrays.FacilityNodes.size()-1).facilityStructure,
 						dataArrays.FacilityNodes.get(dataArrays.FacilityNodes.size()-1).facilityData
 						);
 			}
 		});
+		
 		grid.add(submit1, 3, 1);
 		
 		// Adding a new Market
@@ -81,6 +89,7 @@ public class testForm extends View {
 			@Override
 			public void handle(ActionEvent event){
 				marketNodes.addMarket(markNameField.getText());
+				Cycic.workingMarket = dataArrays.marketNodes.get(dataArrays.marketNodes.size() - 1);
 			}
 		});
 		grid.add(submit2, 2, 6);
@@ -115,10 +124,8 @@ public class testForm extends View {
 		target.setOnMouseClicked(new EventHandler<MouseEvent>(){
 			public void handle(MouseEvent e){
 				target.getItems().clear();
-				for(int i = 0; i < dataArrays.FacilityNodes.size(); i++){
-					if(dataArrays.FacilityNodes.get(i).type == "Market"){
-						target.getItems().add(dataArrays.FacilityNodes.get(i).getId());
-					}
+				for(int i = 0; i < dataArrays.marketNodes.size(); i++){
+					target.getItems().add(dataArrays.marketNodes.get(i).getId());
 				}
 				target.getItems().add("New Market...");
 			}

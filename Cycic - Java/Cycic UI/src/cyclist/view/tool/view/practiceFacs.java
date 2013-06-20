@@ -118,7 +118,7 @@ public class practiceFacs{
         String[] Student_Inf={ "Name", "string", "string", null, null, null, "0", null, "Name" };
         String[] Research={ "Research Topic", "string", "string", null, null, null, "0", null, null};
         String[] Status={"Status", "string", "string", null, "Robert, Hostile, Hated, Loathed, Disliked", "Hated", "1", "Reputation with adviser", null};
-        Student_Info.add("Students");
+        Student_Info.add("Student");
         ArrayList<Object> Student_Info1=new ArrayList<>();
         ArrayList<Object> Student_Info2=new ArrayList<>();
         ArrayList<Object> Student_Info3=new ArrayList<>();
@@ -167,6 +167,6 @@ public class practiceFacs{
         structureNames.add("Research Group");
         
         
-    }
+    } 
 }
     
