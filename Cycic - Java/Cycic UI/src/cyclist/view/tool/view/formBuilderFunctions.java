@@ -235,12 +235,11 @@ public class formBuilderFunctions {
 				cb.getItems().add("New Commodity");
 			}
 		});
-
 		cb.valueProperty().addListener(new ChangeListener<String>(){
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue){
 				String marketName = null;
 				if (newValue == "New Commodity"){
-					/* Tell Commodity Window to add a new commodity */
+					// Tell Commodity Window to add a new commodity 
 				} else {
 					defaultValue.set(0, newValue);
 					for (marketCircle circle: dataArrays.marketNodes){
@@ -251,10 +250,11 @@ public class formBuilderFunctions {
 					for (int i = 0; i < dataArrays.Links.size(); i++){
 						if (dataArrays.Links.get(i).source == string && dataArrays.Links.get(i).target == oldValue){
 							dataArrays.Links.remove(i);
-							i = i - 1;
 						}
 					}
-					visFunctions.linkNodes(string, marketName);
+					if (marketName != null){
+						visFunctions.linkNodes(string, marketName);
+					}
 				}
 			}
 		});
@@ -273,7 +273,6 @@ public class formBuilderFunctions {
 		final ComboBox<String> cb = new ComboBox<String>();
 				
 		cb.setOnMousePressed(new EventHandler<MouseEvent>(){
-			@Override
 			public void handle(MouseEvent e){
 				cb.getItems().clear();
 				for (marketCircle circle: dataArrays.marketNodes){
@@ -282,12 +281,11 @@ public class formBuilderFunctions {
 				cb.getItems().add("New Commodity");
 			}
 		});
-		
 		cb.valueProperty().addListener(new ChangeListener<String>(){
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue){
 				String marketName = null;
 				if (newValue == "New Commodity"){
-					/* Tell Commodity Window to add a new commodity */
+					// Tell Commodity Window to add a new commodity 
 				} else {
 					defaultValue.set(0, newValue);
 					for (marketCircle circle: dataArrays.marketNodes){
@@ -298,10 +296,11 @@ public class formBuilderFunctions {
 					for (int i = 0; i < dataArrays.Links.size(); i++){
 						if (dataArrays.Links.get(i).source == string && dataArrays.Links.get(i).target == oldValue){
 							dataArrays.Links.remove(i);
-							i = i - 1;
 						}
 					}
-					visFunctions.linkNodes(string, marketName);
+					if (marketName != null){
+						visFunctions.linkNodes(string, marketName);
+					}
 				}
 			}
 		});
