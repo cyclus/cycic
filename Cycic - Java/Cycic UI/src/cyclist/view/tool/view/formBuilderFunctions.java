@@ -250,6 +250,7 @@ public class formBuilderFunctions {
 					for (int i = 0; i < dataArrays.Links.size(); i++){
 						if (dataArrays.Links.get(i).source == string && dataArrays.Links.get(i).target == oldValue){
 							dataArrays.Links.remove(i);
+							i = i- 1;
 						}
 					}
 					if (marketName != null){
@@ -284,23 +285,47 @@ public class formBuilderFunctions {
 		cb.valueProperty().addListener(new ChangeListener<String>(){
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue){
 				String marketName = null;
+				String oldMarket = null;
+				String parentName = null;
+				String lazySpaceSaver = null;
+				Boolean hiddenLinkTest = false;
 				if (newValue == "New Commodity"){
 					// Tell Commodity Window to add a new commodity 
 				} else {
-					defaultValue.set(0, newValue);
 					for (marketCircle circle: dataArrays.marketNodes){
 						if (newValue == circle.commodity){
 							marketName = circle.name;
 						}
+						if (defaultValue.get(0) == circle.commodity) {
+							oldMarket = circle.name;
+						}
 					}
-					for (int i = 0; i < dataArrays.Links.size(); i++){
-						if (dataArrays.Links.get(i).source == string && dataArrays.Links.get(i).target == oldValue){
-							dataArrays.Links.remove(i);
+					for (int j = 0; j < dataArrays.Links.size(); j++) {
+						if (dataArrays.Links.get(j).source == string && dataArrays.Links.get(j).target == oldMarket){
+							dataArrays.Links.remove(j);
+							j -= 1;
+						}
+					}
+					for (int i = 0; i < dataArrays.FacilityNodes.size(); i++){
+						for ( int ii = 0; ii < dataArrays.FacilityNodes.get(i).childrenList.size(); ii++){
+							dataArrays.FacilityNodes.get(i).childrenList.get(ii).name = lazySpaceSaver;
+							if (dataArrays.FacilityNodes.get(i).childrenList.get(ii).name == string) {
+								parentName = dataArrays.FacilityNodes.get(i).name;
+							}
+							for (int j = 0; j < dataArrays.Links.size(); j++){
+								if (dataArrays.Links.get(j).source == lazySpaceSaver && dataArrays.Links.get(j).target == oldMarket){
+									hiddenLinkTest = true;
+								}
+							}
+							visFunctions.hiddenLinkRemoval(parentName, oldMarket, hiddenLinkTest);
 						}
 					}
 					if (marketName != null){
 						visFunctions.linkNodes(string, marketName);
+						defaultValue.set(0, newValue);
+						visFunctions.reloadPane();
 					}
+					
 				}
 			}
 		});

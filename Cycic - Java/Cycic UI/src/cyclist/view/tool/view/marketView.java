@@ -34,6 +34,7 @@ public class marketView extends View{
 		button.setOnAction(new EventHandler<ActionEvent>(){
 			public void handle(ActionEvent e){
 				System.out.println(formNode.marketData);
+				System.out.println(formNode.commodity);
 			}
 		});
 		for(int i = 0; i < 11; i++){

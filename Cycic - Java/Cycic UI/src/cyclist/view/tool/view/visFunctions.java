@@ -223,4 +223,30 @@ public class visFunctions {
 			put("z", 26);
 		}
 	};
+	
+	public static void hiddenLinkTest(String parentName, String oldMarket){
+		int hiddenLinkCount = 0;
+		for (int j = 0; j < dataArrays.hiddenLinks.size(); j++){
+			if(dataArrays.hiddenLinks.get(j).source == parentName && dataArrays.hiddenLinks.get(j).target == oldMarket){
+				hiddenLinkCount += 1;
+			}
+			if (hiddenLinkCount > 1){
+				dataArrays.hiddenLinks.remove(j);
+				j = j - 1;
+			}
+		}
+	}
+	
+	public static void hiddenLinkRemoval(String parentName, String oldMarket, Boolean test){
+		int hiddenLinkCount = 0;
+		for (int j = 0; j < dataArrays.hiddenLinks.size(); j++){
+			if(dataArrays.hiddenLinks.get(j).source == parentName && dataArrays.hiddenLinks.get(j).target == oldMarket){
+				hiddenLinkCount += 1;
+			}
+			if (test == false){
+				dataArrays.hiddenLinks.remove(j);
+				j = j - 1;
+			}
+		}
+	}
 }

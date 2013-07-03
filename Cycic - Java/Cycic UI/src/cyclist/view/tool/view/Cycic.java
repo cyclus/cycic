@@ -91,45 +91,16 @@ public class Cycic extends View{
 			}
 		});
 		grid.add(newNode, 0, 0);
-		Button newMark = new Button();
-		
-		Button newLink = new Button();
-		newLink.setText("Link'em!");
-		newMark.setText("Add Market Node");
-		newMark.setOnAction(new EventHandler<ActionEvent>(){
-			@Override
-			public void handle(ActionEvent event){
-				outPut.output();
+		VBox testBox = new VBox();
+		Button test = new Button();
+		test.setText("wwwww");
+		test.setOnMouseClicked(new EventHandler<MouseEvent>(){
+			public void handle(MouseEvent e){
+				System.out.println("Apple");
 			}
 		});
-		newLink.setOnAction(new EventHandler<ActionEvent>(){
-			@Override
-			public void handle(ActionEvent event){
-				visFunctions.linkNodes("LWR", "Market");
-			}
-		});
-		
-		Button linkClone = new Button();
-		linkClone.setText("Clone Link");
-		linkClone.setOnAction(new EventHandler<ActionEvent>(){
-			@Override
-			public void handle(ActionEvent event){
-				visFunctions.linkNodes("LWR1", "Market");
-			}
-		});
-		
-		Button removeClone = new Button();
-		removeClone.setText("Remove?");
-		removeClone.setOnAction(new EventHandler<ActionEvent>(){
-			@Override
-			public void handle(ActionEvent e){
-				Clones.removeClone("LWR1", "LWR");
-			}
-		});
-		grid.add(newMark, 1, 0);
-		grid.add(newLink, 2, 0);
-		grid.add(linkClone, 3, 0);
-		grid.add(removeClone, 4, 0);
+		testBox.getChildren().add(test);
+		grid.add(testBox, 5, 0);
 		pane.setOnMouseClicked(new EventHandler<MouseEvent>(){
 			@Override
 			public void handle(MouseEvent event){
