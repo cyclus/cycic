@@ -14,15 +14,46 @@ public class visFunctions {
 	 * @return
 	 */
 	public static ArrayList<Integer> stringToColor(String string){
-		string = string.toLowerCase();
+		String hashCode;
+		int red=0;
+		int blue=0;
+		int green=0;
+		int p=0;
 		ArrayList<Integer> rgbArray = new ArrayList<Integer>();
-		double hashValue = Math.abs((double)string.hashCode()/2147483647);
-		while(hashValue*26 < 1){
-			hashValue = hashValue * 255.;
+		
+		hashCode= Integer.toString(Math.abs(string.hashCode()));
+		if(hashCode.length()>(p+3)){
+			red=Integer.parseInt(hashCode.substring(p,p+3));
+			p+=3;
+			if(hashCode.length()>(p+3)){
+				green=Integer.parseInt(hashCode.substring(p,p+3));
+				p+=3;
+				if(hashCode.length()>(p+3)){
+					blue=Integer.parseInt(hashCode.substring(p,p+3));
+					p+=3;
+				}else{
+					blue=Integer.parseInt(hashCode.substring(p,hashCode.length()));
+				}	
+			}else{
+				green=Integer.parseInt(hashCode.substring(p,hashCode.length()));
+			}
+		}else{
+			red=Integer.parseInt(hashCode);
 		}
-		rgbArray.add((int)(hashValue*letterMultipliers.get(string.substring(0, 1))));
-		rgbArray.add((int)(hashValue*letterMultipliers.get(string.substring(1, 2))));
-		rgbArray.add((int)(hashValue*letterMultipliers.get(string.substring(2, 3))));
+		
+		while (red>255) {
+			red-=256;
+		}
+		while (green>255) {
+			green-=256;
+		}
+		while (blue>255) {
+			blue-=256;
+		}
+		
+		rgbArray.add(red);
+		rgbArray.add(green);
+		rgbArray.add(blue);
 		return rgbArray;
 	}
 	
@@ -106,6 +137,35 @@ public class visFunctions {
 		}
 	}
 	
+	static void linkNodesSimple(facilityCircle source, marketCircle target){
+		Integer nodeIndex = 0;
+		Integer markIndex = 0;
+		nodeLink link = new nodeLink();
+		link.source = (String) source.name;
+		link.target = target.name;
+		link.line.setStartX(source.getCenterX());
+		link.line.setStartY(source.getCenterY());
+		link.line.setEndX(target.getCenterX());
+		link.line.setEndY(target.getCenterY());
+
+		for(int i = 0; i < dataArrays.marketNodes.size(); i++){
+			if(dataArrays.marketNodes.get(i).getId() == target.name){
+				markIndex = i;
+			}
+		}
+		// Adding the Parent to childMarket link //
+		if(dataArrays.hiddenLinks.size() == 0){
+			addHiddenLink(source.parentIndex, markIndex);
+		}
+		for(int n = 0; n < dataArrays.hiddenLinks.size(); n++){
+			if(dataArrays.hiddenLinks.get(n).target != target.name && dataArrays.hiddenLinks.get(n).source != dataArrays.FacilityNodes.get(source.parentIndex).getId()){
+				addHiddenLink(nodeIndex, markIndex);
+			}
+		} 
+		dataArrays.Links.add(link);
+		Cycic.pane.getChildren().addAll(link.line);
+		link.line.toBack();
+	}
 	/**
 	 * 
 	 * @param parentInt
@@ -150,7 +210,7 @@ public class visFunctions {
 					Cycic.pane.getChildren().add(dataArrays.FacilityNodes.get(i).childrenList.get(ii).text);
 					Cycic.pane.getChildren().add(dataArrays.FacilityNodes.get(i).childrenList.get(ii).image);
 					for(int n = 0; n < dataArrays.Links.size(); n++){
-						if(dataArrays.Links.get(n).source == dataArrays.FacilityNodes.get(i).childrenList.get(ii).getId()){
+						if(dataArrays.Links.get(n).source == dataArrays.FacilityNodes.get(i).childrenList.get(ii).name){
 							Cycic.pane.getChildren().add(dataArrays.Links.get(n).line);
 							dataArrays.Links.get(n).line.toBack();
 						}
@@ -166,6 +226,8 @@ public class visFunctions {
 			Cycic.pane.getChildren().add(dataArrays.marketNodes.get(i));
 			Cycic.pane.getChildren().add(dataArrays.marketNodes.get(i).menu);
 			Cycic.pane.getChildren().add(dataArrays.marketNodes.get(i).text);			
+		}
+		for (nodeLink link : dataArrays.Links) {
 		}
 	}
 	
@@ -192,35 +254,30 @@ public class visFunctions {
 	/**
 	 * 
 	 */
-	public static HashMap<String, Integer> letterMultipliers = new HashMap<String, Integer>()
-	{
-		{
-			put("a", 1);
-			put("b", 2);
-			put("c", 3);
-			put("d", 4);
-			put("e", 5);
-			put("f", 6);
-			put("g", 7);
-			put("h", 8);
-			put("i", 9);
-			put("j", 10);
-			put("k", 11);
-			put("l", 12);
-			put("m", 13);
-			put("n", 14);
-			put("o", 15);
-			put("p", 16);
-			put("q", 17);
-			put("r", 18);
-			put("s", 19);
-			put("t", 20);
-			put("u", 21);
-			put("v", 22);
-			put("w", 23);
-			put("x", 24);
-			put("y", 25);
-			put("z", 26);
+	
+	public static void hiddenLinkTest(String parentName, String oldMarket){
+		int hiddenLinkCount = 0;
+		for (int j = 0; j < dataArrays.hiddenLinks.size(); j++){
+			if(dataArrays.hiddenLinks.get(j).source == parentName && dataArrays.hiddenLinks.get(j).target == oldMarket){
+				hiddenLinkCount += 1;
+			}
+			if (hiddenLinkCount > 1){
+				dataArrays.hiddenLinks.remove(j);
+				j = j - 1;
+			}
 		}
-	};
+	}
+	
+	public static void hiddenLinkRemoval(String parentName, String oldMarket, Boolean test){
+		int hiddenLinkCount = 0;
+		for (int j = 0; j < dataArrays.hiddenLinks.size(); j++){
+			if(dataArrays.hiddenLinks.get(j).source == parentName && dataArrays.hiddenLinks.get(j).target == oldMarket){
+				hiddenLinkCount += 1;
+			}
+			if (test == false){
+				dataArrays.hiddenLinks.remove(j);
+				j = j - 1;
+			}
+		}
+	}
 }

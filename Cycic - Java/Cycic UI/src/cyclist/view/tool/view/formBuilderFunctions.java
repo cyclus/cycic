@@ -89,14 +89,15 @@ public class formBuilderFunctions {
 	 * @param node The facility node that is currently being worked on
 	 * @return TextField that controls the input of this field. 
 	 */
-	static TextField nameFieldBuilder(final facilityCircle node){
+	static TextField nameFieldBuilder(final facilityCircle node, final ArrayList<Object> dataArray){
 		TextField textField = new TextField();
-		textField.setText(node.name);
+		textField.setText((String)node.name);
 		
 		textField.textProperty().addListener(new ChangeListener<String>(){         
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue){
-				node.name = (String) newValue;
+				node.name = newValue;
 				node.text.setText(newValue);
+				dataArray.set(0, newValue);
 			}
 		});
 		
@@ -216,16 +217,86 @@ public class formBuilderFunctions {
 		return unitsLabel; 
 	}
 
+/**
+ * 
+ * @param facNode
+ * @param defaultValue
+ * @return
+ */
+	static ComboBox<String> comboBoxInCommod(final facilityCircle facNode, final ArrayList<Object> defaultValue){
+		// Create and fill the comboBox
+		final ComboBox<String> cb = new ComboBox<String>();
+		cb.setOnMousePressed(new EventHandler<MouseEvent>(){
+			public void handle(MouseEvent e){
+				cb.getItems().clear();
+				for (marketCircle circle: dataArrays.marketNodes){
+					cb.getItems().add(circle.commodity);
+				}
+				cb.getItems().add("New Commodity");
+			}
+		});
+		
+		
+		cb.valueProperty().addListener(new ChangeListener<String>(){
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue){
+				marketCircle marketCircle = null;
+				String oldMarket = null;
+				String parentName = null;
+				String lazySpaceSaver = null;
+				Boolean hiddenLinkTest = false;
+				if (newValue == "New Commodity"){
+					// Tell Commodity Window to add a new commodity 
+				} else {
+					for (marketCircle circle: dataArrays.marketNodes){
+						if (newValue == circle.commodity){
+							marketCircle = circle;
+						}
+						if (defaultValue.get(0) == circle.commodity) {
+							oldMarket = circle.name;
+						}
+					}
+					for (int j = 0; j < dataArrays.Links.size(); j++) {
+						if (dataArrays.Links.get(j).source == facNode.name && dataArrays.Links.get(j).target == oldMarket){
+							dataArrays.Links.remove(j);
+							j -= 1;
+						}
+					}
+					for (int i = 0; i < dataArrays.FacilityNodes.size(); i++){
+						for ( int ii = 0; ii < dataArrays.FacilityNodes.get(i).childrenList.size(); ii++){
+							lazySpaceSaver = (String) dataArrays.FacilityNodes.get(i).childrenList.get(ii).name;
+							if (dataArrays.FacilityNodes.get(i).childrenList.get(ii).name == facNode.name) {
+								parentName = (String) dataArrays.FacilityNodes.get(i).name;
+							}
+							for (int j = 0; j < dataArrays.Links.size(); j++){
+								if (dataArrays.Links.get(j).source == lazySpaceSaver && dataArrays.Links.get(j).target == oldMarket){
+									hiddenLinkTest = true;
+								}
+							}
+							visFunctions.hiddenLinkRemoval(parentName, oldMarket, hiddenLinkTest);
+						}
+					}
+					if (marketCircle != null){
+						visFunctions.linkNodesSimple(facNode, marketCircle);
+						defaultValue.set(0, newValue);
+						visFunctions.reloadPane();
+					}
+					
+				}
+			}
+		});
+
+		return cb;
+	}
+	
 	/**
-	 * 
-	 * @param string
+	 * 	
+	 * @param facNode
 	 * @param defaultValue
 	 * @return
 	 */
-	static ComboBox<String> comboBoxInCommod(final String string, final ArrayList<Object> defaultValue){
-		
+	static ComboBox<String> comboBoxOutCommod(final facilityCircle facNode, final ArrayList<Object> defaultValue){
+		// Create and fill the comboBox
 		final ComboBox<String> cb = new ComboBox<String>();
-		
 		cb.setOnMousePressed(new EventHandler<MouseEvent>(){
 			public void handle(MouseEvent e){
 				cb.getItems().clear();
@@ -235,77 +306,56 @@ public class formBuilderFunctions {
 				cb.getItems().add("New Commodity");
 			}
 		});
-		cb.valueProperty().addListener(new ChangeListener<String>(){
-			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue){
-				String marketName = null;
-				if (newValue == "New Commodity"){
-					// Tell Commodity Window to add a new commodity 
-				} else {
-					defaultValue.set(0, newValue);
-					for (marketCircle circle: dataArrays.marketNodes){
-						if (newValue == circle.commodity){
-							marketName = circle.name;
-						}
-					}
-					for (int i = 0; i < dataArrays.Links.size(); i++){
-						if (dataArrays.Links.get(i).source == string && dataArrays.Links.get(i).target == oldValue){
-							dataArrays.Links.remove(i);
-						}
-					}
-					if (marketName != null){
-						visFunctions.linkNodes(string, marketName);
-					}
-				}
-			}
-		});
 		
-		return cb;
-	}
-	
-	/***
-	 * 
-	 * @param string
-	 * @param defaultValue
-	 * @return
-	 */
-	static ComboBox<String> comboBoxOutCommod(final String string, final ArrayList<Object> defaultValue){
-
-		final ComboBox<String> cb = new ComboBox<String>();
-				
-		cb.setOnMousePressed(new EventHandler<MouseEvent>(){
-			public void handle(MouseEvent e){
-				cb.getItems().clear();
-				for (marketCircle circle: dataArrays.marketNodes){
-					cb.getItems().add(circle.commodity);
-				}
-				cb.getItems().add("New Commodity");
-			}
-		});
+		
 		cb.valueProperty().addListener(new ChangeListener<String>(){
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue){
-				String marketName = null;
+				marketCircle marketCircle = null;
+				String oldMarket = null;
+				String parentName = null;
+				String lazySpaceSaver = null;
+				Boolean hiddenLinkTest = false;
 				if (newValue == "New Commodity"){
 					// Tell Commodity Window to add a new commodity 
 				} else {
-					defaultValue.set(0, newValue);
 					for (marketCircle circle: dataArrays.marketNodes){
 						if (newValue == circle.commodity){
-							marketName = circle.name;
+							marketCircle = circle;
+						}
+						if (defaultValue.get(0) == circle.commodity) {
+							oldMarket = circle.name;
 						}
 					}
-					for (int i = 0; i < dataArrays.Links.size(); i++){
-						if (dataArrays.Links.get(i).source == string && dataArrays.Links.get(i).target == oldValue){
-							dataArrays.Links.remove(i);
+					for (int j = 0; j < dataArrays.Links.size(); j++) {
+						if (dataArrays.Links.get(j).source == facNode.name && dataArrays.Links.get(j).target == oldMarket){
+							dataArrays.Links.remove(j);
+							j -= 1;
 						}
 					}
-					if (marketName != null){
-						visFunctions.linkNodes(string, marketName);
+					for (int i = 0; i < dataArrays.FacilityNodes.size(); i++){
+						for ( int ii = 0; ii < dataArrays.FacilityNodes.get(i).childrenList.size(); ii++){
+							lazySpaceSaver = (String) dataArrays.FacilityNodes.get(i).childrenList.get(ii).name;
+							if (dataArrays.FacilityNodes.get(i).childrenList.get(ii).name == facNode.name) {
+								parentName = (String) dataArrays.FacilityNodes.get(i).name;
+							}
+							for (int j = 0; j < dataArrays.Links.size(); j++){
+								if (dataArrays.Links.get(j).source == lazySpaceSaver && dataArrays.Links.get(j).target == oldMarket){
+									hiddenLinkTest = true;
+								}
+							}
+							visFunctions.hiddenLinkRemoval(parentName, oldMarket, hiddenLinkTest);
+						}
 					}
+					if (marketCircle != null){
+						visFunctions.linkNodesSimple(facNode, marketCircle);
+						defaultValue.set(0, newValue);
+						visFunctions.reloadPane();
+					}
+					
 				}
 			}
 		});
 
 		return cb;
 	}
-	
 }

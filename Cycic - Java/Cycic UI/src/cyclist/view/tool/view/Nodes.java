@@ -5,8 +5,11 @@ import cyclist.model.vo.DnD;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.scene.control.CustomMenuItem;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
@@ -60,13 +63,20 @@ public class Nodes{
 			}
 		});
 		
-		MenuItem cloneNode = new MenuItem("Clone Facility");
+		final Menu clonesList = new Menu("Children");
+		
+		CustomMenuItem cloneNode = new CustomMenuItem(new Label("Add Child"));
+		cloneNode.setHideOnClick(false);
 		cloneNode.setOnAction(new EventHandler<ActionEvent>(){
-			@Override
 			public void handle(ActionEvent e){
-				Clones.addClone("Clone", circle.getId(), circle.childrenShow);
+				CustomMenuItem testBoxing = new CustomMenuItem(new TextField());
+				testBoxing.setHideOnClick(false);
+				clonesList.getItems().add(testBoxing);
+				Clones.addClone("", circle.getId(), circle.childrenShow);
 			}
 		});
+		
+		clonesList.getItems().add(cloneNode);
 		
 		MenuItem showImage = new MenuItem("Show Image");
 		showImage.setOnAction(new EventHandler<ActionEvent>(){
@@ -84,7 +94,7 @@ public class Nodes{
 			}
 		});
 		
-		menu1.getItems().addAll(facForm, cloneNode, delete, showImage, hideImage);
+		menu1.getItems().addAll(facForm, clonesList, delete, showImage, hideImage);
 		circle.menu.getMenus().add(menu1);
 		circle.menu.setLayoutX(circle.getCenterX());
 		circle.menu.setLayoutY(circle.getCenterY());
@@ -165,7 +175,7 @@ public class Nodes{
 					circle.childrenList.get(i).text.setX(circle.childrenList.get(i).getCenterX()-circle.childrenList.get(i).getRadius()*0.6);
 					circle.childrenList.get(i).text.setY(circle.childrenList.get(i).getCenterY());
 					for(int ii = 0; ii < dataArrays.Links.size(); ii++){
-						if(circle.childrenList.get(i).getId() == dataArrays.Links.get(ii).source){
+						if(circle.childrenList.get(i).name == dataArrays.Links.get(ii).source){
 							dataArrays.Links.get(ii).line.setStartX(circle.childrenList.get(i).getCenterX());
 							dataArrays.Links.get(ii).line.setStartY(circle.childrenList.get(i).getCenterY());
 						}
@@ -216,7 +226,6 @@ public class Nodes{
 					Dragboard db = circle.startDragAndDrop(TransferMode.COPY);
 					ClipboardContent content = new ClipboardContent();
 					content.put( DnD.TOOL_FORMAT, "formBuilder");
-					content.put(new DataFormat("cyclist.view.tool"), circle.facilityData);
 					db.setContent(content);
 					event.consume();
 				}

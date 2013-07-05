@@ -24,6 +24,6 @@ public class facilityCircle extends Circle {
 	String parent = new String();
 	Integer parentIndex;
 	Integer clickIndex;
-	String name; 
+	Object name; 
 	Boolean childrenShow;
 }

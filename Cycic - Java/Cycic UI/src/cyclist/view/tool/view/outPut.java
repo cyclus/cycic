@@ -84,7 +84,7 @@ public class outPut {
 			
 			for(facilityCircle facility: dataArrays.FacilityNodes){
 				Element allowedFac = doc.createElement("allowedfacility");
-				allowedFac.appendChild(doc.createTextNode(facility.name));
+				allowedFac.appendChild(doc.createTextNode((String)facility.name));
 				regionID.appendChild(allowedFac);
 			}
 			
@@ -100,7 +100,7 @@ public class outPut {
 			
 			for(facilityCircle facility: dataArrays.FacilityNodes){
 				Element allowedFac = doc.createElement("availableprototype");
-				allowedFac.appendChild(doc.createTextNode(facility.name));
+				allowedFac.appendChild(doc.createTextNode((String)facility.name));
 				institID.appendChild(allowedFac);
 			}
 			
@@ -111,7 +111,7 @@ public class outPut {
 				Element prototype = doc.createElement("prototype");
 				entry.appendChild(prototype);
 				
-				prototype.appendChild(doc.createTextNode(facility.name));
+				prototype.appendChild(doc.createTextNode((String)facility.name));
 				
 				Element number = doc.createElement("number");
 				if(facility.childrenList.size() >= 2){

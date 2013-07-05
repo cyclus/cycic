@@ -25,6 +25,7 @@ public class Clones {
 		clone.setRadius(25);
 		clone.parent = parent;
 		clone.type = "Child";
+		clone.name = name;
 		
 		for(int i = 0; i < dataArrays.FacilityNodes.size(); i++){
 			if(dataArrays.FacilityNodes.get(i).getId() == parent){
@@ -41,7 +42,7 @@ public class Clones {
 		clone.facilityData = dataArrays.FacilityNodes.get(clone.parentIndex).facilityData;
 		
 		// Setting the Fill Color //
-		clone.rgbColor = visFunctions.stringToColor(dataArrays.FacilityNodes.get(clone.parentIndex).getId());
+		clone.rgbColor = visFunctions.stringToColor(parent);
 		clone.rgbColor.set(0, (int)(clone.rgbColor.get(0)*visFunctions.colorMultiplierTest(clone.rgbColor.get(0))));
 		clone.rgbColor.set(1, (int)(clone.rgbColor.get(1)*visFunctions.colorMultiplierTest(clone.rgbColor.get(1))));
 		clone.rgbColor.set(2, (int)(clone.rgbColor.get(2)*visFunctions.colorMultiplierTest(clone.rgbColor.get(2))));
@@ -70,7 +71,6 @@ public class Clones {
 		clone.menu.setLayoutY(clone.getCenterY());
 		clone.menu.setVisible(false);
 		clone.text.setText(name.toString());
-		clone.name = name;
 		clone.text.setX(clone.getCenterX()-clone.getRadius()*0.6);
 		clone.text.setY(clone.getCenterY());
 		clone.text.setWrappingWidth(clone.getRadius()*1.6);
@@ -95,7 +95,6 @@ public class Clones {
 					Dragboard db = clone.startDragAndDrop(TransferMode.COPY);
 					ClipboardContent content = new ClipboardContent();
 					content.put( DnD.TOOL_FORMAT, "formBuilder");
-					content.put(new DataFormat("cyclist.view.tool"), clone.facilityData);
 					db.setContent(content);
 					event.consume();
 				}
@@ -136,13 +135,9 @@ public class Clones {
 				parentChild.line.setEndX(clone.getCenterX());
 				parentChild.line.setEndY(clone.getCenterY());
 				for(int i = 0; i < dataArrays.Links.size();i++){
-					if(dataArrays.Links.get(i).source == clone.getId()){
+					if(dataArrays.Links.get(i).source == clone.name){
 						dataArrays.Links.get(i).line.setStartX(clone.getCenterX());
 						dataArrays.Links.get(i).line.setStartY(clone.getCenterY());
-					}
-					if(dataArrays.Links.get(i).target == clone.getId()){
-						dataArrays.Links.get(i).line.setEndX(clone.getCenterX());
-						dataArrays.Links.get(i).line.setEndY(clone.getCenterY());
 					}
 				}
 				mousex = event.getX();
@@ -169,10 +164,12 @@ public class Clones {
 		
 		// Used for tracking the objects //
 		dataArrays.FacilityNodes.get(clone.parentIndex).childrenLinks.add(parentChild);	
+		
+		int childIndex = dataArrays.FacilityNodes.get(clone.parentIndex).childrenList.size();
 		if(parentChildShow == true){	
-			Cycic.pane.getChildren().add(clone);
-			Cycic.pane.getChildren().add(clone.menu);
-			Cycic.pane.getChildren().add(clone.text);
+			Cycic.pane.getChildren().add(dataArrays.FacilityNodes.get(clone.parentIndex).childrenList.get(childIndex-1));
+			Cycic.pane.getChildren().add(dataArrays.FacilityNodes.get(clone.parentIndex).childrenList.get(childIndex-1).menu);
+			Cycic.pane.getChildren().add(dataArrays.FacilityNodes.get(clone.parentIndex).childrenList.get(childIndex-1).text);
 			Cycic.pane.getChildren().add(parentChild.line);
 			parentChild.line.toBack();
 		}

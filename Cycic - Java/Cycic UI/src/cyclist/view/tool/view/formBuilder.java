@@ -156,14 +156,15 @@ public class formBuilder extends View {
 				} else {
 					switch ((String) facArray.get(0)) {
 					case "Name":
-						grid.add(formBuilderFunctions.nameFieldBuilder(formNode), 1+columnNumber, rowNumber);
+						grid.add(formBuilderFunctions.nameFieldBuilder(formNode, dataArray), 1+columnNumber, rowNumber);
 						columnEnd = 2 + columnNumber;
 						break;
 					case "Incommodity":
-						grid.add(formBuilderFunctions.comboBoxInCommod(formNode.name, dataArray), 1+columnNumber, rowNumber);
+						grid.add(formBuilderFunctions.comboBoxInCommod(formNode, dataArray), 1+columnNumber, rowNumber);
 						break;
 					case "Outcommodity":
-						grid.add(formBuilderFunctions.comboBoxOutCommod(formNode.name, dataArray), 1+columnNumber, rowNumber);
+						grid.add(formBuilderFunctions.comboBoxOutCommod(formNode, dataArray), 1+columnNumber, rowNumber);
+
 						break;
 					default:
 						grid.add(formBuilderFunctions.textFieldBuilder((ArrayList<Object>)dataArray), 1+columnNumber, rowNumber);

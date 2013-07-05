@@ -76,60 +76,20 @@ public class Cycic extends View{
 		final GridPane grid = new GridPane();
 		grid.setStyle("-fx-background-color: #d6d6d6;");
 		final Button newNode = new Button();
-		newNode.setText("Add LWR Node");
+		newNode.setText("Control Box");
 
 		newNode.setOnDragDetected(new EventHandler<MouseEvent>(){
 			@Override
 			public void handle(MouseEvent event){
-				if(event.isShiftDown() == true){
-					Dragboard db = newNode.startDragAndDrop(TransferMode.COPY);
-					ClipboardContent content = new ClipboardContent();
-					content.put( DnD.TOOL_FORMAT, "testForm");
-					db.setContent(content);
-					event.consume();
-				}
+				Dragboard db = newNode.startDragAndDrop(TransferMode.COPY);
+				ClipboardContent content = new ClipboardContent();
+				content.put( DnD.TOOL_FORMAT, "testForm");
+				db.setContent(content);
+				event.consume();
 			}
 		});
 		grid.add(newNode, 0, 0);
-		Button newMark = new Button();
-		
-		Button newLink = new Button();
-		newLink.setText("Link'em!");
-		newMark.setText("Add Market Node");
-		newMark.setOnAction(new EventHandler<ActionEvent>(){
-			@Override
-			public void handle(ActionEvent event){
-				outPut.output();
-			}
-		});
-		newLink.setOnAction(new EventHandler<ActionEvent>(){
-			@Override
-			public void handle(ActionEvent event){
-				visFunctions.linkNodes("LWR", "Market");
-			}
-		});
-		
-		Button linkClone = new Button();
-		linkClone.setText("Clone Link");
-		linkClone.setOnAction(new EventHandler<ActionEvent>(){
-			@Override
-			public void handle(ActionEvent event){
-				visFunctions.linkNodes("LWR1", "Market");
-			}
-		});
-		
-		Button removeClone = new Button();
-		removeClone.setText("Remove?");
-		removeClone.setOnAction(new EventHandler<ActionEvent>(){
-			@Override
-			public void handle(ActionEvent e){
-				Clones.removeClone("LWR1", "LWR");
-			}
-		});
-		grid.add(newMark, 1, 0);
-		grid.add(newLink, 2, 0);
-		grid.add(linkClone, 3, 0);
-		grid.add(removeClone, 4, 0);
+
 		pane.setOnMouseClicked(new EventHandler<MouseEvent>(){
 			@Override
 			public void handle(MouseEvent event){

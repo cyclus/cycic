@@ -422,9 +422,9 @@ public class realFacs {
 		nameStore.add("String");
 		nameStore.add(null);
 		nameStore.add(null);
-		nameStore.add("Name of Storage Facility");
-		nameStore.add(0);
 		nameStore.add(null);
+		nameStore.add(0);
+		nameStore.add("Name of Storage Facility");
 		nameStore.add(null);
 		StorageFacility.add(nameStore);
 		//Build Incommodities array

@@ -70,6 +70,7 @@ public class marketNodes{
 		circle.onMousePressedProperty().set(new EventHandler<MouseEvent>(){
 			@Override
 			public void handle(MouseEvent event){
+				Cycic.workingMarket = circle;
 				x = circle.getCenterX() - event.getX();
 				y = circle.getCenterY() - event.getY();
 				mousex = event.getX();

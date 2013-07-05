@@ -34,6 +34,7 @@ public class marketView extends View{
 		button.setOnAction(new EventHandler<ActionEvent>(){
 			public void handle(ActionEvent e){
 				System.out.println(formNode.marketData);
+				System.out.println(formNode.commodity);
 			}
 		});
 		for(int i = 0; i < 11; i++){
@@ -49,9 +50,10 @@ public class marketView extends View{
 			}
 		});
 		
-		topGrid.add(new Label("User Level"), 0, 0);
-		topGrid.add(userLevelBox, 1, 0);
-		topGrid.add(button, 2, 0);
+		topGrid.add(new Label(formNode.name), 0, 0);
+		topGrid.add(new Label("User Level"), 1, 0);
+		topGrid.add(userLevelBox, 2, 0);
+		topGrid.add(button, 3, 0);
 		
 		Label commod = new Label("Market Commodity");
 		topGrid.add(commod, 0, 1);
@@ -179,10 +181,10 @@ public class marketView extends View{
 						columnEnd = 2 + columnNumber;
 						break;
 					case "Incommodity":
-						grid.add(formBuilderFunctions.comboBoxInCommod(formNode.name, dataArray), 1+columnNumber, rowNumber);
+						//grid.add(formBuilderFunctions.comboBoxInCommod(formNode, dataArray), 1+columnNumber, rowNumber);
 						break;
 					case "Outcommodity":
-						grid.add(formBuilderFunctions.comboBoxOutCommod(formNode.name, dataArray), 1+columnNumber, rowNumber);
+						//grid.add(formBuilderFunctions.comboBoxOutCommod(formNode, dataArray), 1+columnNumber, rowNumber);
 						break;
 					default:
 						grid.add(formBuilderFunctions.textFieldBuilder((ArrayList<Object>)dataArray), 1+columnNumber, rowNumber);
