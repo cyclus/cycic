@@ -58,3 +58,11 @@ class regionNode{
 	ArrayList<Object> regionStruct = new ArrayList<Object>();
 	ArrayList<facilityCircle> availFacilities = new ArrayList<facilityCircle>(); 
 }
+
+class simInfo{
+	double duration;
+	int startMonth;
+	int startYear;
+	int simStart;
+	int decay;
+}

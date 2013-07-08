@@ -8,7 +8,7 @@ import javafx.scene.shape.Ellipse;
 import javafx.scene.text.Text;
 
 public class marketCircle extends Ellipse {
-	String name;
+	Object name;
 	String facilityType = "";
 	Integer facTypeIndex = 0;
 	ArrayList<Object> marketData = new ArrayList<Object>();

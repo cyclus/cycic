@@ -69,9 +69,9 @@ public class Nodes{
 		cloneNode.setHideOnClick(false);
 		cloneNode.setOnAction(new EventHandler<ActionEvent>(){
 			public void handle(ActionEvent e){
-				CustomMenuItem testBoxing = new CustomMenuItem(new TextField());
+				/*CustomMenuItem testBoxing = new CustomMenuItem(new TextField());
 				testBoxing.setHideOnClick(false);
-				clonesList.getItems().add(testBoxing);
+				clonesList.getItems().add(testBoxing);*/
 				Clones.addClone("", circle.getId(), circle.childrenShow);
 			}
 		});

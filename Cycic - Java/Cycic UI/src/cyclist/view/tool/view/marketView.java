@@ -50,7 +50,7 @@ public class marketView extends View{
 			}
 		});
 		
-		topGrid.add(new Label(formNode.name), 0, 0);
+		topGrid.add(new Label((String) formNode.name), 0, 0);
 		topGrid.add(new Label("User Level"), 1, 0);
 		topGrid.add(userLevelBox, 2, 0);
 		topGrid.add(button, 3, 0);

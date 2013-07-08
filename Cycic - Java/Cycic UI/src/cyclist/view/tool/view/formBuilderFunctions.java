@@ -111,7 +111,7 @@ public class formBuilderFunctions {
 	 */
 	static TextField marketNameBuilder(final marketCircle node){
 		TextField textField = new TextField();
-		textField.setText(node.name);
+		textField.setText((String) node.name);
 		
 		textField.textProperty().addListener(new ChangeListener<String>(){         
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue){
@@ -252,7 +252,7 @@ public class formBuilderFunctions {
 							marketCircle = circle;
 						}
 						if (defaultValue.get(0) == circle.commodity) {
-							oldMarket = circle.name;
+							oldMarket = (String) circle.name;
 						}
 					}
 					for (int j = 0; j < dataArrays.Links.size(); j++) {
@@ -323,7 +323,7 @@ public class formBuilderFunctions {
 							marketCircle = circle;
 						}
 						if (defaultValue.get(0) == circle.commodity) {
-							oldMarket = circle.name;
+							oldMarket = (String) circle.name;
 						}
 					}
 					for (int j = 0; j < dataArrays.Links.size(); j++) {

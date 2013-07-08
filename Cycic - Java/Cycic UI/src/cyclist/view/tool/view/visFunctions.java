@@ -21,7 +21,7 @@ public class visFunctions {
 		int p=0;
 		ArrayList<Integer> rgbArray = new ArrayList<Integer>();
 		
-		hashCode= Integer.toString(Math.abs(string.hashCode()));
+		hashCode = Integer.toString(Math.abs(string.hashCode()));
 		if(hashCode.length()>(p+3)){
 			red=Integer.parseInt(hashCode.substring(p,p+3));
 			p+=3;
@@ -89,60 +89,13 @@ public class visFunctions {
 		}
 	}
 	
-	/**
-	 * 
-	 * @param source
-	 * @param target
-	 */
-	static void linkNodes(String source, String target){
-		Integer nodeIndex = 0;
-		Integer markIndex = 0;
-		nodeLink link = new nodeLink();
-		link.source = source;
-		link.target = target;
-		for(int i = 0; i < dataArrays.FacilityNodes.size(); i++){
-			if(dataArrays.FacilityNodes.get(i).getId() == source){
-				nodeIndex = i;
-				link.line.setStartX(dataArrays.FacilityNodes.get(i).getCenterX());
-				link.line.setStartY(dataArrays.FacilityNodes.get(i).getCenterY());
-			}
-			for(int ii = 0; ii < dataArrays.FacilityNodes.get(i).childrenList.size(); ii++){
-				if(dataArrays.FacilityNodes.get(i).childrenList.get(ii).getId() == source){
-					nodeIndex = dataArrays.FacilityNodes.get(i).childrenList.get(ii).parentIndex;
-					link.line.setStartX(dataArrays.FacilityNodes.get(i).childrenList.get(ii).getCenterX());
-					link.line.setStartY(dataArrays.FacilityNodes.get(i).childrenList.get(ii).getCenterY());
-				}
-			}
-		}
-		for(int i = 0; i < dataArrays.marketNodes.size(); i++){
-			if(dataArrays.marketNodes.get(i).getId() == target){
-				link.line.setEndX(dataArrays.marketNodes.get(i).getCenterX());
-				link.line.setEndY(dataArrays.marketNodes.get(i).getCenterY());
-				markIndex = i;
-			}
-		}
-		// Adding the Parent to childMarket link //
-		if(dataArrays.hiddenLinks.size() == 0){
-			addHiddenLink(nodeIndex, markIndex);
-		}
-		for(int n = 0; n < dataArrays.hiddenLinks.size(); n++){
-			if(dataArrays.hiddenLinks.get(n).target != target || dataArrays.hiddenLinks.get(n).source != dataArrays.FacilityNodes.get(nodeIndex).getId()){
-				addHiddenLink(nodeIndex, markIndex);
-			}
-		} 
-		dataArrays.Links.add(link);
-		if(dataArrays.FacilityNodes.get(nodeIndex).childrenShow == true){
-			Cycic.pane.getChildren().addAll(link.line);
-			link.line.toBack();
-		}
-	}
 	
 	static void linkNodesSimple(facilityCircle source, marketCircle target){
 		Integer nodeIndex = 0;
-		Integer markIndex = 0;
+		marketCircle markIndex = null;
 		nodeLink link = new nodeLink();
 		link.source = (String) source.name;
-		link.target = target.name;
+		link.target = (String) target.name;
 		link.line.setStartX(source.getCenterX());
 		link.line.setStartY(source.getCenterY());
 		link.line.setEndX(target.getCenterX());
@@ -150,16 +103,16 @@ public class visFunctions {
 
 		for(int i = 0; i < dataArrays.marketNodes.size(); i++){
 			if(dataArrays.marketNodes.get(i).getId() == target.name){
-				markIndex = i;
+				markIndex = dataArrays.marketNodes.get(i);
 			}
 		}
 		// Adding the Parent to childMarket link //
 		if(dataArrays.hiddenLinks.size() == 0){
-			addHiddenLink(source.parentIndex, markIndex);
+			addHiddenLink(dataArrays.FacilityNodes.get(source.parentIndex), markIndex);
 		}
 		for(int n = 0; n < dataArrays.hiddenLinks.size(); n++){
 			if(dataArrays.hiddenLinks.get(n).target != target.name && dataArrays.hiddenLinks.get(n).source != dataArrays.FacilityNodes.get(source.parentIndex).getId()){
-				addHiddenLink(nodeIndex, markIndex);
+				addHiddenLink(dataArrays.FacilityNodes.get(source.parentIndex), markIndex);
 			}
 		} 
 		dataArrays.Links.add(link);
@@ -171,16 +124,16 @@ public class visFunctions {
 	 * @param parentInt
 	 * @param marketInt
 	 */
-	static void addHiddenLink(Integer parentInt, Integer marketInt){
+	static void addHiddenLink(facilityCircle parent, marketCircle market){
 		nodeLink hiddenLink = new nodeLink();
-		hiddenLink.source = dataArrays.FacilityNodes.get(parentInt).getId();
-		hiddenLink.target = dataArrays.marketNodes.get(marketInt).getId();
-		hiddenLink.line.setStartX(dataArrays.FacilityNodes.get(parentInt).getCenterX());
-		hiddenLink.line.setStartY(dataArrays.FacilityNodes.get(parentInt).getCenterY());
-		hiddenLink.line.setEndX(dataArrays.marketNodes.get(marketInt).getCenterX());
-		hiddenLink.line.setEndY(dataArrays.marketNodes.get(marketInt).getCenterY());
+		hiddenLink.source = (String) parent.name;
+		hiddenLink.target = (String) market.name;
+		hiddenLink.line.setStartX(parent.getCenterX());
+		hiddenLink.line.setStartY(parent.getCenterY());
+		hiddenLink.line.setEndX(market.getCenterX());
+		hiddenLink.line.setEndY(market.getCenterY());
 		dataArrays.hiddenLinks.add(hiddenLink);
-		if(dataArrays.FacilityNodes.get(parentInt).childrenShow == false){
+		if(parent.childrenShow == false){
 			Cycic.pane.getChildren().addAll(hiddenLink.line);
 			hiddenLink.line.toBack();
 		}
