@@ -39,7 +39,9 @@ public class Nodes{
 		circle.text = new Text(name);
 		circle.name = name;
 		circle.text.setX(circle.getCenterX()-circle.getRadius()*0.6);
-		circle.text.setY(circle.getCenterY());		
+		circle.text.setY(circle.getCenterY());	
+		circle.text.setWrappingWidth(circle.getRadius()*1.6);
+		circle.text.setMouseTransparent(true);
 		
 		// Setting the circle color //
 		circle.setStroke(Color.BLACK);
@@ -59,7 +61,7 @@ public class Nodes{
 		
 		delete.setOnAction(new EventHandler<ActionEvent>(){
 			public void handle(ActionEvent e){
-				deleteNode(circle.getId());
+				deleteNode(circle);
 			}
 		});
 		
@@ -72,7 +74,7 @@ public class Nodes{
 				/*CustomMenuItem testBoxing = new CustomMenuItem(new TextField());
 				testBoxing.setHideOnClick(false);
 				clonesList.getItems().add(testBoxing);*/
-				Clones.addClone("", circle.getId(), circle.childrenShow);
+				Clones.addClone("", circle, circle.childrenShow);
 			}
 		});
 		
@@ -152,13 +154,13 @@ public class Nodes{
 				circle.text.setY(circle.getCenterY());
 				
 				for(int i = 0; i < dataArrays.Links.size(); i++){
-					if(dataArrays.Links.get(i).source == circle.getId()){
+					if(dataArrays.Links.get(i).source == circle){
 						dataArrays.Links.get(i).line.setStartX(circle.getCenterX());
 						dataArrays.Links.get(i).line.setStartY(circle.getCenterY());
 					}
 				}
 				for(int i = 0; i < dataArrays.hiddenLinks.size(); i++){
-					if(dataArrays.hiddenLinks.get(i).source == circle.getId()){
+					if(dataArrays.hiddenLinks.get(i).source == circle){
 						dataArrays.hiddenLinks.get(i).line.setStartX(circle.getCenterX());
 						dataArrays.hiddenLinks.get(i).line.setStartY(circle.getCenterY());
 					}
@@ -175,7 +177,7 @@ public class Nodes{
 					circle.childrenList.get(i).text.setX(circle.childrenList.get(i).getCenterX()-circle.childrenList.get(i).getRadius()*0.6);
 					circle.childrenList.get(i).text.setY(circle.childrenList.get(i).getCenterY());
 					for(int ii = 0; ii < dataArrays.Links.size(); ii++){
-						if(circle.childrenList.get(i).name == dataArrays.Links.get(ii).source){
+						if(circle.childrenList.get(i) == dataArrays.Links.get(ii).source){
 							dataArrays.Links.get(ii).line.setStartX(circle.childrenList.get(i).getCenterX());
 							dataArrays.Links.get(ii).line.setStartY(circle.childrenList.get(i).getCenterY());
 						}
@@ -243,17 +245,17 @@ public class Nodes{
 	 * 
 	 * @param name
 	 */
-	static void deleteNode(String name){
+	static void deleteNode(facilityCircle circle){
 		for(int i = 0; i < dataArrays.Links.size(); i++){
-			if(dataArrays.Links.get(i).source == name){
+			if(dataArrays.Links.get(i).source == circle){
 				dataArrays.Links.remove(i);
 			}
 		}
 		for(int i = 0; i < dataArrays.FacilityNodes.size(); i++){
-			if(dataArrays.FacilityNodes.get(i).getId() == name){
+			if(dataArrays.FacilityNodes.get(i) == circle){
 				for(int ii = 0; ii < dataArrays.FacilityNodes.get(i).childrenList.size();ii++){
 					for(int iii = 0; iii < dataArrays.Links.size(); iii++){
-						if(dataArrays.Links.get(i).source == dataArrays.FacilityNodes.get(i).childrenList.get(iii).getId()){
+						if(dataArrays.Links.get(i).source == dataArrays.FacilityNodes.get(i).childrenList.get(iii)){
 							dataArrays.Links.remove(i);
 						}
 					}

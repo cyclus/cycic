@@ -164,7 +164,6 @@ public class formBuilder extends View {
 						break;
 					case "Outcommodity":
 						grid.add(formBuilderFunctions.comboBoxOutCommod(formNode, dataArray), 1+columnNumber, rowNumber);
-
 						break;
 					default:
 						grid.add(formBuilderFunctions.textFieldBuilder((ArrayList<Object>)dataArray), 1+columnNumber, rowNumber);

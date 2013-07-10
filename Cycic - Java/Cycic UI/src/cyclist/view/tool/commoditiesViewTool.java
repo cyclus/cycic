@@ -5,7 +5,6 @@ import javafx.scene.image.Image;
 import org.puremvc.java.multicore.patterns.mediator.Mediator;
 
 import cyclist.view.component.View;
-import cyclist.view.tool.mediator.AgentMediator;
 import cyclist.view.tool.mediator.commoditiesViewMediator;
 import cyclist.view.tool.view.commoditiesView;
 

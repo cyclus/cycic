@@ -1,4 +1,3 @@
-cyclist.view.tool.FooTool
 cyclist.view.tool.cycicTool
 cyclist.view.tool.regionViewTool
 cyclist.view.tool.recipeFormTool

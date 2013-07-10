@@ -89,20 +89,38 @@ public class visFunctions {
 		}
 	}
 	
+	/**
+	 * Adjusts the color of a node when highlighted
+	 */
+	static ColorAdjust colorAdjust = new ColorAdjust(){
+		{
+			setBrightness(0.2);
+			setHue(-0.05);
+		}
+	};
+	
+	/**
+	 * Depricated
+	 */
+	static Bloom bloom = new Bloom(){
+		{
+			setThreshold(1.0);
+		}
+	};
 	
 	static void linkNodesSimple(facilityCircle source, marketCircle target){
-		Integer nodeIndex = 0;
 		marketCircle markIndex = null;
+		boolean hiddenLinkCheck = false;
 		nodeLink link = new nodeLink();
-		link.source = (String) source.name;
-		link.target = (String) target.name;
+		link.source = source;
+		link.target = target;
 		link.line.setStartX(source.getCenterX());
 		link.line.setStartY(source.getCenterY());
 		link.line.setEndX(target.getCenterX());
 		link.line.setEndY(target.getCenterY());
 
 		for(int i = 0; i < dataArrays.marketNodes.size(); i++){
-			if(dataArrays.marketNodes.get(i).getId() == target.name){
+			if(dataArrays.marketNodes.get(i) == target){
 				markIndex = dataArrays.marketNodes.get(i);
 			}
 		}
@@ -111,10 +129,13 @@ public class visFunctions {
 			addHiddenLink(dataArrays.FacilityNodes.get(source.parentIndex), markIndex);
 		}
 		for(int n = 0; n < dataArrays.hiddenLinks.size(); n++){
-			if(dataArrays.hiddenLinks.get(n).target != target.name && dataArrays.hiddenLinks.get(n).source != dataArrays.FacilityNodes.get(source.parentIndex).getId()){
-				addHiddenLink(dataArrays.FacilityNodes.get(source.parentIndex), markIndex);
+			if( (marketCircle) dataArrays.hiddenLinks.get(n).target == target && dataArrays.hiddenLinks.get(n).source == dataArrays.FacilityNodes.get(source.parentIndex)){
+				hiddenLinkCheck = true;
 			}
 		} 
+		if ( hiddenLinkCheck == false) {
+			addHiddenLink(dataArrays.FacilityNodes.get(source.parentIndex), markIndex);
+		}
 		dataArrays.Links.add(link);
 		Cycic.pane.getChildren().addAll(link.line);
 		link.line.toBack();
@@ -126,8 +147,8 @@ public class visFunctions {
 	 */
 	static void addHiddenLink(facilityCircle parent, marketCircle market){
 		nodeLink hiddenLink = new nodeLink();
-		hiddenLink.source = (String) parent.name;
-		hiddenLink.target = (String) market.name;
+		hiddenLink.source = parent;
+		hiddenLink.target = market;
 		hiddenLink.line.setStartX(parent.getCenterX());
 		hiddenLink.line.setStartY(parent.getCenterY());
 		hiddenLink.line.setEndX(market.getCenterX());
@@ -151,7 +172,7 @@ public class visFunctions {
 			Cycic.pane.getChildren().add(dataArrays.FacilityNodes.get(i).image);
 			if(dataArrays.FacilityNodes.get(i).childrenShow == false){
 				for(int ii = 0; ii < dataArrays.hiddenLinks.size(); ii++){
-					if(dataArrays.FacilityNodes.get(i).getId() == dataArrays.hiddenLinks.get(ii).source){
+					if(dataArrays.FacilityNodes.get(i) == dataArrays.hiddenLinks.get(ii).source){
 						Cycic.pane.getChildren().add(dataArrays.hiddenLinks.get(ii).line);
 						dataArrays.hiddenLinks.get(ii).line.toBack();
 					}
@@ -163,7 +184,7 @@ public class visFunctions {
 					Cycic.pane.getChildren().add(dataArrays.FacilityNodes.get(i).childrenList.get(ii).text);
 					Cycic.pane.getChildren().add(dataArrays.FacilityNodes.get(i).childrenList.get(ii).image);
 					for(int n = 0; n < dataArrays.Links.size(); n++){
-						if(dataArrays.Links.get(n).source == dataArrays.FacilityNodes.get(i).childrenList.get(ii).name){
+						if(dataArrays.Links.get(n).source == dataArrays.FacilityNodes.get(i).childrenList.get(ii)){
 							Cycic.pane.getChildren().add(dataArrays.Links.get(n).line);
 							dataArrays.Links.get(n).line.toBack();
 						}
@@ -180,35 +201,10 @@ public class visFunctions {
 			Cycic.pane.getChildren().add(dataArrays.marketNodes.get(i).menu);
 			Cycic.pane.getChildren().add(dataArrays.marketNodes.get(i).text);			
 		}
-		for (nodeLink link : dataArrays.Links) {
-		}
 	}
 	
-	/**
-	 * 
-	 */
-	static ColorAdjust colorAdjust = new ColorAdjust(){
-		{
-			setBrightness(0.2);
-			setHue(-0.05);
-		}
-	};
 	
-	/**
-	 * 
-	 */
-	static Bloom bloom = new Bloom(){
-		{
-			setThreshold(1.0);
-		}
-	};
-	
-	@SuppressWarnings("serial")
-	/**
-	 * 
-	 */
-	
-	public static void hiddenLinkTest(String parentName, String oldMarket){
+	public static void hiddenLinkTest(facilityCircle parentName, Object oldMarket){
 		int hiddenLinkCount = 0;
 		for (int j = 0; j < dataArrays.hiddenLinks.size(); j++){
 			if(dataArrays.hiddenLinks.get(j).source == parentName && dataArrays.hiddenLinks.get(j).target == oldMarket){
@@ -221,15 +217,14 @@ public class visFunctions {
 		}
 	}
 	
-	public static void hiddenLinkRemoval(String parentName, String oldMarket, Boolean test){
-		int hiddenLinkCount = 0;
+	public static void hiddenLinkRemoval(facilityCircle parentName, Object oldMarket, Boolean test){
+
 		for (int j = 0; j < dataArrays.hiddenLinks.size(); j++){
-			if(dataArrays.hiddenLinks.get(j).source == parentName && dataArrays.hiddenLinks.get(j).target == oldMarket){
-				hiddenLinkCount += 1;
-			}
-			if (test == false){
-				dataArrays.hiddenLinks.remove(j);
-				j = j - 1;
+			if(dataArrays.hiddenLinks.get(j).source == parentName && dataArrays.hiddenLinks.get(j).target == (marketCircle) oldMarket){
+				if (test == false){
+					dataArrays.hiddenLinks.remove(j);
+					j = j - 1;
+				}
 			}
 		}
 	}

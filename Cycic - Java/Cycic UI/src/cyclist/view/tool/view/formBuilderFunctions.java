@@ -240,9 +240,9 @@ public class formBuilderFunctions {
 		cb.valueProperty().addListener(new ChangeListener<String>(){
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue){
 				marketCircle marketCircle = null;
-				String oldMarket = null;
-				String parentName = null;
-				String lazySpaceSaver = null;
+				Object oldMarket = null;
+				facilityCircle parentName = null;
+				Object lazySpaceSaver = null;
 				Boolean hiddenLinkTest = false;
 				if (newValue == "New Commodity"){
 					// Tell Commodity Window to add a new commodity 
@@ -252,28 +252,25 @@ public class formBuilderFunctions {
 							marketCircle = circle;
 						}
 						if (defaultValue.get(0) == circle.commodity) {
-							oldMarket = (String) circle.name;
+							oldMarket = circle;
 						}
 					}
 					for (int j = 0; j < dataArrays.Links.size(); j++) {
-						if (dataArrays.Links.get(j).source == facNode.name && dataArrays.Links.get(j).target == oldMarket){
+						if (dataArrays.Links.get(j).source == facNode && dataArrays.Links.get(j).target == oldMarket){
 							dataArrays.Links.remove(j);
 							j -= 1;
 						}
 					}
-					for (int i = 0; i < dataArrays.FacilityNodes.size(); i++){
-						for ( int ii = 0; ii < dataArrays.FacilityNodes.get(i).childrenList.size(); ii++){
-							lazySpaceSaver = (String) dataArrays.FacilityNodes.get(i).childrenList.get(ii).name;
-							if (dataArrays.FacilityNodes.get(i).childrenList.get(ii).name == facNode.name) {
-								parentName = (String) dataArrays.FacilityNodes.get(i).name;
+					parentName = dataArrays.FacilityNodes.get(facNode.parentIndex);
+					for ( int ii = 0; ii < parentName.childrenList.size(); ii++){
+						lazySpaceSaver = parentName.childrenList.get(ii);
+						for (int j = 0; j < dataArrays.Links.size(); j++){
+							if (dataArrays.Links.get(j).source == lazySpaceSaver && dataArrays.Links.get(j).target == oldMarket){
+								hiddenLinkTest = true;
 							}
-							for (int j = 0; j < dataArrays.Links.size(); j++){
-								if (dataArrays.Links.get(j).source == lazySpaceSaver && dataArrays.Links.get(j).target == oldMarket){
-									hiddenLinkTest = true;
-								}
-							}
-							visFunctions.hiddenLinkRemoval(parentName, oldMarket, hiddenLinkTest);
 						}
+						visFunctions.hiddenLinkRemoval(parentName, oldMarket, hiddenLinkTest);
+						hiddenLinkTest = false;
 					}
 					if (marketCircle != null){
 						visFunctions.linkNodesSimple(facNode, marketCircle);
@@ -311,9 +308,9 @@ public class formBuilderFunctions {
 		cb.valueProperty().addListener(new ChangeListener<String>(){
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue){
 				marketCircle marketCircle = null;
-				String oldMarket = null;
-				String parentName = null;
-				String lazySpaceSaver = null;
+				Object oldMarket = null;
+				facilityCircle parentName = null;
+				Object lazySpaceSaver = null;
 				Boolean hiddenLinkTest = false;
 				if (newValue == "New Commodity"){
 					// Tell Commodity Window to add a new commodity 
@@ -323,28 +320,25 @@ public class formBuilderFunctions {
 							marketCircle = circle;
 						}
 						if (defaultValue.get(0) == circle.commodity) {
-							oldMarket = (String) circle.name;
+							oldMarket = circle;
 						}
 					}
 					for (int j = 0; j < dataArrays.Links.size(); j++) {
-						if (dataArrays.Links.get(j).source == facNode.name && dataArrays.Links.get(j).target == oldMarket){
+						if (dataArrays.Links.get(j).source == facNode && dataArrays.Links.get(j).target == oldMarket){
 							dataArrays.Links.remove(j);
 							j -= 1;
 						}
 					}
-					for (int i = 0; i < dataArrays.FacilityNodes.size(); i++){
-						for ( int ii = 0; ii < dataArrays.FacilityNodes.get(i).childrenList.size(); ii++){
-							lazySpaceSaver = (String) dataArrays.FacilityNodes.get(i).childrenList.get(ii).name;
-							if (dataArrays.FacilityNodes.get(i).childrenList.get(ii).name == facNode.name) {
-								parentName = (String) dataArrays.FacilityNodes.get(i).name;
+					parentName = dataArrays.FacilityNodes.get(facNode.parentIndex);
+					for ( int ii = 0; ii < parentName.childrenList.size(); ii++){
+						lazySpaceSaver = parentName.childrenList.get(ii);
+						for (int j = 0; j < dataArrays.Links.size(); j++){
+							if (dataArrays.Links.get(j).source == lazySpaceSaver && dataArrays.Links.get(j).target == oldMarket){
+								hiddenLinkTest = true;
 							}
-							for (int j = 0; j < dataArrays.Links.size(); j++){
-								if (dataArrays.Links.get(j).source == lazySpaceSaver && dataArrays.Links.get(j).target == oldMarket){
-									hiddenLinkTest = true;
-								}
-							}
-							visFunctions.hiddenLinkRemoval(parentName, oldMarket, hiddenLinkTest);
 						}
+						visFunctions.hiddenLinkRemoval(parentName, oldMarket, hiddenLinkTest);
+						hiddenLinkTest = false;
 					}
 					if (marketCircle != null){
 						visFunctions.linkNodesSimple(facNode, marketCircle);

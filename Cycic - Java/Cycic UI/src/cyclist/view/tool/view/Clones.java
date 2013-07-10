@@ -19,16 +19,16 @@ public class Clones {
 	protected static double x;
 	protected static double y;
 	
-	static void addClone(String name, final String parent, Boolean parentChildShow) {
+	static void addClone(String name, final facilityCircle parent, Boolean parentChildShow) {
 		final facilityCircle clone = new facilityCircle();
 		clone.setId(name);
 		clone.setRadius(25);
-		clone.parent = parent;
+		clone.parent = (String) parent.name;
 		clone.type = "Child";
 		clone.name = name;
 		
 		for(int i = 0; i < dataArrays.FacilityNodes.size(); i++){
-			if(dataArrays.FacilityNodes.get(i).getId() == parent){
+			if(dataArrays.FacilityNodes.get(i) == parent){
 				clone.parentIndex = i;
 			}
 		}
@@ -42,7 +42,7 @@ public class Clones {
 		clone.facilityData = dataArrays.FacilityNodes.get(clone.parentIndex).facilityData;
 		
 		// Setting the Fill Color //
-		clone.rgbColor = visFunctions.stringToColor(parent);
+		clone.rgbColor = visFunctions.stringToColor((String) parent.name);
 		clone.rgbColor.set(0, (int)(clone.rgbColor.get(0)*visFunctions.colorMultiplierTest(clone.rgbColor.get(0))));
 		clone.rgbColor.set(1, (int)(clone.rgbColor.get(1)*visFunctions.colorMultiplierTest(clone.rgbColor.get(1))));
 		clone.rgbColor.set(2, (int)(clone.rgbColor.get(2)*visFunctions.colorMultiplierTest(clone.rgbColor.get(2))));
@@ -62,7 +62,7 @@ public class Clones {
 		MenuItem delete = new MenuItem("Delete");
 		delete.setOnAction(new EventHandler<ActionEvent>(){
 			public void handle(ActionEvent e){
-				removeClone(clone.getId(), parent);
+				removeClone((String) clone.name, (String) parent.name);
 			}
 		});
 		menu1.getItems().addAll(facForm, delete);
@@ -74,6 +74,7 @@ public class Clones {
 		clone.text.setX(clone.getCenterX()-clone.getRadius()*0.6);
 		clone.text.setY(clone.getCenterY());
 		clone.text.setWrappingWidth(clone.getRadius()*1.6);
+		clone.text.setMouseTransparent(true);
 		
 		// Adding the Parent Child Link //
 		final nodeLink parentChild = new nodeLink();
@@ -135,7 +136,7 @@ public class Clones {
 				parentChild.line.setEndX(clone.getCenterX());
 				parentChild.line.setEndY(clone.getCenterY());
 				for(int i = 0; i < dataArrays.Links.size();i++){
-					if(dataArrays.Links.get(i).source == clone.name){
+					if(dataArrays.Links.get(i).source == clone){
 						dataArrays.Links.get(i).line.setStartX(clone.getCenterX());
 						dataArrays.Links.get(i).line.setStartY(clone.getCenterY());
 					}
@@ -175,7 +176,7 @@ public class Clones {
 		}
 	}
 	
-	static void removeClone(String name, String parent){
+	static void removeClone(Object name, String parent){
 		int parentPass = 0;
 		for(int i = 0; i < dataArrays.FacilityNodes.size(); i++){
 			if(dataArrays.FacilityNodes.get(i).getId() == parent){

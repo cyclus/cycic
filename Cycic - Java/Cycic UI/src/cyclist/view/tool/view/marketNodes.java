@@ -33,6 +33,8 @@ public class marketNodes{
 		circle.name = name;
 		circle.text.setX(circle.getCenterX()-circle.text.getBoundsInLocal().getWidth()/2);
 		circle.text.setY(circle.getCenterY());
+		circle.text.setWrappingWidth(circle.getRadiusX()*1);
+		circle.text.setMouseTransparent(true);
 		
 		// Setting the circle color //
 		circle.setStroke(Color.BLACK);
@@ -102,13 +104,13 @@ public class marketNodes{
 				circle.text.setY(circle.getCenterY());
 				
 				for(int i = 0; i < dataArrays.Links.size(); i++){
-					if(dataArrays.Links.get(i).target == circle.getId()){
+					if(dataArrays.Links.get(i).target == circle){
 						dataArrays.Links.get(i).line.setEndX(circle.getCenterX());
 						dataArrays.Links.get(i).line.setEndY(circle.getCenterY());
 					}
 				}				
 				for(int i = 0; i < dataArrays.hiddenLinks.size(); i++){
-					if(dataArrays.hiddenLinks.get(i).target == circle.getId()){
+					if(dataArrays.hiddenLinks.get(i).target == circle){
 						dataArrays.hiddenLinks.get(i).line.setEndX(circle.getCenterX());
 						dataArrays.hiddenLinks.get(i).line.setEndY(circle.getCenterY());
 					}

@@ -47,9 +47,8 @@ class isotopeData {
 }
 
 class nodeLink {
-	String name = new String();
-	String source = new String();
-	String target = new String();
+	facilityCircle source;
+	Object target;
 	Line line = new Line();
 }
 
