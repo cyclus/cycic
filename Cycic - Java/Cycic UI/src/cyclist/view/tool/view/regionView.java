@@ -7,13 +7,16 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import cyclist.view.component.View;
@@ -21,24 +24,35 @@ import cyclist.view.component.View;
 public class regionView extends View{
 	public regionView(){
 		super();
+		
+		
 		structureCB.setOnMouseClicked(new EventHandler<MouseEvent>(){
 			public void handle(MouseEvent e){
 				structureCB.getItems().clear();
 				for(int i = 0; i < dataArrays.regionNodes.size(); i++){
-					structureCB.getItems().add((String) dataArrays.regionNodes.get(i).get(0));
+					structureCB.getItems().add((String) dataArrays.regionNodes.get(i).name);
 				}
-				structureCB.getItems().add("New Growth Region");
+				structureCB.getItems().add("New Region");
 			}
 		});
 		
 		structureCB.valueProperty().addListener(new ChangeListener<String>(){
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue){
-				if(newValue == "New Growth Region"){
-					dataArrays.regionNodes.add(new ArrayList<Object>());
-						formBuilderFunctions.formArrayBuilder((ArrayList<Object>) dataArrays.regionStructs.get(0), dataArrays.regionNodes.get(dataArrays.regionNodes.size()-1));
-					formBuilder((ArrayList<Object>) dataArrays.regionStructs.get(0), dataArrays.regionNodes.get(dataArrays.regionNodes.size()-1));
+				if (newValue == null){
+					
+				} else if(newValue == "New Region"){
+					grid.getChildren().clear();
+					rowNumber = 0;
+					dataArrays.regionNodes.add(new regionNode());
+					workingRegion = dataArrays.regionNodes.get(dataArrays.regionNodes.size()-1);
+					workingRegion.type = "GrowthRegion";
+					workingRegion.regionStruct = (ArrayList<Object>) dataArrays.regionStructs.get(0);
+					formBuilderFunctions.formArrayBuilder(workingRegion.regionStruct, workingRegion.regionData);
+					formBuilder(workingRegion.regionStruct, workingRegion.regionData);
 				} else {
-					formBuilder((ArrayList<Object>) dataArrays.regionStructs.get(0), dataArrays.regionNodes.get(structureCB.getItems().indexOf(newValue)));
+					grid.getChildren().clear();
+					workingRegion = dataArrays.regionNodes.get(structureCB.getItems().indexOf(newValue));
+					formBuilder(workingRegion.regionStruct, workingRegion.regionData);
 				}
 			}
 		});
@@ -47,11 +61,60 @@ public class regionView extends View{
 		button.setText("Check Array");
 		button.setOnAction(new EventHandler<ActionEvent>(){
 			public void handle(ActionEvent e){
-				System.out.println(dataArrays.regionNodes.get(0));
+				System.out.println(workingRegion.regionData);
 			}
 		});
+		
+		
 		topGrid.add(structureCB, 0, 0);
 		topGrid.add(button, 2, 0);
+		
+		final ListView<String> facilityList = new ListView<String>();
+		facilityList.setOrientation(Orientation.HORIZONTAL);
+		facilityList.setMinHeight(25);
+		facilityList.setMaxHeight(25);
+
+		facilityList.setOnMousePressed(new EventHandler<MouseEvent>(){
+			public void handle(MouseEvent event){
+				if (event.isSecondaryButtonDown()){
+					workingRegion.availFacilities.remove(facilityList.getSelectionModel().getSelectedItem());
+					facilityList.getItems().remove(facilityList.getSelectionModel().getSelectedItem());
+				}
+			}
+		});
+
+		final ComboBox<String> addNewFacilityBox = new ComboBox<String>();
+		addNewFacilityBox.setOnMousePressed(new EventHandler<MouseEvent>(){
+			public void handle(MouseEvent e){
+				addNewFacilityBox.getItems().clear();
+				for (facilityCircle circle: dataArrays.FacilityNodes){
+					for (facilityCircle child: circle.childrenList) {
+						addNewFacilityBox.getItems().add((String)child.name);
+					}
+				}
+			}
+		});
+		
+		Button addAvailFac = new Button();
+		addAvailFac.setText("Add Facility Prototype to Region");
+		addAvailFac.setOnAction(new EventHandler<ActionEvent>(){
+			public void handle(ActionEvent e){
+				facilityList.getItems().clear();
+				for (String facility: workingRegion.availFacilities){
+					facilityList.getItems().add(facility);
+				}
+				facilityList.getItems().add(addNewFacilityBox.getValue());
+				workingRegion.availFacilities.add(addNewFacilityBox.getValue());
+			}
+		});
+		
+
+		topGrid.add(new Label("Available Facilities"), 0, 1);
+		topGrid.add(facilityList, 1, 1);
+		topGrid.add(addNewFacilityBox, 0, 2);
+		topGrid.add(addAvailFac, 1, 2);
+		topGrid.setHgap(10);
+		
 		grid.autosize();
 		grid.setAlignment(Pos.BASELINE_CENTER);
 		grid.setVgap(10);
@@ -60,6 +123,10 @@ public class regionView extends View{
 		grid.setStyle("-fx-background-color: Orange;");
 		setContent(topGrid);
 		setContent(grid);
+		
+		if (dataArrays.regionStructs.size() < 1) {
+			practiceRegions.init();
+		}
 	}
 	
 	private ComboBox<String> structureCB = new ComboBox<String>();
@@ -69,7 +136,7 @@ public class regionView extends View{
 	private int rowNumber = 0;
 	private int columnNumber = 0;
 	private int columnEnd = 0;
-	
+	static regionNode workingRegion;
 	/**
 	 * This function takes a constructed data array and it's corresponding facility structure array and creates
 	 * a form in for the structure and data array and facility structure.
@@ -90,6 +157,9 @@ public class regionView extends View{
 						// Indenting a sub structure
 						columnNumber += 1;
 						for(int ii = 0; ii < dataArray.size(); ii ++){
+							if ( ii > 0 ) {
+								grid.add(arrayListRemove(dataArray, ii), columnNumber-1, rowNumber);
+							}
 							formBuilder((ArrayList<Object>)facArray.get(1), (ArrayList<Object>) dataArray.get(ii));						
 						}
 						// resetting the indent
@@ -126,7 +196,7 @@ public class regionView extends View{
 						Slider slider = formBuilderFunctions.sliderBuilder(facArray.get(4).toString(), dataArray.get(0).toString());
 						TextField textField = formBuilderFunctions.sliderTextFieldBuilder(slider, dataArray);
 						grid.add(slider, 1+columnNumber, rowNumber);
-						grid.add(textField, 2+columnNumber, rowNumber);	
+						grid.add(textField, 2+columnNumber, rowNumber);
 						columnEnd = 2+columnNumber+1;
 					// Slider with discrete steps
 					} else {
@@ -134,21 +204,21 @@ public class regionView extends View{
 						grid.add(cb, 1+columnNumber, rowNumber);
 						columnEnd = 2 + columnNumber;
 					}
-				}
-				// Handling Zero/One or Mores
-				else if(facArray.get(2) == "oneOrMore" || facArray.get(2) == "zeroOrMore"){
-					Button button = new Button();
-					button.setText("Add");
-					grid.add(button, 1+columnNumber, rowNumber);
-					columnNumber += 1;
-				}
-				// TextField Inputs
-				else {
-					grid.add(formBuilderFunctions.textFieldBuilder((ArrayList<Object>)dataArray), 1+columnNumber, rowNumber);
-					columnEnd = 2 + columnNumber;
+				} else {
+					switch ((String) facArray.get(0)) {
+					case "Name":
+						grid.add(formBuilderFunctions.regionNameBuilder(workingRegion, dataArray), 1+columnNumber, rowNumber);
+						columnEnd = 2 + columnNumber;
+						break;
+					default:
+						grid.add(formBuilderFunctions.textFieldBuilder((ArrayList<Object>)dataArray), 1+columnNumber, rowNumber);
+						columnEnd = 2 + columnNumber;
+						break;
+					}
 				}
 				grid.add(formBuilderFunctions.unitsBuilder((String)facArray.get(3)), columnEnd, rowNumber);
 				columnEnd = 0;
+				rowNumber += 1;
 			}
 		}
 		rowNumber += 1;
@@ -166,29 +236,28 @@ public class regionView extends View{
 		
 		button.setOnAction(new EventHandler<ActionEvent>(){
 			public void handle(ActionEvent e){
- 				arrayListCopy(dataArray, (ArrayList<Object>) dataArray.get(0));
+ 				formBuilderFunctions.arrayListCopy(dataArray, (ArrayList<Object>) dataArray.get(0));
 				grid.getChildren().clear();
 				rowNumber = 0;
-				formBuilder((ArrayList<Object>) dataArrays.regionStructs.get(0), dataArrays.regionNodes.get(dataArrays.regionNodes.size()-1));
+				formBuilder(workingRegion.regionStruct, workingRegion.regionData);
 			}
 		});
 		return button;
 	}
 	
-	/**
-	 * 
-	 * @param baseList
-	 * @param copyList
-	 */
-	public void arrayListCopy(ArrayList<Object> baseList, ArrayList<Object> copyList){
-		ArrayList<Object> addedArray = new ArrayList<Object>();
-		for(int i = 0; i < copyList.size(); i++){
-			if(copyList.get(i) instanceof ArrayList){
-				arrayListCopy(addedArray, (ArrayList<Object>)copyList.get(i));
-			} else {
-				addedArray.add(copyList.get(i));
+	public Button arrayListRemove(final ArrayList<Object> dataArray, final int dataArrayNumber){
+		Button button = new Button();
+		button.setText("Remove");
+		
+		button.setOnAction(new EventHandler<ActionEvent>(){
+			public void handle(ActionEvent e) {
+				dataArray.remove(dataArrayNumber);
+				grid.getChildren().clear();
+				rowNumber = 0;
+				formBuilder(workingRegion.regionStruct, workingRegion.regionData);
 			}
-		}
-		baseList.add(addedArray);
+		});		
+		
+		return button;
 	}
 }

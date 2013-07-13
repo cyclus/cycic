@@ -20,12 +20,11 @@ public class dataArrays {
 	
 	static ArrayList<Label> Regions = new ArrayList<Label>();
 	static ArrayList<Object> regionStructs = new ArrayList<Object>();
-	static ArrayList<ArrayList<Object>> regionNodes = new ArrayList<ArrayList<Object>>();
-	static ArrayList<regionNode> regionNodes1 = new ArrayList<regionNode>();
+	static ArrayList<regionNode> regionNodes = new ArrayList<regionNode>();
 	
 	static ArrayList<Label> Institutions = new ArrayList<Label>();
 	static ArrayList<Object> institStructs = new ArrayList<Object>();
-	static ArrayList<ArrayList<Object>> institNodes = new ArrayList<ArrayList<Object>>();
+	static ArrayList<instituteNode> institNodes = new ArrayList<instituteNode>();
 	
 	static ArrayList<Label> Markets = new ArrayList<Label>();
 	static ArrayList<Object> marketStructs = new ArrayList<Object>();
@@ -54,8 +53,18 @@ class nodeLink {
 
 class regionNode{
 	String name = new String();
+	String type = new String();
 	ArrayList<Object> regionStruct = new ArrayList<Object>();
-	ArrayList<facilityCircle> availFacilities = new ArrayList<facilityCircle>(); 
+	ArrayList<Object> regionData  = new ArrayList<Object>();
+	ArrayList<String> availFacilities = new ArrayList<String>(); 
+}
+
+class instituteNode{
+	String name;
+	String type;
+	ArrayList<Object> institStruct  = new ArrayList<Object>();
+	ArrayList<Object> institData  = new ArrayList<Object>();
+	ArrayList<String> availFacilities = new ArrayList<String>();
 }
 
 class simInfo{

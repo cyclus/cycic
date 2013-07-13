@@ -125,11 +125,6 @@ public class marketNodes{
 				if(event.getButton().equals(MouseButton.SECONDARY)){
 					circle.menu.setVisible(true);
 				}
-				for(int i = 0; i < dataArrays.FacilityNodes.size(); i++){
-					if(dataArrays.FacilityNodes.get(i).getId() != circle.getId()){
-						dataArrays.FacilityNodes.get(i).clickIndex = 0;
-					}
-				}
 			}
 		});
 		dataArrays.marketNodes.add(circle);

@@ -63,21 +63,21 @@ public class outPut {
 			}
 			
 			// Regions
-			/*for(regionNode region : dataArrays.regionNodes1) {
+			for(regionNode region : dataArrays.regionNodes) {
 				Element regionID = doc.createElement("region");
 				rootElement.appendChild(regionID);
 				
 				Element regionName = doc.createElement(region.name);
 				regionID.appendChild(regionName);
 				
-				for(facilityCircle facility: region.availFacilities){
+				for(String facility: region.availFacilities){
 					Element allowedFac = doc.createElement("allowedfacility");
-					allowedFac.appendChild(doc.createTextNode(facility.name));
+					allowedFac.appendChild(doc.createTextNode(facility));
 					regionID.appendChild(allowedFac);
 				}
 				
 				regionBuilder(doc, regionID, dataArrays.regionStructs.get(0), dataArrays.regionNodes.get(0), "growthregion");
-			}*/
+			}
 			// Following is a quick hack //
 			Element regionID = doc.createElement("region");
 			rootElement.appendChild(regionID);
@@ -88,10 +88,14 @@ public class outPut {
 				regionID.appendChild(allowedFac);
 			}
 			
-			Element regionName = facilityNameElement(doc, (ArrayList<Object>) dataArrays.regionNodes.get(0).get(0));
-			regionID.appendChild(regionName);
+			for (regionNode region: dataArrays.regionNodes){
+				Element regionName = facilityNameElement(doc, (ArrayList<Object>) region.regionData.get(0));
+				regionID.appendChild(regionName);
+				regionBuilder(doc, regionID, region.regionStruct, region.regionData, region.type);
+			}
+				
 			
-			regionBuilder(doc, regionID, (ArrayList<Object>) dataArrays.regionStructs.get(0), dataArrays.regionNodes.get(0), "GrowthRegion");
+			
 			
 			// Institutions
 			
@@ -124,7 +128,9 @@ public class outPut {
 			}
 			institID.appendChild(initialFacilities);
 			
-			regionBuilder(doc, institID, (ArrayList<Object>) dataArrays.institStructs.get(0), dataArrays.institNodes.get(0), "DeployInst");
+			for (instituteNode institute: dataArrays.institNodes) {
+				regionBuilder(doc, institID, institute.institStruct, institute.institData, institute.type);
+			}
 			// End quick hack //
 			
 			

@@ -23,10 +23,10 @@ public class commoditiesView extends View{
 		setContent(commodGrid);
 	}
 	
-	private GridPane commodGrid = new GridPane();
-	private Button addNewCommod = new Button();
+	private static GridPane commodGrid = new GridPane();
+	private static Button addNewCommod = new Button();
 			
-	public void init(){
+	public static void init(){
 		commodGrid.getChildren().clear();
 		for (int i = 0; i < dataArrays.CommoditiesList.size(); i++){
 			TextField commodity = new TextField();
@@ -51,7 +51,7 @@ public class commoditiesView extends View{
 		commodGrid.add(addNewCommod, 0, dataArrays.CommoditiesList.size());
 	}
 	
-	public void addNewCommodity(){
+	static public void addNewCommodity(){
 		Label commodity = new Label();
 		commodity.setText("");
 		dataArrays.CommoditiesList.add(commodity);

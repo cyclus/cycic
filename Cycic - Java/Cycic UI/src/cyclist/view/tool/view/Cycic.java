@@ -40,7 +40,6 @@ public class Cycic extends View{
 	static marketCircle workingMarket = null;
 	
 	private void init(){
-		practiceRegions.init();
 		realFacs.init();
 		practiceInstitute.init();
 		
@@ -60,25 +59,7 @@ public class Cycic extends View{
 		dataArrays.simInfor.add("0");
 		dataArrays.simInfor.add("2");
 		
-		/*AccordionPane regions = new AccordionPane();
-		regions.builder("Regions", dataArrays.Regions);
-		
-		AccordionPane institutions = new AccordionPane();
-		institutions.builder("Institutes", dataArrays.Institutions);
-		
-		AccordionPane markets = new AccordionPane();
-		markets.builder("Markets", dataArrays.Markets);
-		
-		AccordionPane commodities = new AccordionPane();
-		commodities.builder("Commodities", dataArrays.CommoditiesList);
-		
-		AccordionPane recipes = new AccordionPane();
-		recipes.builder("Recipes", dataArrays.RecipesList);
-		
-		AccordionPane facilityTypes = new AccordionPane();
-		commodities.builder("Facility Types", dataArrays.FacilityTypes);*/
-		
-		
+
 		// Temp Toolbar //
 		final GridPane grid = new GridPane();
 		grid.setStyle("-fx-background-color: #d6d6d6;");
@@ -160,7 +141,6 @@ public class Cycic extends View{
 			}
 		});
 		setContent(grid);
-		//accordionBox.getChildren().add(regions);
 		cycicBox.getChildren().addAll(pane);
 		setContent(cycicBox);
 

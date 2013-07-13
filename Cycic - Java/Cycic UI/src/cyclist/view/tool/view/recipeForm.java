@@ -16,10 +16,10 @@ public class recipeForm extends View{
 	public recipeForm(){
 		super();
 		init();
-		recipeGrid.setHgap(12);
-		recipeGrid.setVgap(15);
-		topRecipeGrid.setHgap(12);
-		topRecipeGrid.setVgap(15);
+		recipeGrid.setHgap(5);
+		recipeGrid.setVgap(8);
+		topRecipeGrid.setHgap(5);
+		topRecipeGrid.setVgap(8);
 		setContent(topRecipeGrid);
 		setContent(recipeGrid);
 	}
@@ -38,6 +38,7 @@ public class recipeForm extends View{
 		recipiesList.getItems().clear();
 		
 		recipiesList.setOnMouseClicked(new EventHandler<MouseEvent>(){
+			@Override
 			public void handle(MouseEvent e){
 				recipiesList.getItems().clear();
 				for(int i = 0; i < dataArrays.Recipes.size(); i++){
@@ -47,41 +48,51 @@ public class recipeForm extends View{
 			}
 		});
 		
-		recipiesList.valueProperty().addListener(new ChangeListener<String>(){
+		recipiesList.valueProperty().addListener(new ChangeListener<String>(){ 
+			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue){
-				if(newValue == "Add New Recipe"){
-					recipeGenInfo();
+				if (newValue == null) {
+					// Do nothing
+				} else if (newValue == "Add New Recipe") {
+					rowNumber = 3;
+					Nrecipe recipe = new Nrecipe();
+					dataArrays.Recipes.add(recipe);
+					recipeGenInfo(recipe);
 				} else {
-					loadRecipe(dataArrays.Recipes.get(recipiesList.getItems().indexOf(newValue)));
+					for(Nrecipe recipe: dataArrays.Recipes) {
+						if (recipe.Name == newValue) {
+							loadRecipe(recipe);
+						}
+					}
 				}
 			}
 		});
 		topRecipeGrid.add(recipiesList, 1, 0);
 		
-		Button submit = new Button();
-		submit.setText("Remove Recipe");
-		submit.setOnAction(new EventHandler<ActionEvent>(){
+		Button removeRecipeButt = new Button();
+		removeRecipeButt.setText("Remove Recipe");
+		removeRecipeButt.setOnAction(new EventHandler<ActionEvent>(){
 			public void handle(ActionEvent event){
 				recipeGrid.getChildren().clear();
 				if (recipiesList.getValue() == "Add New Recipe"){
-					dataArrays.Recipes.remove(dataArrays.Recipes.size()-1);
+					// Do nothing
 				} else {
 					dataArrays.Recipes.remove(recipiesList.getItems().indexOf(recipiesList.getValue()));
 				}
 			}
 		});
-		topRecipeGrid.add(submit, 2, 0);
+		topRecipeGrid.add(removeRecipeButt, 2, 0);
 	}
 	
 	/**
 	 * 
 	 */
-	public void recipeGenInfo(){
+	public void recipeGenInfo(final Nrecipe recipe){
 		recipeGrid.getChildren().clear();
-		final Nrecipe recipe = new Nrecipe();
-		dataArrays.Recipes.add(recipe);
 		Label name = new Label("Recipe Name");
 		TextField recipeName = new TextField();
+		recipeName.setText(recipe.Name);
+		recipeName.setMinHeight(10);
 		recipeName.textProperty().addListener(new ChangeListener<String>(){
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue){
 				recipe.Name = newValue;
@@ -101,6 +112,7 @@ public class recipeForm extends View{
 				recipe.Basis = basisBox.getValue();
 			}
 		});
+		basisBox.setValue(recipe.Basis);
 		recipeGrid.add(basisBox, 1, 1);
 		
 		Label isotope = new Label("Isotopes");
@@ -126,7 +138,11 @@ public class recipeForm extends View{
 		recipeGrid.add(isotope, 0, rowNumber);
 		
 		TextField isotopeNumber = new TextField();
+		
+		isotopeNumber.setMinSize(40, 20);
+		isotopeNumber.setMaxSize(100, 20);
 		isotopeNumber.setText("ZZAAA");
+		
 		isotopeNumber.textProperty().addListener(new ChangeListener<String>(){
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue){
 				isoData.Name = newValue;
@@ -166,52 +182,18 @@ public class recipeForm extends View{
 	 * @param recipe
 	 */
 	public void loadRecipe(final Nrecipe recipe){
-		recipeGrid.getChildren().clear();
-		rowNumber = 3;
-		Label name = new Label("Recipe Name");
-		recipeGrid.add(name, 0, 0);
-		
-		TextField recipeName = new TextField();
-		recipeName.setText(recipe.Name);
-		recipeName.textProperty().addListener(new ChangeListener<String>(){
-			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue){
-				recipe.Name = newValue;
-			}
-		});
-		recipeGrid.add(recipeName, 1, 0);
-		
-		Label basis = new Label("Basis");
-		recipeGrid.add(basis, 0, 1);
-		
-		final ComboBox<String> basisBox = new ComboBox<String>();
-		basisBox.getItems().add("Atom");
-		basisBox.getItems().add("Mass");
-		basisBox.valueProperty().addListener(new ChangeListener<String>(){
-			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue){
-				recipe.Basis = basisBox.getValue();
-			}
-		});
-		basisBox.setValue(recipe.Basis);
-		recipeGrid.add(basisBox, 1, 1);
-		
-		Label isotope = new Label("Isotopes");
-		recipeGrid.add(isotope, 0, 2);
-		
-		Button addIso = new Button();
-		addIso.setText("Add Isotope");
-		addIso.setOnAction(new EventHandler<ActionEvent>(){
-			public void handle(ActionEvent e){
-				addIsotope(recipe);
-			}
-		});
-		recipeGrid.add(addIso, 1, 2);	
+		recipeGenInfo(recipe);
 		
 		for(final isotopeData iso : recipe.Composition){
 			Label isotopeStored = new Label("Isotope");
 			recipeGrid.add(isotopeStored, 0, rowNumber);
 			
 			TextField isotopeNumber = new TextField();
+			
 			isotopeNumber.setText(iso.Name);
+			isotopeNumber.setMinSize(40, 20);
+			isotopeNumber.setMaxSize(100, 20);
+			
 			isotopeNumber.textProperty().addListener(new ChangeListener<String>(){
 				public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue){
 					iso.Name = newValue;
@@ -241,6 +223,7 @@ public class recipeForm extends View{
 				}
 			});
 			isoWeightFrac.setText(String.valueOf(iso.weightFrac));
+			isoWeightFrac.setMaxSize(80, 20);
 			recipeGrid.add(isoWeightFrac, 3, rowNumber);
 			
 			rowNumber += 1;

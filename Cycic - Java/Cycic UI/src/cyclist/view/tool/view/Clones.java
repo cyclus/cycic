@@ -151,9 +151,6 @@ public class Clones {
 				if(event.getButton().equals(MouseButton.SECONDARY)){
 					clone.menu.setVisible(true);
 				}
-				for(int i = 0; i < dataArrays.FacilityNodes.size(); i++){
-					dataArrays.FacilityNodes.get(i).clickIndex = 0;
-				}
 				if(event.getButton().equals(MouseButton.PRIMARY)){
 					for(int i = 0; i < Cycic.pane.getChildren().size(); i++){
 						Cycic.pane.getChildren().get(i).setEffect(null);	

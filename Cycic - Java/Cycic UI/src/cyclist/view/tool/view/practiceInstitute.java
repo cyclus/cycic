@@ -71,8 +71,5 @@ public class practiceInstitute {
 		deployInst.add(buildOrderArray);
 		
 		dataArrays.institStructs.add(deployInst);
-		dataArrays.institNodes.add(new ArrayList<Object>());
-		
-		formBuilderFunctions.formArrayBuilder(deployInst, dataArrays.institNodes.get(0));
 	}
 }

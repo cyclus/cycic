@@ -5,6 +5,7 @@ import javafx.scene.image.Image;
 import org.puremvc.java.multicore.patterns.mediator.Mediator;
 
 import cyclist.view.component.View;
+import cyclist.view.tool.mediator.recipeFormMediator;
 import cyclist.view.tool.view.recipeForm;
 
 public class recipeFormTool implements Tool {
@@ -28,7 +29,7 @@ public class recipeFormTool implements Tool {
 	
 	@Override
 	public Mediator getMediator() {
-		return null;
+		return new recipeFormMediator();
 	}
 
 }

@@ -35,7 +35,6 @@ public class Nodes{
 		circle.setCenterY(40);
 		circle.type = "Parent";
 		circle.childrenShow = true;
-		circle.clickIndex = 0;
 		circle.text = new Text(name);
 		circle.name = name;
 		circle.text.setX(circle.getCenterX()-circle.getRadius()*0.6);
@@ -183,7 +182,6 @@ public class Nodes{
 						}
 					}
 				}
-				circle.clickIndex = 0;
 				mousex = event.getX();
 				mousey = event.getY();
 			}
@@ -194,23 +192,16 @@ public class Nodes{
 				if(event.getButton().equals(MouseButton.SECONDARY)){
 					circle.menu.setVisible(true);
 				}
-				for(int i = 0; i < dataArrays.FacilityNodes.size(); i++){
-					if(dataArrays.FacilityNodes.get(i).getId() != circle.getId()){
-						dataArrays.FacilityNodes.get(i).clickIndex = 0;
+				if (event.getClickCount() >= 2){
+					if(circle.childrenShow == true){
+						circle.childrenShow = false;
+						visFunctions.reloadPane();
+					}else{
+						circle.childrenShow = true;
+						visFunctions.reloadPane();
 					}
 				}
 				if(event.getButton().equals(MouseButton.PRIMARY)){
-					circle.clickIndex += 1;
-					if(circle.clickIndex == 2){
-						if(circle.childrenShow == true){
-							circle.childrenShow = false;
-							visFunctions.reloadPane();
-						}else{
-							circle.childrenShow = true;
-							visFunctions.reloadPane();
-						}
-						circle.clickIndex = 0;
-					}
 					for(int i = 0; i < Cycic.pane.getChildren().size(); i++){
 						Cycic.pane.getChildren().get(i).setEffect(null);	
 					}

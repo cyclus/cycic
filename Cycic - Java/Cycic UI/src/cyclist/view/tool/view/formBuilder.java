@@ -108,6 +108,9 @@ public class formBuilder extends View {
 							// Indenting a sub structure
 							columnNumber += 1;
 							for(int ii = 0; ii < dataArray.size(); ii ++){
+								if ( ii > 0 ) {
+									grid.add(arrayListRemove(dataArray, ii), columnNumber-1, rowNumber);
+								}
 								formBuilder((ArrayList<Object>)facArray.get(1), (ArrayList<Object>) dataArray.get(ii));	
 								rowNumber += 1;
 							}
@@ -165,6 +168,9 @@ public class formBuilder extends View {
 					case "Outcommodity":
 						grid.add(formBuilderFunctions.comboBoxOutCommod(formNode, dataArray), 1+columnNumber, rowNumber);
 						break;
+					case "Recipe":
+						grid.add(formBuilderFunctions.recipeComboBox(formNode, dataArray), 1+columnNumber, rowNumber);
+						break;
 					default:
 						grid.add(formBuilderFunctions.textFieldBuilder((ArrayList<Object>)dataArray), 1+columnNumber, rowNumber);
 						columnEnd = 2 + columnNumber;
@@ -197,6 +203,22 @@ public class formBuilder extends View {
 				formBuilder(formNode.facilityStructure, formNode.facilityData);
 			}
 		});
+		return button;
+	}
+	
+	public Button arrayListRemove(final ArrayList<Object> dataArray, final int dataArrayNumber){
+		Button button = new Button();
+		button.setText("Remove");
+		
+		button.setOnAction(new EventHandler<ActionEvent>(){
+			public void handle(ActionEvent e) {
+				dataArray.remove(dataArrayNumber);
+				grid.getChildren().clear();
+				rowNumber = 0;
+				formBuilder(formNode.facilityStructure, formNode.facilityData);
+			}
+		});		
+		
 		return button;
 	}
 }

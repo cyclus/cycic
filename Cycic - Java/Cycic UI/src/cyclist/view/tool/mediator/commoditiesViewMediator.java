@@ -1,5 +1,7 @@
 package cyclist.view.tool.mediator;
 
+import org.puremvc.java.multicore.interfaces.INotification;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
@@ -33,6 +35,12 @@ public class commoditiesViewMediator extends CyclistMediator {
 					sendNotification(ApplicationConstants.REMOVE_VIEW, getMediatorName());
 				}
 			});
+		}
+	}
+	
+	public void handleNotification(INotification notification){
+		if (notification.getName() == ApplicationConstants.ADD_COMMODITY) {
+			commoditiesView.addNewCommodity();		
 		}
 	}
 }

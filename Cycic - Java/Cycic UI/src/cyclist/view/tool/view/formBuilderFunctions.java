@@ -6,15 +6,11 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Orientation;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
 
 /**
  * This class is built to handle all of the functions used in building the forms for Cycic. 
@@ -76,8 +72,7 @@ public class formBuilderFunctions {
 		
 		textField.textProperty().addListener(new ChangeListener<Object>(){         
 			public void changed(ObservableValue<?> observable, Object oldValue, Object newValue){
-				defaultValue.clear();
-				defaultValue.add((String) newValue);
+				defaultValue.set(0, newValue);
 			}
 		});
 		
@@ -123,6 +118,31 @@ public class formBuilderFunctions {
 		return textField;
 	}
 	
+	static TextField regionNameBuilder(final regionNode node, final ArrayList<Object> dataArray){
+		TextField textField = new TextField();
+		textField.setText((String) node.name);
+		
+		textField.textProperty().addListener(new ChangeListener<String>(){         
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue){
+				node.name = (String) newValue;
+				dataArray.set(0, newValue);
+			}
+		});
+		return textField;
+	}
+	
+	static TextField institNameBuilder(final instituteNode node, final ArrayList<Object> dataArray){
+		TextField textField = new TextField();
+		textField.setText((String) node.name);
+		
+		textField.textProperty().addListener(new ChangeListener<String>(){         
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue){
+				node.name = (String) newValue;
+				dataArray.set(0, newValue);
+			}
+		});
+		return textField;
+	}
 	/**
 	 * This function builds the slider for continuous ranges given a minimum and maximum. 
 	 * @param string The string containing a range in the following format "min...max"
@@ -226,6 +246,8 @@ public class formBuilderFunctions {
 	static ComboBox<String> comboBoxInCommod(final facilityCircle facNode, final ArrayList<Object> defaultValue){
 		// Create and fill the comboBox
 		final ComboBox<String> cb = new ComboBox<String>();
+		cb.setMinWidth(80);
+
 		cb.setOnMousePressed(new EventHandler<MouseEvent>(){
 			public void handle(MouseEvent e){
 				cb.getItems().clear();
@@ -235,6 +257,10 @@ public class formBuilderFunctions {
 				cb.getItems().add("New Commodity");
 			}
 		});
+		
+		if ( defaultValue.get(0) != "") {
+			cb.setValue((String) defaultValue.get(0));
+		}
 		
 		
 		cb.valueProperty().addListener(new ChangeListener<String>(){
@@ -294,6 +320,8 @@ public class formBuilderFunctions {
 	static ComboBox<String> comboBoxOutCommod(final facilityCircle facNode, final ArrayList<Object> defaultValue){
 		// Create and fill the comboBox
 		final ComboBox<String> cb = new ComboBox<String>();
+		cb.setMinWidth(80);
+		
 		cb.setOnMousePressed(new EventHandler<MouseEvent>(){
 			public void handle(MouseEvent e){
 				cb.getItems().clear();
@@ -304,6 +332,9 @@ public class formBuilderFunctions {
 			}
 		});
 		
+		if ( defaultValue.get(0) != "") {
+			cb.setValue((String) defaultValue.get(0));
+		}
 		
 		cb.valueProperty().addListener(new ChangeListener<String>(){
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue){
@@ -313,7 +344,7 @@ public class formBuilderFunctions {
 				Object lazySpaceSaver = null;
 				Boolean hiddenLinkTest = false;
 				if (newValue == "New Commodity"){
-					// Tell Commodity Window to add a new commodity 
+					//
 				} else {
 					for (marketCircle circle: dataArrays.marketNodes){
 						if (newValue == circle.commodity){
@@ -350,6 +381,30 @@ public class formBuilderFunctions {
 			}
 		});
 
+		return cb;
+	}
+	
+	static ComboBox<String> recipeComboBox(facilityCircle facNode, final ArrayList<Object> defaultValue){
+		final ComboBox<String> cb = new ComboBox<String>();
+		
+		cb.setValue((String) defaultValue.get(0));
+		
+		cb.setOnMousePressed(new EventHandler<MouseEvent>(){
+			public void handle(MouseEvent e){
+				cb.getItems().clear();
+				for (Nrecipe recipe: dataArrays.Recipes) {
+					cb.getItems().add(recipe.Name);
+				}
+			}
+		});
+		
+		cb.valueProperty().addListener(new ChangeListener<String>(){
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue){
+				defaultValue.set(0, newValue);
+			}
+		});
+		
+		
 		return cb;
 	}
 }

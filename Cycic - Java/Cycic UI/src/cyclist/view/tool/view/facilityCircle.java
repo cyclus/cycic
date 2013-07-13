@@ -17,13 +17,14 @@ public class facilityCircle extends Circle {
 	ArrayList<Double> childrenDeltaX = new ArrayList<Double>();
 	ArrayList<Double> childrenDeltaY = new ArrayList<Double>();
 	ArrayList<Integer> rgbColor = new ArrayList<Integer>();
+	/*ArrayList<String> incommods = new ArrayList<String>();
+	ArrayList<String> outcommods = new ArrayList<String>();*/
 	MenuBar menu = new MenuBar();
 	Text text = new Text();
 	ImageView image = new ImageView();
 	String type = new String();
 	String parent = new String();
 	Integer parentIndex;
-	Integer clickIndex;
 	Object name; 
 	Boolean childrenShow;
 }
