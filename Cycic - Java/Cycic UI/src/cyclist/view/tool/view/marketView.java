@@ -13,11 +13,13 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 
 public class marketView extends View{
 	public marketView(){
@@ -50,7 +52,7 @@ public class marketView extends View{
 			}
 		});
 		
-		topGrid.add(new Label((String) formNode.name), 0, 0);
+		topGrid.add(formBuilderFunctions.marketNameBuilder(formNode), 0, 0);
 		topGrid.add(new Label("User Level"), 1, 0);
 		topGrid.add(userLevelBox, 2, 0);
 		topGrid.add(button, 3, 0);
@@ -90,13 +92,21 @@ public class marketView extends View{
 		grid.setPadding(new Insets(30, 30, 30, 30));
 		grid.setStyle("-fx-background-color: Orange;");
 		
-		setOnMousePressed(new EventHandler<MouseEvent>(){
+		VBox formGrid = new VBox();
+		formGrid.getChildren().addAll(topGrid, grid);
+		final ScrollPane sc = new ScrollPane();
+		sc.setPrefSize(500, 500);
+		sc.setStyle("-fx-background-color: Orange;");
+		sc.setContent(formGrid);
+		
+		// This is a quick hack.
+		sc.setOnMousePressed(new EventHandler<MouseEvent>(){
 			public void handle(MouseEvent e){
 				Cycic.workingMarket = formNode;
 			}
 		});
-		setContent(topGrid);
-		setContent(grid);
+		
+		setContent(sc);
 	}
 	
 	private ComboBox<String> userLevelBox = new ComboBox<String>();

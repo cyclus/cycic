@@ -13,18 +13,24 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import cyclist.view.component.View;
 
 public class regionView extends View{
 	public regionView(){
 		super();
 		
+		final ListView<String> facilityList = new ListView<String>();
+		facilityList.setOrientation(Orientation.VERTICAL);
+		facilityList.setMinHeight(25);
 		
 		structureCB.setOnMouseClicked(new EventHandler<MouseEvent>(){
 			public void handle(MouseEvent e){
@@ -51,7 +57,11 @@ public class regionView extends View{
 					formBuilder(workingRegion.regionStruct, workingRegion.regionData);
 				} else {
 					grid.getChildren().clear();
+					facilityList.getItems().clear();
 					workingRegion = dataArrays.regionNodes.get(structureCB.getItems().indexOf(newValue));
+					for(int i = 0; i < workingRegion.availFacilities.size(); i++){
+						facilityList.getItems().add(workingRegion.availFacilities.get(i));
+					}
 					formBuilder(workingRegion.regionStruct, workingRegion.regionData);
 				}
 			}
@@ -69,10 +79,7 @@ public class regionView extends View{
 		topGrid.add(structureCB, 0, 0);
 		topGrid.add(button, 2, 0);
 		
-		final ListView<String> facilityList = new ListView<String>();
-		facilityList.setOrientation(Orientation.HORIZONTAL);
-		facilityList.setMinHeight(25);
-		facilityList.setMaxHeight(25);
+
 
 		facilityList.setOnMousePressed(new EventHandler<MouseEvent>(){
 			public void handle(MouseEvent event){
@@ -108,21 +115,42 @@ public class regionView extends View{
 			}
 		});
 		
-
-		topGrid.add(new Label("Available Facilities"), 0, 1);
-		topGrid.add(facilityList, 1, 1);
 		topGrid.add(addNewFacilityBox, 0, 2);
 		topGrid.add(addAvailFac, 1, 2);
 		topGrid.setHgap(10);
+		topGrid.setVgap(2);
 		
 		grid.autosize();
 		grid.setAlignment(Pos.BASELINE_CENTER);
 		grid.setVgap(10);
 		grid.setHgap(5);
-		grid.setPadding(new Insets(30, 30, 30, 30));
+		grid.setPadding(new Insets(5, 5, 5, 5));
 		grid.setStyle("-fx-background-color: Orange;");
-		setContent(topGrid);
-		setContent(grid);
+				
+		VBox regionSideBar = new VBox();
+		regionSideBar.setPadding(new Insets(0, 5, 0, 0));
+		regionSideBar.setMinWidth(100);
+		regionSideBar.setPrefWidth(100);
+		regionSideBar.getChildren().add(new Label("Available Facilities"));
+		regionSideBar.getChildren().add(facilityList);
+		
+		VBox regionGridBox = new VBox();
+		regionGridBox.getChildren().addAll(topGrid, grid);		
+		
+		HBox regionBox = new HBox();
+		regionBox.getChildren().addAll(regionSideBar, regionGridBox);
+		
+		final ScrollPane sc = new ScrollPane();
+		sc.setPrefSize(500, 500);
+		sc.setContent(regionBox);
+		sc.setStyle("-fx-background-color: Orange;");
+		setContent(sc);
+		
+		/*setOnMouseDragged(new EventHandler<MouseEvent>(){
+			public void handle(MouseEvent e){
+				sc.setPrefSize(getWidth(), getHeight());
+			}
+		});*/
 		
 		if (dataArrays.regionStructs.size() < 1) {
 			practiceRegions.init();
