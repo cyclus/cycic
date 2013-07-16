@@ -95,7 +95,7 @@ public class formBuilder extends View {
 	 * @param dataArray The empty data array that is associated with this facility. It should be built to match the structure
 	 * of the facility structure passed to the form. 
 	 */
-	public void formBuilder(ArrayList<Object> facArray, ArrayList<Object> dataArray){
+	/*public void formBuildertest(ArrayList<Object> facArray, ArrayList<Object> dataArray){
 		for(int i = 0; i < dataArray.size(); i++){
 			if (dataArray.get(i) instanceof ArrayList){
 				if(facArray.size() > 2){
@@ -103,14 +103,15 @@ public class formBuilder extends View {
 						if ((int)facArray.get(6) <= userLevel && i == 0){
 							Label name = new Label((String) facArray.get(0));
 							grid.add(name, columnNumber, rowNumber);
-							grid.add(orMoreAddButton(grid, dataArray), 1+columnNumber, rowNumber);
+							grid.add(orMoreAddButton(grid, (ArrayList) facArray, (ArrayList) dataArray), 1+columnNumber, rowNumber);
 							rowNumber += 1;
 							// Indenting a sub structure
 							columnNumber += 1;
 							for(int ii = 0; ii < dataArray.size(); ii ++){
 								if ( ii > 0 ) {
-									grid.add(arrayListRemove(dataArray, ii), columnNumber-1, rowNumber);
+									
 								}
+								grid.add(arrayListRemove(dataArray, ii), columnNumber-1, rowNumber);
 								formBuilder((ArrayList<Object>)facArray.get(1), (ArrayList<Object>) dataArray.get(ii));	
 								rowNumber += 1;
 							}
@@ -182,7 +183,7 @@ public class formBuilder extends View {
 				rowNumber += 1;
 			}
 		}
-	}
+	}*/
 	
 	/**
 	 * 
@@ -190,13 +191,13 @@ public class formBuilder extends View {
 	 * @param dataArray
 	 * @return
 	 */
-	public Button orMoreAddButton(final GridPane grid, final ArrayList<Object> dataArray){
+	public Button orMoreAddButton(final GridPane grid, final ArrayList<Object> facArray,final ArrayList<Object> dataArray){
 		Button button = new Button();
 		button.setText("Add");
 		
 		button.setOnAction(new EventHandler<ActionEvent>(){
 			public void handle(ActionEvent e){
- 				formBuilderFunctions.arrayListCopy(dataArray, (ArrayList<Object>) dataArray.get(0));
+ 				formBuilderFunctions.formArrayBuilder(facArray, (ArrayList<Object>) dataArray);
 				grid.getChildren().clear();
 				rowNumber = 0;
 				//formBuilder(practiceFacs.Structures.get(formNode.facTypeIndex), formNode.facilityData);
@@ -220,6 +221,107 @@ public class formBuilder extends View {
 		});		
 		
 		return button;
+	}
+	
+	public void formBuilder(ArrayList<Object> facArray, ArrayList<Object> dataArray){
+		for (int i = 0; i < facArray.size(); i++){
+			if (facArray.get(i) instanceof ArrayList && facArray.get(0) instanceof ArrayList) {
+				formBuilder((ArrayList<Object>) facArray.get(i), (ArrayList<Object>) dataArray.get(i));
+			} else if (i == 0){
+				if (facArray.get(2) == "oneOrMore"){
+					if ((int)facArray.get(6) <= userLevel && i == 0){
+						Label name = new Label((String) facArray.get(0));
+						grid.add(name, columnNumber, rowNumber);
+						grid.add(orMoreAddButton(grid, (ArrayList) facArray, (ArrayList) dataArray), 1+columnNumber, rowNumber);
+						rowNumber += 1;
+						// Indenting a sub structure
+						columnNumber += 1;
+						for(int ii = 0; ii < dataArray.size(); ii ++){
+							if ( ii > 0 ) {
+								grid.add(arrayListRemove(dataArray, ii), columnNumber-1, rowNumber);
+							}
+							formBuilder((ArrayList<Object>)facArray.get(1), (ArrayList<Object>) dataArray.get(ii));	
+							rowNumber += 1;
+						}
+						// resetting the indent
+						columnNumber -= 1;
+					}
+				} else if (facArray.get(2) == "zeroOrMore") {
+					if ((int)facArray.get(6) <= userLevel && i == 0){
+						Label name = new Label((String) facArray.get(0));
+						grid.add(name, columnNumber, rowNumber);
+						grid.add(orMoreAddButton(grid, (ArrayList) facArray, (ArrayList) dataArray), 1+columnNumber, rowNumber);
+						rowNumber += 1;
+						// Indenting a sub structure
+						columnNumber += 1;
+						for(int ii = 0; ii < dataArray.size(); ii ++){
+							grid.add(arrayListRemove(dataArray, ii), columnNumber-1, rowNumber);
+							formBuilder((ArrayList<Object>)facArray.get(1), (ArrayList<Object>) dataArray.get(ii));	
+							rowNumber += 1;
+						}
+						// resetting the indent
+						columnNumber -= 1;
+					}
+				} else if (facArray.get(2) == "input" || facArray.get(2) == "output") {
+					if ((int)facArray.get(6) <= userLevel){
+						Label name = new Label((String) facArray.get(0));
+						grid.add(name, columnNumber, rowNumber);
+						rowNumber += 1;
+						// Indenting a sub structure
+						columnNumber += 1;
+						for(int ii = 0; ii < dataArray.size(); ii ++){
+							formBuilder((ArrayList<Object>)facArray.get(1), (ArrayList<Object>) dataArray.get(ii));						
+						}
+						// resetting the indent
+						columnNumber -= 1;
+					}
+				} else {
+					// Adding the label
+					Label name = new Label((String) facArray.get(0));
+					name.setTooltip(new Tooltip((String) facArray.get(7)));
+					grid.add(name, columnNumber, rowNumber);
+					// Setting up the input type for the label
+					if (facArray.get(4) != null){
+						// If statement to test for a continuous range for sliders.
+						if (facArray.get(4).toString().split("[...]").length > 1){
+							Slider slider = formBuilderFunctions.sliderBuilder(facArray.get(4).toString(), dataArray.get(0).toString());
+							TextField textField = formBuilderFunctions.sliderTextFieldBuilder(slider, dataArray);
+							grid.add(slider, 1+columnNumber, rowNumber);
+							grid.add(textField, 2+columnNumber, rowNumber);
+							columnEnd = 2+columnNumber+1;
+						// Slider with discrete steps
+						} else {
+							ComboBox<String> cb = formBuilderFunctions.comboBoxBuilder(facArray.get(4).toString(), dataArray);
+							grid.add(cb, 1+columnNumber, rowNumber);
+							columnEnd = 2 + columnNumber;
+						}
+					} else {
+						switch ((String) facArray.get(0)) {
+						case "Name":
+							grid.add(formBuilderFunctions.nameFieldBuilder(formNode, dataArray), 1+columnNumber, rowNumber);
+							columnEnd = 2 + columnNumber;
+							break;
+						case "Incommodity":
+							grid.add(formBuilderFunctions.comboBoxInCommod(formNode, dataArray), 1+columnNumber, rowNumber);
+							break;
+						case "Outcommodity":
+							grid.add(formBuilderFunctions.comboBoxOutCommod(formNode, dataArray), 1+columnNumber, rowNumber);
+							break;
+						case "Recipe":
+							grid.add(formBuilderFunctions.recipeComboBox(formNode, dataArray), 1+columnNumber, rowNumber);
+							break;
+						default:
+							grid.add(formBuilderFunctions.textFieldBuilder((ArrayList<Object>)dataArray), 1+columnNumber, rowNumber);
+							columnEnd = 2 + columnNumber;
+							break;
+						}
+					}
+					grid.add(formBuilderFunctions.unitsBuilder((String)facArray.get(3)), columnEnd, rowNumber);
+					columnEnd = 0;
+					rowNumber += 1;
+				}
+			}
+		}
 	}
 }
 

@@ -76,62 +76,44 @@ public class outPut {
 					regionID.appendChild(allowedFac);
 				}
 				
-				regionBuilder(doc, regionID, dataArrays.regionStructs.get(0), dataArrays.regionNodes.get(0), "growthregion");
-			}
-			// Following is a quick hack //
-			Element regionID = doc.createElement("region");
-			rootElement.appendChild(regionID);
-			
-			for(facilityCircle facility: dataArrays.FacilityNodes){
-				Element allowedFac = doc.createElement("allowedfacility");
-				allowedFac.appendChild(doc.createTextNode((String)facility.name));
-				regionID.appendChild(allowedFac);
-			}
-			
-			for (regionNode region: dataArrays.regionNodes){
-				Element regionName = facilityNameElement(doc, (ArrayList<Object>) region.regionData.get(0));
-				regionID.appendChild(regionName);
-				regionBuilder(doc, regionID, region.regionStruct, region.regionData, region.type);
-			}
+				regionBuilder(doc, regionID, region.regionStruct, region.regionData, "growthregion");
 				
-			
-			
-			
+				Element institID = doc.createElement("institution");
+				regionID.appendChild(institID);
+
+				for(String facility: region.availFacilities){
+					Element allowedFac = doc.createElement("availableprototype");
+					allowedFac.appendChild(doc.createTextNode(facility));
+					institID.appendChild(allowedFac);
+				}
+
+				Element initialFacilities = doc.createElement("initialfacilitylist");
+				for(String facility: region.availFacilities){
+					Element entry = doc.createElement("entry");
+
+					Element prototype = doc.createElement("prototype");
+					entry.appendChild(prototype);
+
+					prototype.appendChild(doc.createTextNode(facility));
+
+					Element number = doc.createElement("number");
+					/*if(facility.childrenList.size() >= 2){
+						number.appendChild(doc.createTextNode(String.format("%f", facility.childrenList.size())));
+					} else {
+						number.appendChild(doc.createTextNode("1"));
+					}
+					entry.appendChild(number);
+					initialFacilities.appendChild(entry);*/
+				}
+				institID.appendChild(initialFacilities);
+
+				for (instituteNode institute: dataArrays.institNodes) {
+					regionBuilder(doc, institID, institute.institStruct, institute.institData, institute.type);
+				}
+			}
 			// Institutions
 			
-			Element institID = doc.createElement("institution");
-			regionID.appendChild(institID);
-			
-			for(facilityCircle facility: dataArrays.FacilityNodes){
-				Element allowedFac = doc.createElement("availableprototype");
-				allowedFac.appendChild(doc.createTextNode((String)facility.name));
-				institID.appendChild(allowedFac);
-			}
-			
-			Element initialFacilities = doc.createElement("initialfacilitylist");
-			for(facilityCircle facility: dataArrays.FacilityNodes){
-				Element entry = doc.createElement("entry");
-				
-				Element prototype = doc.createElement("prototype");
-				entry.appendChild(prototype);
-				
-				prototype.appendChild(doc.createTextNode((String)facility.name));
-				
-				Element number = doc.createElement("number");
-				if(facility.childrenList.size() >= 2){
-					number.appendChild(doc.createTextNode(String.format("%f", facility.childrenList.size())));
-				} else {
-					number.appendChild(doc.createTextNode("1"));
-				}
-				entry.appendChild(number);
-				initialFacilities.appendChild(entry);
-			}
-			institID.appendChild(initialFacilities);
-			
-			for (instituteNode institute: dataArrays.institNodes) {
-				regionBuilder(doc, institID, institute.institStruct, institute.institData, institute.type);
-			}
-			// End quick hack //
+
 			
 			
 			//Recipes
