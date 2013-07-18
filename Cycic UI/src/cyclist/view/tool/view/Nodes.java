@@ -66,9 +66,6 @@ public class Nodes{
 		cloneNode.setHideOnClick(false);
 		cloneNode.setOnAction(new EventHandler<ActionEvent>(){
 			public void handle(ActionEvent e){
-				/*CustomMenuItem testBoxing = new CustomMenuItem(new TextField());
-				testBoxing.setHideOnClick(false);
-				clonesList.getItems().add(testBoxing);*/
 				Clones.addClone("", circle, circle.childrenShow);
 			}
 		});
@@ -214,7 +211,7 @@ public class Nodes{
 				if(event.isShiftDown() == true){
 					Dragboard db = circle.startDragAndDrop(TransferMode.COPY);
 					ClipboardContent content = new ClipboardContent();
-					content.put( DnD.TOOL_FORMAT, "formBuilder");
+					content.put( DnD.TOOL_FORMAT, "Form Builder");
 					db.setContent(content);
 					event.consume();
 				}

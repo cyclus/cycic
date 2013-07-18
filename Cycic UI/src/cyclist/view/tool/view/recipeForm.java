@@ -27,7 +27,7 @@ public class recipeForm extends View{
 	private GridPane topRecipeGrid = new GridPane();
 	private GridPane recipeGrid = new GridPane();
 	private ComboBox<String> recipiesList = new ComboBox<String>();
-	private int rowNumber = 3;
+	private int rowNumber;
 	
 	/**
 	 * 
@@ -88,6 +88,7 @@ public class recipeForm extends View{
 	 * 
 	 */
 	public void recipeGenInfo(final Nrecipe recipe){
+		rowNumber = 3;
 		recipeGrid.getChildren().clear();
 		Label name = new Label("Recipe Name");
 		TextField recipeName = new TextField();
@@ -173,8 +174,22 @@ public class recipeForm extends View{
 			}
 		});
 		recipeGrid.add(isoWeightFrac, 3, rowNumber);
+		recipeGrid.add(removeIsotope(recipe, isoData), 4, rowNumber);
 		recipe.Composition.add(isoData);
 		rowNumber += 1;
+	}
+	
+	public Button removeIsotope(final Nrecipe recipe, final isotopeData isoData){
+		Button removeIso = new Button();
+		removeIso.setText("Remove");
+		removeIso.setOnAction(new EventHandler<ActionEvent>(){
+			public void handle(ActionEvent event){
+				recipe.Composition.remove(isoData);
+				loadRecipe(recipe);
+			}
+		});
+		
+		return removeIso;
 	}
 	
 	/**
@@ -225,6 +240,7 @@ public class recipeForm extends View{
 			isoWeightFrac.setText(String.valueOf(iso.weightFrac));
 			isoWeightFrac.setMaxSize(80, 20);
 			recipeGrid.add(isoWeightFrac, 3, rowNumber);
+			recipeGrid.add(removeIsotope(recipe, iso), 4, rowNumber);
 			
 			rowNumber += 1;
 		}

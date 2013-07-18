@@ -17,7 +17,7 @@ public class formBuilderTool implements Tool {
 
 	@Override
 	public String getName() {
-		return "formBuilder";
+		return "Form Builder";
 	}
 
 	@Override

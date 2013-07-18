@@ -35,6 +35,9 @@ public class Cycic extends View{
 		
 		HBox cycicBox = new HBox();
 		Cycic.pane.setId("cycicPane");
+		Cycic.pane.setPrefSize(1000, 1000);
+		Cycic.pane.setClip(getParent());
+		Cycic.pane.setStyle("-fx-background-color: white;");
 		
 		//Temporary simulation data
 		dataArrays.simInfor.add("12");

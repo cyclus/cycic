@@ -94,7 +94,7 @@ public class Clones {
 				if(event.isShiftDown() == true){
 					Dragboard db = clone.startDragAndDrop(TransferMode.COPY);
 					ClipboardContent content = new ClipboardContent();
-					content.put( DnD.TOOL_FORMAT, "formBuilder");
+					content.put( DnD.TOOL_FORMAT, "Form Builder");
 					db.setContent(content);
 					event.consume();
 				}
@@ -116,17 +116,18 @@ public class Clones {
 			public void handle(MouseEvent event){
 				clone.setCenterX(mousex+x);
 				clone.setCenterY(mousey+y);
-				if(clone.getCenterX() <= clone.getParent().getLayoutBounds().getMinX()+clone.getRadius()){
-					clone.setCenterX(clone.getParent().getLayoutBounds().getMinX()+clone.getRadius());
+				
+				if(clone.getCenterX() <= Cycic.pane.getLayoutBounds().getMinX()+clone.getRadius()){
+					clone.setCenterX(Cycic.pane.getLayoutBounds().getMinX()+clone.getRadius());
 				}
-				if(clone.getCenterY() <= clone.getParent().getLayoutBounds().getMinY()+clone.getRadius()){
-					clone.setCenterY(clone.getParent().getLayoutBounds().getMinY()+clone.getRadius());
+				if(clone.getCenterY() <= Cycic.pane.getLayoutBounds().getMinY()+clone.getRadius()){
+					clone.setCenterY(Cycic.pane.getLayoutBounds().getMinY()+clone.getRadius());
 				}
-				if(clone.getCenterY() >= clone.getParent().getParent().getLayoutBounds().getMaxY()-clone.getRadius()-60){
-					clone.setCenterY(clone.getParent().getParent().getLayoutBounds().getMaxY()-clone.getRadius()-60);
+				if(clone.getCenterY() >= Cycic.pane.getLayoutBounds().getMaxY()-clone.getRadius()){
+					clone.setCenterY(Cycic.pane.getLayoutBounds().getMaxY()-clone.getRadius());
 				}
-				if(clone.getCenterX() >= clone.getParent().getParent().getLayoutBounds().getMaxX()-clone.getRadius()){
-					clone.setCenterX(clone.getParent().getParent().getLayoutBounds().getMaxX()-clone.getRadius());
+				if(clone.getCenterX() >= Cycic.pane.getLayoutBounds().getMaxX()-clone.getRadius()){
+					clone.setCenterX(Cycic.pane.getLayoutBounds().getMaxX()-clone.getRadius());
 				}
 				clone.menu.setLayoutX(clone.getCenterX());
 				clone.menu.setLayoutY(clone.getCenterY());

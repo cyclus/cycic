@@ -17,7 +17,7 @@ public class cycicTool implements Tool {
 
 	@Override
 	public String getName() {
-		return "Cycic";
+		return "CYCIC";
 	}
 
 	@Override

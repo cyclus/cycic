@@ -47,6 +47,7 @@ public class formBuilder extends View {
 		for(int i = 0; i < 11; i++){
 			userLevelBox.getItems().add(String.format("%d", i));
 		}
+		userLevelBox.setValue(Integer.toString(userLevel));
 		userLevelBox.valueProperty().addListener(new ChangeListener<String>(){
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue){
 				userLevelBox.setValue(newValue);
@@ -68,13 +69,13 @@ public class formBuilder extends View {
 		grid.setVgap(15);
 		grid.setHgap(10);
 		grid.setPadding(new Insets(5, 5, 5, 5));
-		grid.setStyle("-fx-background-color: Orange;");
+		grid.setStyle("-fx-background-color: silver;");
 		
 		VBox formGrid = new VBox();
 		formGrid.getChildren().addAll(topGrid, grid);
 		final ScrollPane sc = new ScrollPane();
 		sc.setPrefSize(500, 800);
-		sc.setStyle("-fx-background-color: Orange;");
+		sc.setStyle("-fx-background-color: silver;");
 		sc.setContent(formGrid);
 		
 		// This is a quick hack. 
@@ -95,7 +96,7 @@ public class formBuilder extends View {
 	private int rowNumber = 0;
 	private int columnNumber = 0;
 	private int columnEnd = 0;
-	private int userLevel= 1;
+	private int userLevel= 0;
 	
 	/**
 	 * 
@@ -187,7 +188,7 @@ public class formBuilder extends View {
 						// resetting the indent
 						columnNumber -= 1;
 					}
-				} else {
+				} else if ((int) facArray.get(6) <= userLevel){
 					// Adding the label
 					Label name = new Label((String) facArray.get(0));
 					name.setTooltip(new Tooltip((String) facArray.get(7)));

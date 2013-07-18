@@ -2,6 +2,8 @@ package cyclist.view.tool.view;
 
 import java.util.ArrayList;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -17,6 +19,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
+import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -24,12 +27,35 @@ import javafx.scene.layout.VBox;
 import cyclist.view.component.View;
 
 public class regionView extends View{
+	public ObjectProperty<EventHandler<ActionEvent>> onActionProperty() {
+		return actionProperty;
+	}
 	public regionView(){
 		super();
 		
 		final ListView<String> facilityList = new ListView<String>();
 		facilityList.setOrientation(Orientation.VERTICAL);
 		facilityList.setMinHeight(25);
+		facilityList.setOnMousePressed(new EventHandler<MouseEvent>(){
+			public void handle(MouseEvent event){
+				if (event.isSecondaryButtonDown()){
+					workingRegion.availFacilities.remove(facilityList.getSelectionModel().getSelectedItem());
+					facilityList.getItems().remove(facilityList.getSelectionModel().getSelectedItem());
+				}
+			}
+		});
+		
+		final ListView<String> institList = new ListView<String>();
+		institList.setOrientation(Orientation.VERTICAL);
+		institList.setMinHeight(25);
+		institList.setOnMousePressed(new EventHandler<MouseEvent>(){
+			public void handle(MouseEvent event){
+				if (event.isSecondaryButtonDown()){
+					workingRegion.availFacilities.remove(facilityList.getSelectionModel().getSelectedItem());
+					institList.getItems().remove(facilityList.getSelectionModel().getSelectedItem());
+				}
+			}
+		});		
 		
 		structureCB.setOnMouseClicked(new EventHandler<MouseEvent>(){
 			public void handle(MouseEvent e){
@@ -56,11 +82,15 @@ public class regionView extends View{
 					formBuilderFunctions.formArrayBuilder(workingRegion.regionStruct, workingRegion.regionData);
 					formBuilder(workingRegion.regionStruct, workingRegion.regionData);
 				} else {
+					rowNumber = 0;
 					grid.getChildren().clear();
 					facilityList.getItems().clear();
 					workingRegion = dataArrays.regionNodes.get(structureCB.getItems().indexOf(newValue));
 					for(int i = 0; i < workingRegion.availFacilities.size(); i++){
 						facilityList.getItems().add(workingRegion.availFacilities.get(i));
+					}
+					for (int i = 0; i < workingRegion.institutions.size(); i++){
+						institList.getItems().add(workingRegion.institutions.get(i));
 					}
 					formBuilder(workingRegion.regionStruct, workingRegion.regionData);
 				}
@@ -79,17 +109,6 @@ public class regionView extends View{
 		topGrid.add(structureCB, 0, 0);
 		topGrid.add(button, 2, 0);
 		
-
-
-		facilityList.setOnMousePressed(new EventHandler<MouseEvent>(){
-			public void handle(MouseEvent event){
-				if (event.isSecondaryButtonDown()){
-					workingRegion.availFacilities.remove(facilityList.getSelectionModel().getSelectedItem());
-					facilityList.getItems().remove(facilityList.getSelectionModel().getSelectedItem());
-				}
-			}
-		});
-
 		final ComboBox<String> addNewFacilityBox = new ComboBox<String>();
 		addNewFacilityBox.setOnMousePressed(new EventHandler<MouseEvent>(){
 			public void handle(MouseEvent e){
@@ -115,8 +134,33 @@ public class regionView extends View{
 			}
 		});
 		
+		final ComboBox<String> addNewInstitBox = new ComboBox<String>();
+		addNewInstitBox.setOnMousePressed(new EventHandler<MouseEvent>(){
+			public void handle(MouseEvent event){
+				addNewInstitBox.getItems().clear();
+				for (instituteNode instit: dataArrays.institNodes){
+					addNewInstitBox.getItems().add(instit.name);
+				}
+			}
+		});
+		
+		Button addInstit = new Button();
+		addInstit.setText("Add Institution");
+		addInstit.setOnAction(new EventHandler<ActionEvent>(){
+			public void handle(ActionEvent event){
+				institList.getItems().clear();
+				for (String instit: workingRegion.institutions){
+					institList.getItems().add(instit);
+				}
+				institList.getItems().add(addNewInstitBox.getValue());
+				workingRegion.institutions.add(addNewInstitBox.getValue());
+			}
+		});
+		
 		topGrid.add(addNewFacilityBox, 0, 2);
 		topGrid.add(addAvailFac, 1, 2);
+		topGrid.add(addNewInstitBox, 0, 3);
+		topGrid.add(addInstit, 1, 3);
 		topGrid.setHgap(10);
 		topGrid.setVgap(2);
 		
@@ -125,14 +169,17 @@ public class regionView extends View{
 		grid.setVgap(10);
 		grid.setHgap(5);
 		grid.setPadding(new Insets(5, 5, 5, 5));
-		grid.setStyle("-fx-background-color: Orange;");
+		grid.setStyle("-fx-background-color: silver;");
 				
-		VBox regionSideBar = new VBox();
+		HBox regionSideBar = new HBox();
+		VBox facilitiesBox = new VBox();
+		facilitiesBox.getChildren().addAll(new Label("Allowed Facilities"), facilityList);
+		VBox institBox = new VBox();
+		institBox.getChildren().addAll(new Label("Institutions"), institList);
 		regionSideBar.setPadding(new Insets(0, 5, 0, 0));
-		regionSideBar.setMinWidth(100);
-		regionSideBar.setPrefWidth(100);
-		regionSideBar.getChildren().add(new Label("Available Facilities"));
-		regionSideBar.getChildren().add(facilityList);
+		regionSideBar.setMinWidth(200);
+		regionSideBar.setPrefWidth(200);
+		regionSideBar.getChildren().addAll(facilitiesBox, institBox);
 		
 		VBox regionGridBox = new VBox();
 		regionGridBox.getChildren().addAll(topGrid, grid);		
@@ -143,7 +190,7 @@ public class regionView extends View{
 		final ScrollPane sc = new ScrollPane();
 		sc.setPrefSize(500, 500);
 		sc.setContent(regionBox);
-		sc.setStyle("-fx-background-color: Orange;");
+		sc.setStyle("-fx-background-color: silver;");
 		setContent(sc);
 		setPrefSize(600,400);
 		
@@ -167,6 +214,7 @@ public class regionView extends View{
 	private int columnEnd = 0;
 	private int userLevel = 0;
 	static regionNode workingRegion;
+	final private ObjectProperty<EventHandler<ActionEvent>> actionProperty = new SimpleObjectProperty<EventHandler<ActionEvent>>();
 	/**
 	 * This function takes a constructed data array and it's corresponding facility structure array and creates
 	 * a form in for the structure and data array and facility structure.
@@ -292,7 +340,7 @@ public class regionView extends View{
  				formBuilderFunctions.formArrayBuilder(facArray, (ArrayList<Object>) dataArray);
 				grid.getChildren().clear();
 				rowNumber = 0;
-				formBuilder(formNode.facilityStructure, formNode.facilityData);
+				formBuilder(workingRegion.regionStruct, workingRegion.regionData);
 			}
 		});
 		return button;

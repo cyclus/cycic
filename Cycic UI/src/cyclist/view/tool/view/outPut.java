@@ -136,23 +136,23 @@ public class outPut {
 	private static void controlSetup(Document doc, Element control){
 		
 		Element simDuration = doc.createElement("duration");
-		simDuration.appendChild(doc.createTextNode(dataArrays.simInfor.get(0)));
+		simDuration.appendChild(doc.createTextNode(dataArrays.simulationData.duration));
 		control.appendChild(simDuration);
 		
 		Element simStartMon = doc.createElement("startmonth");
-		simStartMon.appendChild(doc.createTextNode(dataArrays.simInfor.get(1)));
+		simStartMon.appendChild(doc.createTextNode(dataArrays.simulationData.startMonth));
 		control.appendChild(simStartMon);
 		
 		Element simStartYear = doc.createElement("startyear");
-		simStartYear.appendChild(doc.createTextNode(dataArrays.simInfor.get(2)));
+		simStartYear.appendChild(doc.createTextNode(dataArrays.simulationData.startYear));
 		control.appendChild(simStartYear);
 		
 		Element simStart = doc.createElement("simstart");
-		simStart.appendChild(doc.createTextNode(dataArrays.simInfor.get(3)));
+		simStart.appendChild(doc.createTextNode(dataArrays.simulationData.simStart));
 		control.appendChild(simStart);
 		
 		Element decay = doc.createElement("decay");
-		decay.appendChild(doc.createTextNode(dataArrays.simInfor.get(4)));
+		decay.appendChild(doc.createTextNode(dataArrays.simulationData.decay));
 		control.appendChild(decay);
 	}
 	

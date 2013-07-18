@@ -46,7 +46,7 @@ public class instituteView extends View{
 		prototypeList.setOnMousePressed(new EventHandler<MouseEvent>(){
 			public void handle(MouseEvent event){
 				if (event.isSecondaryButtonDown()){
-					workingInstit.availFacilities.remove(prototypeList.getSelectionModel().getSelectedItem());
+					workingInstit.availPrototypes.remove(prototypeList.getSelectionModel().getSelectedItem());
 					prototypeList.getItems().remove(prototypeList.getSelectionModel().getSelectedItem());
 				}
 			}
@@ -67,7 +67,7 @@ public class instituteView extends View{
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue){
 				if (newValue == null){
 					
-				} else if(newValue == "New Institute"){
+				} else if(newValue == "New Institution"){
 					grid.getChildren().clear();
 					rowNumber = 0;
 					dataArrays.institNodes.add(new instituteNode());
@@ -76,7 +76,11 @@ public class instituteView extends View{
 					workingInstit.institStruct = (ArrayList<Object>) dataArrays.institStructs.get(0);
 					formBuilderFunctions.formArrayBuilder(workingInstit.institStruct, workingInstit.institData);
 					formBuilder(workingInstit.institStruct, workingInstit.institData);
+					facilityList.getItems().clear();
+					prototypeList.getItems().clear();
 				} else {
+					workingInstit = dataArrays.institNodes.get(structureCB.getItems().indexOf(newValue));
+					rowNumber = 0;
 					grid.getChildren().clear();
 					facilityList.getItems().clear();
 					prototypeList.getItems().clear();
@@ -86,7 +90,6 @@ public class instituteView extends View{
 					for (prototypeItem prototype: workingInstit.availPrototypes) {
 						prototypeList.getItems().add(prototype.prototypeName);
 					}
-					workingInstit = dataArrays.institNodes.get(structureCB.getItems().indexOf(newValue));
 					formBuilder(workingInstit.institStruct, workingInstit.institData);
 				}
 			}
@@ -165,7 +168,7 @@ public class instituteView extends View{
 		grid.setVgap(10);
 		grid.setHgap(5);
 		grid.setPadding(new Insets(30, 30, 30, 30));
-		grid.setStyle("-fx-background-color: Orange;");
+		grid.setStyle("-fx-background-color: silver;");
 		setContent(topGrid);
 		setContent(grid);
 		
@@ -190,7 +193,7 @@ public class instituteView extends View{
 		final ScrollPane sc = new ScrollPane();
 		sc.setPrefSize(500, 500);
 		sc.setContent(institBox);
-		sc.setStyle("-fx-background-color: Orange;");
+		sc.setStyle("-fx-background-color: silver;");
 		setContent(sc);
 		setPrefSize(600,400);
 		
@@ -333,7 +336,7 @@ public class instituteView extends View{
  				formBuilderFunctions.formArrayBuilder(facArray, (ArrayList<Object>) dataArray);
 				grid.getChildren().clear();
 				rowNumber = 0;
-				formBuilder(formNode.facilityStructure, formNode.facilityData);
+				formBuilder(workingInstit.institStruct, workingInstit.institData);
 			}
 		});
 		return button;

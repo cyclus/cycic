@@ -17,13 +17,13 @@ public class instituteViewTool implements Tool {
 
 	@Override
 	public String getName() {
-		return "instituteView";
+		return "Institution Builder";
 	}
 
 	@Override
 	public View getView() {
 		View view = new instituteView();
-		view.setParam("Institute Form");
+		view.setParam("Institution Form");
 		return view;
 	}
 	

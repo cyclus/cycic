@@ -90,13 +90,13 @@ public class marketView extends View{
 		grid.setVgap(15);
 		grid.setHgap(10);
 		grid.setPadding(new Insets(30, 30, 30, 30));
-		grid.setStyle("-fx-background-color: Orange;");
+		grid.setStyle("-fx-background-color: silver;");
 		
 		VBox formGrid = new VBox();
 		formGrid.getChildren().addAll(topGrid, grid);
 		final ScrollPane sc = new ScrollPane();
 		sc.setPrefSize(500, 500);
-		sc.setStyle("-fx-background-color: Orange;");
+		sc.setStyle("-fx-background-color: silver;");
 		sc.setContent(formGrid);
 		setPrefSize(600,400);
 		

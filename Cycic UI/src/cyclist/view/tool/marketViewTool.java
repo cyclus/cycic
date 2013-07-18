@@ -17,7 +17,7 @@ public class marketViewTool implements Tool {
 
 	@Override
 	public String getName() {
-		return "marketView";
+		return "Market Form";
 	}
 
 	@Override

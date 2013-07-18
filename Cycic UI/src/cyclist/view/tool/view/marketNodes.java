@@ -60,7 +60,7 @@ public class marketNodes{
 				if(event.isShiftDown() == true){
 					Dragboard db = circle.startDragAndDrop(TransferMode.COPY);
 					ClipboardContent content = new ClipboardContent();
-					content.put( DnD.TOOL_FORMAT, "marketView");
+					content.put( DnD.TOOL_FORMAT, "Market Form");
 					db.setContent(content);
 					event.consume();
 				}

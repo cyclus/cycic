@@ -28,6 +28,7 @@ public class dataArrays {
 	static ArrayList<marketCircle> marketNodes = new ArrayList<marketCircle>();
 	
 	static ArrayList<String> simInfor = new ArrayList<String>();
+	static simInfo simulationData = new simInfo();
 }
 
 class Nrecipe {
@@ -54,6 +55,7 @@ class regionNode{
 	ArrayList<Object> regionStruct = new ArrayList<Object>();
 	ArrayList<Object> regionData  = new ArrayList<Object>();
 	ArrayList<String> availFacilities = new ArrayList<String>(); 
+	ArrayList<String> institutions = new ArrayList<String>();
 }
 
 class instituteNode{
@@ -66,11 +68,11 @@ class instituteNode{
 }
 
 class simInfo{
-	double duration;
-	int startMonth;
-	int startYear;
-	int simStart;
-	int decay;
+	String duration;
+	String startMonth;
+	String startYear;
+	String simStart;
+	String decay;
 }
 
 class prototypeItem{

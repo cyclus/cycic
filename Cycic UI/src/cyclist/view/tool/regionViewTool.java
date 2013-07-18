@@ -17,7 +17,7 @@ public class regionViewTool implements Tool {
 
 	@Override
 	public String getName() {
-		return "Region Form";
+		return "Region Builder";
 	}
 
 	@Override
