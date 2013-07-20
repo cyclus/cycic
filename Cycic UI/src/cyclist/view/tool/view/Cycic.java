@@ -39,14 +39,6 @@ public class Cycic extends View{
 		Cycic.pane.setClip(getParent());
 		Cycic.pane.setStyle("-fx-background-color: white;");
 		
-		//Temporary simulation data
-		dataArrays.simInfor.add("12");
-		dataArrays.simInfor.add("1");
-		dataArrays.simInfor.add("2000");
-		dataArrays.simInfor.add("0");
-		dataArrays.simInfor.add("2");
-		
-
 		// Temp Toolbar //
 		final GridPane grid = new GridPane();
 		grid.setStyle("-fx-background-color: #d6d6d6;");
@@ -127,6 +119,17 @@ public class Cycic extends View{
 				}			
 			}
 		});
+		
+		Button output = new Button();
+		output.setText("Print Output");
+		output.setOnAction(new EventHandler<ActionEvent>(){
+			public void handle(ActionEvent event){
+				outPut.output();
+			}
+		});
+		grid.add(output, 0, 2);
+		
+		
 		setContent(grid);
 		cycicBox.getChildren().addAll(pane);
 		setContent(cycicBox);

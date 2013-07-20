@@ -50,7 +50,7 @@ public class Nodes{
 			circle.text.setFill(Color.WHITE);
 		}
 		
-		final Menu menu1 = new Menu(circle.getId());
+		final Menu menu1 = new Menu("Options");
 		MenuItem facForm = new MenuItem("Facility Form");
 		MenuItem delete = new MenuItem("Delete");
 		

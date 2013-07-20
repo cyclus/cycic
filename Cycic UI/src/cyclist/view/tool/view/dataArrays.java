@@ -63,8 +63,8 @@ class instituteNode{
 	String type;
 	ArrayList<Object> institStruct  = new ArrayList<Object>();
 	ArrayList<Object> institData  = new ArrayList<Object>();
-	ArrayList<String> availFacilities = new ArrayList<String>();
-	ArrayList<prototypeItem> availPrototypes = new ArrayList<prototypeItem>();
+	ArrayList<facilityItem> availFacilities = new ArrayList<facilityItem>();
+	ArrayList<String> availPrototypes = new ArrayList<String>();
 }
 
 class simInfo{
@@ -75,7 +75,7 @@ class simInfo{
 	String decay;
 }
 
-class prototypeItem{
-	String prototypeName;
-	Integer Number;	
+class facilityItem{
+	String name;
+	String number;	
 }

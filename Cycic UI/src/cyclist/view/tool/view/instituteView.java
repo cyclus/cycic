@@ -34,7 +34,7 @@ public class instituteView extends View{
 		facilityList.setOnMousePressed(new EventHandler<MouseEvent>(){
 			public void handle(MouseEvent event){
 				if (event.isSecondaryButtonDown()){
-					workingInstit.availFacilities.remove(facilityList.getSelectionModel().getSelectedItem());
+					workingInstit.availFacilities.remove(facilityList.getSelectionModel().getSelectedIndex());
 					facilityList.getItems().remove(facilityList.getSelectionModel().getSelectedItem());
 				}
 			}
@@ -84,11 +84,11 @@ public class instituteView extends View{
 					grid.getChildren().clear();
 					facilityList.getItems().clear();
 					prototypeList.getItems().clear();
-					for(String facility: workingInstit.availFacilities) {
+					for(String facility: workingInstit.availPrototypes) {
 						facilityList.getItems().add(facility);
 					}
-					for (prototypeItem prototype: workingInstit.availPrototypes) {
-						prototypeList.getItems().add(prototype.prototypeName);
+					for (facilityItem prototype: workingInstit.availFacilities) {
+						prototypeList.getItems().add(prototype.name);
 					}
 					formBuilder(workingInstit.institStruct, workingInstit.institData);
 				}
@@ -105,62 +105,98 @@ public class instituteView extends View{
 		topGrid.add(structureCB, 0, 0);
 		topGrid.add(button, 2, 0);
 		
-		final ComboBox<String> addNewFacilityBox = new ComboBox<String>();
-		addNewFacilityBox.setOnMousePressed(new EventHandler<MouseEvent>(){
+		final ComboBox<String> addNewProtoBox = new ComboBox<String>();
+		addNewProtoBox.setOnMousePressed(new EventHandler<MouseEvent>(){
 			public void handle(MouseEvent e){
-				addNewFacilityBox.getItems().clear();
+				addNewProtoBox.getItems().clear();
 				for (facilityCircle circle: dataArrays.FacilityNodes){
 					for (facilityCircle child: circle.childrenList) {
-						addNewFacilityBox.getItems().add((String)child.name);
+						addNewProtoBox.getItems().add((String)child.name);
+					}
+				}
+			}
+		});
+		
+		Button addAvailProto = new Button();
+		addAvailProto.setText("Add Prototype");
+		addAvailProto.setOnAction(new EventHandler<ActionEvent>(){
+			public void handle(ActionEvent e){
+				prototypeList.getItems().clear();
+				workingInstit.availPrototypes.add(addNewProtoBox.getValue());
+				for (String facility: workingInstit.availPrototypes){
+					prototypeList.getItems().add(facility);
+				}
+
+			}
+		});
+		
+		final ComboBox<String> addNewFacBox = new ComboBox<String>();
+		addNewFacBox.setOnMousePressed(new EventHandler<MouseEvent>(){
+			public void handle(MouseEvent e){
+				addNewFacBox.getItems().clear();
+				for (facilityCircle circle: dataArrays.FacilityNodes){
+					for (facilityCircle child: circle.childrenList) {
+						addNewFacBox.getItems().add((String)child.name);
+					}
+				}
+			}
+		});
+		
+		final TextField facilityNumber = new TextField(){
+			@Override public void replaceText(int start, int end, String text) {
+				if (!text.matches("[a-z]")){
+					super.replaceText(start, end, text);
+				}
+			}
+			
+			public void replaceSelection(String text) {
+				if (!text.matches("[a-z]")){
+					super.replaceSelection(text);
+				}
+			}
+		};
+		facilityNumber.textProperty().addListener(new ChangeListener<String>(){
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue){
+				for(facilityItem facility: workingInstit.availFacilities){
+					if (facility.name == addNewFacBox.getValue()) {
+						facility.number = newValue;
+					}
+				}
+			}
+		});
+		
+		addNewFacBox.valueProperty().addListener(new ChangeListener<String>(){
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue){
+				for(facilityItem facility: workingInstit.availFacilities){
+					if (facility.name == addNewFacBox.getValue()){
+						facilityNumber.setText(facility.number);
 					}
 				}
 			}
 		});
 		
 		Button addAvailFac = new Button();
-		addAvailFac.setText("Add Facility");
+		addAvailFac.setText("Add Starting Facility");
 		addAvailFac.setOnAction(new EventHandler<ActionEvent>(){
-			public void handle(ActionEvent e){
-				facilityList.getItems().clear();
-				for (String facility: workingInstit.availFacilities){
-					facilityList.getItems().add(facility);
-				}
-				facilityList.getItems().add(addNewFacilityBox.getValue());
-				workingInstit.availFacilities.add(addNewFacilityBox.getValue());
-			}
-		});
-		
-		final ComboBox<String> addNewPrototypeBox = new ComboBox<String>();
-		addNewPrototypeBox.setOnMousePressed(new EventHandler<MouseEvent>(){
-			public void handle(MouseEvent e){
-				addNewPrototypeBox.getItems().clear();
-				for (facilityCircle circle: dataArrays.FacilityNodes){
-					addNewPrototypeBox.getItems().add((String) circle.name);
-				}
-			}
-		});
-		
-		Button addAvailPrototype = new Button();
-		addAvailPrototype.setText("Add Prototype");
-		addAvailPrototype.setOnAction(new EventHandler<ActionEvent>(){
 			public void handle(ActionEvent event){
-				prototypeList.getItems().clear();
-				for (prototypeItem facility: workingInstit.availPrototypes){
-					prototypeList.getItems().add(facility.prototypeName);
+				facilityList.getItems().clear();
+				facilityItem facilityAdded = new facilityItem();
+				facilityAdded.name = addNewFacBox.getValue();
+				facilityAdded.number = facilityNumber.getText();
+				workingInstit.availFacilities.add(facilityAdded);
+				for (facilityItem facility: workingInstit.availFacilities){
+					facilityList.getItems().add(facility.name + " - " + facility.number);
 				}
-				prototypeList.getItems().add(addNewPrototypeBox.getValue());
-				prototypeItem prototypeAdded = new prototypeItem();
-				prototypeAdded.prototypeName = addNewPrototypeBox.getValue();
-				workingInstit.availPrototypes.add(prototypeAdded);
 			}
 		});
 				
 		topGrid.add(new Label("Available Facilities"), 0, 1);
 		topGrid.add(facilityList, 1, 1);
-		topGrid.add(addNewFacilityBox, 0, 2);
-		topGrid.add(addAvailFac, 1, 2);
-		topGrid.add(addNewPrototypeBox, 0, 3);
-		topGrid.add(addAvailPrototype, 1, 3);
+		topGrid.add(addNewProtoBox, 0, 2);
+		topGrid.add(addAvailProto, 1, 2);
+		topGrid.add(addNewFacBox, 0, 3);
+		topGrid.add(facilityNumber, 1, 3);
+		topGrid.add(addAvailFac, 2, 3);
 		topGrid.setHgap(10);
 		
 		grid.autosize();

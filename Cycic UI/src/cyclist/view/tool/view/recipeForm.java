@@ -18,6 +18,7 @@ public class recipeForm extends View{
 		init();
 		recipeGrid.setHgap(5);
 		recipeGrid.setVgap(8);
+		
 		topRecipeGrid.setHgap(5);
 		topRecipeGrid.setVgap(8);
 		setContent(topRecipeGrid);

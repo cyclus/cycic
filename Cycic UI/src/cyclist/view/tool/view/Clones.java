@@ -38,7 +38,7 @@ public class Clones {
 		clone.setCenterX(dataArrays.FacilityNodes.get(clone.parentIndex).getCenterX()+60);
 		clone.setCenterY(dataArrays.FacilityNodes.get(clone.parentIndex).getCenterY()+60);
 		clone.facilityType = dataArrays.FacilityNodes.get(clone.parentIndex).facilityType;
-		clone.facilityData = dataArrays.FacilityNodes.get(clone.parentIndex).facilityData;
+		formBuilderFunctions.formArrayBuilder(clone.facilityStructure, clone.facilityData);
 		
 		// Setting the Fill Color //
 		clone.rgbColor = visFunctions.stringToColor((String) parent.name);
@@ -56,7 +56,7 @@ public class Clones {
 		clone.setStroke(Color.BLACK);
 		
 		// Adding the label and the menu //
-		final Menu menu1 = new Menu(clone.getId());
+		final Menu menu1 = new Menu((String) clone.name);
 		MenuItem facForm = new MenuItem("Facility Form");
 		MenuItem delete = new MenuItem("Delete");
 		delete.setOnAction(new EventHandler<ActionEvent>(){

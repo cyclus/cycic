@@ -15,6 +15,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 public class outPut {
 	
@@ -38,21 +39,22 @@ public class outPut {
 			}
 			
 			// Markets
+			for(marketCircle market: dataArrays.marketNodes){
+				Element marketID = doc.createElement("market");
+				
+				rootElement.appendChild(marketID);
+				marketBuilder(doc, marketID, market);
+			}
 			
 			// Facilities
 			for(facilityCircle facility : dataArrays.FacilityNodes){
 				if (facility.childrenList.size() > 0) {
 					for (int i = 0; i < facility.childrenList.size(); i++){
 						Element facID = doc.createElement("facility");
-						facilityBuilder(doc, facID, realFacs.alfredStructs.get(facility.facTypeIndex), facility.childrenList.get(i).facilityData, realFacs.alfredStructsNames.get(facility.facTypeIndex));
+						facilityBuilder(doc, facID, facility.facilityStructure, facility.childrenList.get(i).facilityData, facility.type);
 						rootElement.appendChild(facID);
 					}
-				} else {
-					Element facID = doc.createElement("facility");
-					facilityBuilder(doc, facID, realFacs.alfredStructs.get(facility.facTypeIndex), facility.facilityData, realFacs.alfredStructsNames.get(facility.facTypeIndex));
-					rootElement.appendChild(facID);
-				}
-				
+				} 
 			}
 			
 			// Regions
@@ -60,7 +62,7 @@ public class outPut {
 				Element regionID = doc.createElement("region");
 				rootElement.appendChild(regionID);
 				
-				Element regionName = doc.createElement(region.name);
+				Element regionName = doc.createElement("Name");
 				regionID.appendChild(regionName);
 				
 				for(String facility: region.availFacilities){
@@ -69,45 +71,35 @@ public class outPut {
 					regionID.appendChild(allowedFac);
 				}
 				
-				regionBuilder(doc, regionID, region.regionStruct, region.regionData, "growthregion");
+				regionBuilder(doc, regionID, region.regionStruct, region.regionData, "GrowthRegion");
 				
-				Element institID = doc.createElement("institution");
-				regionID.appendChild(institID);
-
-				for(String facility: region.availFacilities){
-					Element allowedFac = doc.createElement("availableprototype");
-					allowedFac.appendChild(doc.createTextNode(facility));
-					institID.appendChild(allowedFac);
-				}
-
-				Element initialFacilities = doc.createElement("initialfacilitylist");
-				for(String facility: region.availFacilities){
-					Element entry = doc.createElement("entry");
-
-					Element prototype = doc.createElement("prototype");
-					entry.appendChild(prototype);
-
-					prototype.appendChild(doc.createTextNode(facility));
-
-					Element number = doc.createElement("number");
-					/*if(facility.childrenList.size() >= 2){
-						number.appendChild(doc.createTextNode(String.format("%f", facility.childrenList.size())));
-					} else {
-						number.appendChild(doc.createTextNode("1"));
+				for (instituteNode institution: dataArrays.institNodes){
+					for (String instit: region.institutions){
+						if (institution.name == instit) {
+							Element institID = doc.createElement("institution");
+							regionID.appendChild(institID);
+							for(String facility: institution.availPrototypes) {
+								Element allowedProto = doc.createElement("availableprototype");
+								allowedProto.appendChild(doc.createTextNode(facility));
+								institID.appendChild(allowedProto);								
+							}
+							Element initFacList = doc.createElement("initialfacilitylist");
+							for(facilityItem facility: institution.availFacilities) {
+								Element entry = doc.createElement("entry");
+								Element initProto = doc.createElement("prototype");
+								initProto.appendChild(doc.createTextNode(facility.name));
+								entry.appendChild(initProto);
+								Element number = doc.createElement("number");
+								number.appendChild(doc.createTextNode(facility.number));
+								entry.appendChild(number);
+								initFacList.appendChild(entry);
+							}
+							institID.appendChild(initFacList);
+							regionBuilder(doc, institID, institution.institStruct, institution.institData, "DeployInstit");
+						}
 					}
-					entry.appendChild(number);
-					initialFacilities.appendChild(entry);*/
-				}
-				institID.appendChild(initialFacilities);
-
-				for (instituteNode institute: dataArrays.institNodes) {
-					regionBuilder(doc, institID, institute.institStruct, institute.institData, institute.type);
 				}
 			}
-			// Institutions
-			
-
-			
 			
 			//Recipes
 			for(Nrecipe recipe : dataArrays.Recipes){
@@ -275,17 +267,6 @@ public class outPut {
 	
 	/**
 	 * 
-	 * @param doc The xml.parser document that controls the cyclus input document.
-	 * @param structArray
-	 * @return
-	 */
-	private static Element facilityElementHeading(Document doc, ArrayList<Object> structArray){
-		Element heading = doc.createElement((String)structArray.get(0).toString().replace(" ", ""));
-		return heading;
-	}
-	
-	/**
-	 * 
 	 * @param string
 	 * @return
 	 */
@@ -307,6 +288,7 @@ public class outPut {
 	 */
 	@SuppressWarnings("unchecked")
 	private static void regionBuilder(Document doc, Element rootElement, ArrayList<Object> regionArray, ArrayList<Object> dataArray, String facType){
+		rootElement.appendChild(facilityNameElement(doc, (ArrayList<Object>)dataArray.get(0)));
 		Element model = doc.createElement("model");
 		rootElement.appendChild(model);
 		
@@ -323,6 +305,21 @@ public class outPut {
 				modelType.appendChild(heading);
 			}
 		}
+	}
+	
+	public static void marketBuilder(Document doc, Element rootElement, marketCircle market){
+		Element marketName = doc.createElement("name");
+		marketName.appendChild(doc.createTextNode((String) market.name));
+		rootElement.appendChild(marketName);
+		
+		Element marketCommod = doc.createElement("mktcommodity");
+		marketCommod.appendChild(doc.createTextNode(market.commodity));
+		rootElement.appendChild(marketCommod);
+				
+		Element marketModel = doc.createElement("model");
+		Element marketType = doc.createElement("TestMarket");
+		marketModel.appendChild(marketType);
+		rootElement.appendChild(marketModel);	
 	}
 }
 

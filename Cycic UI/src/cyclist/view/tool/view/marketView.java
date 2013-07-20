@@ -69,6 +69,7 @@ public class marketView extends View{
 					marketCommod.getItems().add(commod.getText());
 				}
 				marketCommod.getItems().add("Add New Commodity");
+				marketCommod.setValue(formNode.commodity);
 			}
 		});
 		marketCommod.valueProperty().addListener(new ChangeListener<String>(){         

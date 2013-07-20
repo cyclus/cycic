@@ -51,8 +51,8 @@ public class regionView extends View{
 		institList.setOnMousePressed(new EventHandler<MouseEvent>(){
 			public void handle(MouseEvent event){
 				if (event.isSecondaryButtonDown()){
-					workingRegion.availFacilities.remove(facilityList.getSelectionModel().getSelectedItem());
-					institList.getItems().remove(facilityList.getSelectionModel().getSelectedItem());
+					workingRegion.institutions.remove(institList.getSelectionModel().getSelectedItem());
+					institList.getItems().remove(institList.getSelectionModel().getSelectedItem());
 				}
 			}
 		});		
@@ -126,11 +126,10 @@ public class regionView extends View{
 		addAvailFac.setOnAction(new EventHandler<ActionEvent>(){
 			public void handle(ActionEvent e){
 				facilityList.getItems().clear();
+				workingRegion.availFacilities.add(addNewFacilityBox.getValue());
 				for (String facility: workingRegion.availFacilities){
 					facilityList.getItems().add(facility);
 				}
-				facilityList.getItems().add(addNewFacilityBox.getValue());
-				workingRegion.availFacilities.add(addNewFacilityBox.getValue());
 			}
 		});
 		
@@ -149,11 +148,10 @@ public class regionView extends View{
 		addInstit.setOnAction(new EventHandler<ActionEvent>(){
 			public void handle(ActionEvent event){
 				institList.getItems().clear();
+				workingRegion.institutions.add(addNewInstitBox.getValue());
 				for (String instit: workingRegion.institutions){
 					institList.getItems().add(instit);
 				}
-				institList.getItems().add(addNewInstitBox.getValue());
-				workingRegion.institutions.add(addNewInstitBox.getValue());
 			}
 		});
 		
