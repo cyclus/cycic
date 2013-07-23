@@ -10,7 +10,16 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import cyclist.view.component.View;
 
+/**
+ * Commodities Class extends the Cyclist.View class and is used for
+ * controlling the commodities of a simulation.
+ * @author Robert
+ *
+ */
 public class commoditiesView extends View{
+	/**
+	 * Initiates the commodity view.
+	 */
 	public commoditiesView(){
 		super();
 		init();
@@ -25,7 +34,10 @@ public class commoditiesView extends View{
 	
 	private static GridPane commodGrid = new GridPane();
 	private static Button addNewCommod = new Button();
-			
+	
+	/**
+	 * Function for building the gridpane used by the commodity views.		
+	 */
 	public static void init(){
 		commodGrid.getChildren().clear();
 		for (int i = 0; i < dataArrays.CommoditiesList.size(); i++){
@@ -51,6 +63,10 @@ public class commoditiesView extends View{
 		commodGrid.add(addNewCommod, 0, dataArrays.CommoditiesList.size());
 	}
 	
+	/**
+	 * Adds a new TextField to the commodity GridPane tied to a new commodity in the 
+	 * simulation.
+	 */
 	static public void addNewCommodity(){
 		Label commodity = new Label();
 		commodity.setText("");

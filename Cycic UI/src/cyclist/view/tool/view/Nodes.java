@@ -7,6 +7,8 @@ import javafx.scene.control.CustomMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.effect.Lighting;
+import javafx.scene.effect.Light.Distant;
 import javafx.scene.image.Image;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
@@ -49,6 +51,14 @@ public class Nodes{
 		}else{
 			circle.text.setFill(Color.WHITE);
 		}
+		
+		// Really cool effect, not ready for testing yet.
+		/*Distant light = new Distant();
+		light.setAzimuth(-135.0f);
+		final Lighting l = new Lighting();
+		l.setLight(light);
+		l.setSurfaceScale(5.0f);
+		circle.setEffect(l);*/
 		
 		final Menu menu1 = new Menu("Options");
 		MenuItem facForm = new MenuItem("Facility Form");
@@ -196,7 +206,7 @@ public class Nodes{
 				}
 				if(event.getButton().equals(MouseButton.PRIMARY)){
 					for(int i = 0; i < Cycic.pane.getChildren().size(); i++){
-						Cycic.pane.getChildren().get(i).setEffect(null);	
+						Cycic.pane.getChildren().get(i).setEffect(null);
 					}
 					circle.setEffect(visFunctions.colorAdjust);
 				}

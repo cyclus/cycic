@@ -22,12 +22,20 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import cyclist.view.component.View;
-
+/**
+ * A view used to build and develope instutitions for the simulation currently being built. 
+ * @author Robert
+ *
+ */
 public class instituteView extends View{
+	/**
+	 * Initiates a new window for building and modifying instutitions. 
+	 */
 	public instituteView(){
 		super();
 		setPrefSize(500,500);
 		
+		// ListView for initial facilities in the institution.
 		final ListView<String> facilityList = new ListView<String>();
 		facilityList.setOrientation(Orientation.VERTICAL);
 		facilityList.setMinHeight(25);
@@ -40,6 +48,7 @@ public class instituteView extends View{
 			}
 		});
 		
+		// ListView for prototypes available it the institution.
 		final ListView<String> prototypeList = new ListView<String>();
 		prototypeList.setOrientation(Orientation.VERTICAL);
 		prototypeList.setMinHeight(25);
@@ -52,6 +61,8 @@ public class instituteView extends View{
 			}
 		});
 		
+		// Building the list of objects to be put in to the ComboBox.
+		// Inputs all built institutions and adds a field for adding a new one. 
 		structureCB.setOnMouseClicked(new EventHandler<MouseEvent>(){
 			public void handle(MouseEvent e){
 				structureCB.getItems().clear();
@@ -62,6 +73,7 @@ public class instituteView extends View{
 			}
 		});
 		
+		// Change Listener for structureCB to indicate the selection of a new or saved institution to be loaded.
 		structureCB.valueProperty().addListener(new ChangeListener<String>(){
 			@SuppressWarnings("unchecked")
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue){
@@ -105,6 +117,7 @@ public class instituteView extends View{
 		topGrid.add(structureCB, 0, 0);
 		topGrid.add(button, 2, 0);
 		
+		// ComboBox to add facilities to the prototype ListView
 		final ComboBox<String> addNewProtoBox = new ComboBox<String>();
 		addNewProtoBox.setOnMousePressed(new EventHandler<MouseEvent>(){
 			public void handle(MouseEvent e){
@@ -117,6 +130,7 @@ public class instituteView extends View{
 			}
 		});
 		
+		// Button to sumbit selected object in addNewPrototypeBox to Prototype ListView and Institution prototype array. 
 		Button addAvailProto = new Button();
 		addAvailProto.setText("Add Prototype");
 		addAvailProto.setOnAction(new EventHandler<ActionEvent>(){
@@ -130,6 +144,7 @@ public class instituteView extends View{
 			}
 		});
 		
+		//ComboBox for adding a new facility to the initial facility array of the institution.
 		final ComboBox<String> addNewFacBox = new ComboBox<String>();
 		addNewFacBox.setOnMousePressed(new EventHandler<MouseEvent>(){
 			public void handle(MouseEvent e){
@@ -142,7 +157,9 @@ public class instituteView extends View{
 			}
 		});
 		
+		// TextField to indicate the number of facilities to add at the start of the simulation.
 		final TextField facilityNumber = new TextField(){
+			// This bit of code prevents letters from being put into the TextField.
 			@Override public void replaceText(int start, int end, String text) {
 				if (!text.matches("[a-z]")){
 					super.replaceText(start, end, text);
@@ -155,6 +172,8 @@ public class instituteView extends View{
 				}
 			}
 		};
+		
+		// Change Listener to update facilityItem with number of facilities to add at simulation start up
 		facilityNumber.textProperty().addListener(new ChangeListener<String>(){
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue){
 				for(facilityItem facility: workingInstit.availFacilities){
@@ -164,7 +183,7 @@ public class instituteView extends View{
 				}
 			}
 		});
-		
+		// ComboBox change listener to add new facility to the instutitions initial facility list.
 		addNewFacBox.valueProperty().addListener(new ChangeListener<String>(){
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue){
 				for(facilityItem facility: workingInstit.availFacilities){
@@ -174,7 +193,7 @@ public class instituteView extends View{
 				}
 			}
 		});
-		
+		// Button to sumbit selection in addNewFacBox ComboBox.
 		Button addAvailFac = new Button();
 		addAvailFac.setText("Add Starting Facility");
 		addAvailFac.setOnAction(new EventHandler<ActionEvent>(){
@@ -190,6 +209,7 @@ public class instituteView extends View{
 			}
 		});
 				
+		// Building the grids for the views.
 		topGrid.add(new Label("Available Facilities"), 0, 1);
 		topGrid.add(facilityList, 1, 1);
 		topGrid.add(addNewProtoBox, 0, 2);
@@ -208,7 +228,7 @@ public class instituteView extends View{
 		setContent(topGrid);
 		setContent(grid);
 		
-		
+		// V and H boxes for the ListViews
 		HBox institSideBar = new HBox();
 		VBox facilitiesBox = new VBox();
 		facilitiesBox.getChildren().addAll(new Label("Starting Facilities"), facilityList);
@@ -226,6 +246,7 @@ public class instituteView extends View{
 		HBox institBox = new HBox();
 		institBox.getChildren().addAll(institSideBar, institGridBox);
 		
+		//Quick hack for making window's scrollable. 
 		final ScrollPane sc = new ScrollPane();
 		sc.setPrefSize(500, 500);
 		sc.setContent(institBox);
@@ -233,6 +254,7 @@ public class instituteView extends View{
 		setContent(sc);
 		setPrefSize(600,400);
 		
+		// Ensures the temperary institution is initiated only once. 
 		if (dataArrays.institStructs.size() < 1) {
 			practiceInstitute.init();
 		}
@@ -247,13 +269,14 @@ public class instituteView extends View{
 	private int columnEnd = 0;
 	private int userLevel = 0;
 	static instituteNode workingInstit;
+
 	/**
-	 * This function takes a constructed data array and it's corresponding facility structure array and creates
-	 * a form in for the structure and data array and facility structure.
+	 * This function takes a constructed data array and it's corresponding institution structure array and creates
+	 * a form in for the structure and data arrays.
 	 * @param facArray This is the structure of the data array. Included in this array should be all of the information
-	 * needed to fully describe the data structure of a facility.
-	 * @param dataArray The empty data array that is associated with this facility. It should be built to match the structure
-	 * of the facility structure passed to the form. 
+	 * needed to fully describe the data structure of a institution.
+	 * @param dataArray The empty data array that is associated with this institution. It should be built to match the structure
+	 * of the institution structure passed to the form. 
 	 */
 	@SuppressWarnings("unchecked")
 	public void formBuilder(ArrayList<Object> facArray, ArrayList<Object> dataArray){
@@ -329,6 +352,7 @@ public class instituteView extends View{
 							columnEnd = 2 + columnNumber;
 						}
 					} else {
+						// Switch that will contain current and future key words to indicate special form functions.
 						switch ((String) facArray.get(0)) {
 						case "Name":
 							grid.add(formBuilderFunctions.institNameBuilder(workingInstit, dataArray), 1+columnNumber, rowNumber);
@@ -358,10 +382,11 @@ public class instituteView extends View{
 	}
 	
 	/**
-	 * 
-	 * @param grid
-	 * @param dataArray
-	 * @return
+	 * Function to add an orMore button to the form. This button allows the user to add additional fields to zeroOrMore or oneOrMore form inputs.
+	 * @param grid This is the grid of the current view. 
+	 * @param facArray The ArrayList<Object> used to make a copy of the one or more field. 
+	 * @param dataArray The ArrayList<Object> the new orMore field will be added to.
+	 * @return Button that will add the orMore field to the dataArray and reload the form.
 	 */
 	public Button orMoreAddButton(final GridPane grid, final ArrayList<Object> facArray,final ArrayList<Object> dataArray){
 		Button button = new Button();
@@ -378,6 +403,12 @@ public class instituteView extends View{
 		return button;
 	}
 	
+	/**
+	 * This function removes a orMore that has been added to a particular field.
+	 * @param dataArray The ArrayList<Object> containing the orMore field
+	 * @param dataArrayNumber the index number of the orMore field that is to be removed.
+	 * @return Button for executing the commands in this function.
+	 */
 	public Button arrayListRemove(final ArrayList<Object> dataArray, final int dataArrayNumber){
 		Button button = new Button();
 		button.setText("Remove");

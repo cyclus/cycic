@@ -7,6 +7,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
+/**
+ * This class extends the Java Circle class. Used to represent the facility
+ * on the CYCIC pane and contains all of the information assocaited with
+ * the facility.
+ * @author Robert
+ *
+ */
 public class facilityCircle extends Circle {
 	String facilityType = "";
 	Integer facTypeIndex = 0;

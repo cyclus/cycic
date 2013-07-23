@@ -121,9 +121,9 @@ public class outPut {
 		}
 	}
 	/**
-	 * Sets up the control information for the system
+	 * Sets up the control information for the simulation.
 	 * @param doc The xml.parser document that controls the cyclus input document.
-	 * @param control 
+	 * @param control Element in the xml.parser document the simulation information will be added to.
 	 */
 	private static void controlSetup(Document doc, Element control){
 		
@@ -149,7 +149,7 @@ public class outPut {
 	}
 	
 	/**
-	 * 
+	 * Function used to create commodities in the Cyclus input xml.
 	 * @param doc The xml.parser document that controls the cyclus input document.
 	 * @param rootElement The element that will serve as the heading for substructures built in this function.
 	 * @param commodity Label containing the commodity name.
@@ -164,10 +164,10 @@ public class outPut {
 	}
 	
 	/**
-	 * 
+	 * Function used to add recipies to the Cyclus input xml.
 	 * @param doc The xml.parser document that controls the cyclus input document.
 	 * @param rootElement The element that will serve as the heading for substructures built in this function.
-	 * @param recipe
+	 * @param recipe The Cyclus recipe being added to the input xml.
 	 */
 	private static void recipeBuilder(Document doc, Element rootElement, Nrecipe recipe){
 		Element recipeEle = doc.createElement("recipe");
@@ -196,12 +196,12 @@ public class outPut {
 	}
 	
 	/**
-	 * 
+	 * Function responsible for adding facilities to the cyclus xml input. 
 	 * @param doc The xml.parser document that controls the cyclus input document.
 	 * @param rootElement The element that will serve as the heading for substructures built in this function.
-	 * @param facArray
-	 * @param dataArray
-	 * @param facType
+	 * @param facArray The ArrayList<Object> containing the facility structure.
+	 * @param dataArray The ArrayList<Object> containing the facility data. 
+	 * @param facType A string that indicates the type of the facility. 
 	 */
 	@SuppressWarnings("unchecked")
 	private static void facilityBuilder(Document doc, Element rootElement, ArrayList<Object> facArray, ArrayList<Object> dataArray, String facType){
@@ -226,10 +226,10 @@ public class outPut {
 	}
 	
 	/**
-	 * 
+	 * Special function for adding the <name> field to the facility input definition.
 	 * @param doc The xml.parser document that controls the cyclus input document.
-	 * @param dataArray
-	 * @return
+	 * @param dataArray ArrayList<Object> that contains the name information for the facility.
+	 * @return Element added to the facility rootElement.
 	 */
 	private static Element facilityNameElement(Document doc, ArrayList<Object> dataArray){
 		Element nameElement = doc.createElement("name");
@@ -238,11 +238,11 @@ public class outPut {
 	}
 	
 	/**
-	 * 
+	 * This function produces a xml element that contains the information for a facility input.
 	 * @param doc The xml.parser document that controls the cyclus input document.
 	 * @param rootElement The element that will serve as the heading for substructures built in this function.
-	 * @param structArray
-	 * @param dataArray
+	 * @param structArray ArrayList<Object> containing the facility input field information.
+	 * @param dataArray ArrayList<Object> containing the data associated with the input field informtation.
 	 */
 	@SuppressWarnings("unchecked")
 	private static void facilityDataElement(Document doc, Element rootElement, ArrayList<Object> structArray, ArrayList<Object> dataArray){
@@ -266,9 +266,9 @@ public class outPut {
 	}
 	
 	/**
-	 * 
-	 * @param string
-	 * @return
+	 * Function for doing proper indentation for the special oneOrMore, zeroOrMore input fields. 
+	 * @param string String used to test for indentation.
+	 * @return Boolean to indicate whether a indent is required. 
 	 */
 	private static boolean indentCheck(String string){
 		if(string == "oneOrMore" || string == "zeroOrMore" || string == "input" || string == "output"){
@@ -280,33 +280,38 @@ public class outPut {
 	
 	/**
 	 * 
-	 * @param doc
-	 * @param rootElement
-	 * @param regionArray
-	 * @param dataArray
-	 * @param facType
+	 * @param doc The xml.parser document that controls the cyclus input document.
+	 * @param rootElement The element that will serve as the heading for substructures built in this function.
+	 * @param structArray Region or Institution array used to indicate the name for the xml tag.
+	 * @param dataArray ArrayList<Object> containing the data to be input into the xml tag. 
+	 * @param nodeType String containing information about the type of the node. 
 	 */
 	@SuppressWarnings("unchecked")
-	private static void regionBuilder(Document doc, Element rootElement, ArrayList<Object> regionArray, ArrayList<Object> dataArray, String facType){
+	private static void regionBuilder(Document doc, Element rootElement, ArrayList<Object> structArray, ArrayList<Object> dataArray, String nodeType){
 		rootElement.appendChild(facilityNameElement(doc, (ArrayList<Object>)dataArray.get(0)));
 		Element model = doc.createElement("model");
 		rootElement.appendChild(model);
 		
-		Element modelType = doc.createElement(facType.replace(" ", "").toString());
+		Element modelType = doc.createElement(nodeType.replace(" ", "").toString());
 		model.appendChild(modelType);
 		
 		for(int i = 1; i < dataArray.size(); i++){
 			if (dataArray.get(i) instanceof ArrayList){
-				facilityDataElement(doc, modelType, (ArrayList<Object>) regionArray.get(i), (ArrayList<Object>) dataArray.get(i));
+				facilityDataElement(doc, modelType, (ArrayList<Object>) structArray.get(i), (ArrayList<Object>) dataArray.get(i));
 			} else {
 				// Adding the label
-				Element heading = doc.createElement((String) regionArray.get(0));
+				Element heading = doc.createElement((String) structArray.get(0));
 				heading.appendChild(doc.createTextNode((String) dataArray.get(0)));
 				modelType.appendChild(heading);
 			}
 		}
 	}
 	
+	/**
+	 * This function is a quick hack that builds the markets in the simulation. All markets are forced to be TestMarkets for now.
+	 * @param rootElement The element that will serve as the heading for substructures built in this function.
+	 * @param market marketCircle being written to the xml file. 
+	 */
 	public static void marketBuilder(Document doc, Element rootElement, marketCircle market){
 		Element marketName = doc.createElement("name");
 		marketName.appendChild(doc.createTextNode((String) market.name));

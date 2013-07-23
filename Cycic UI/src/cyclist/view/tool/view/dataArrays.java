@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import javafx.scene.control.Label;
 import javafx.scene.shape.Line;
 
+/**
+ * This class contains all of the data structures used for CYCIC.
+ * @author Robert
+ *
+ */
 public class dataArrays {
 	static ArrayList<facilityCircle> FacilityNodes = new ArrayList<facilityCircle>();
 	static ArrayList<Label> FacilityTypes = new ArrayList<Label>();	
@@ -31,24 +36,45 @@ public class dataArrays {
 	static simInfo simulationData = new simInfo();
 }
 
+/**
+ * Class used to build the recipes for cyclus.
+ * @author Robert
+ *
+ */
 class Nrecipe {
 	String Name = new String();
 	String Basis = new String();
 	ArrayList<isotopeData> Composition = new ArrayList<isotopeData>();
 }
 
+/**
+ * Contains name, weightFrac, and mass information for specify an isotope within a recipe.
+ * @author Robert
+ *
+ */
 class isotopeData {
 	String Name = new String();
 	double weightFrac;
 	double mass;
 }
 
+/**
+ * Class used to create the links between nodes.
+ * @author Robert
+ *
+ */
 class nodeLink {
 	facilityCircle source;
 	Object target;
 	Line line = new Line();
 }
 
+/**
+ * Class used to represent regions in Cyclus. Contains structures for; 
+ * name, type, data structures, data, available facilities, and institutions.
+ * @author Robert
+ *
+ */
 class regionNode{
 	String name = new String();
 	String type = new String();
@@ -58,6 +84,13 @@ class regionNode{
 	ArrayList<String> institutions = new ArrayList<String>();
 }
 
+/**
+ * Class used to represent institutions in Cyclus. Contains structures for; 
+ * name,type, data structures, data, available prototypes, and 
+ * initial facilityItems (facility name /number)
+ * @author Robert
+ *
+ */
 class instituteNode{
 	String name;
 	String type;
@@ -67,6 +100,23 @@ class instituteNode{
 	ArrayList<String> availPrototypes = new ArrayList<String>();
 }
 
+/**
+ * Class used to indicate an initial facility within an institution and
+ * the number of these institutions at the start of the simualtion.
+ * @author Robert
+ *
+ */
+class facilityItem{
+	String name;
+	String number;	
+}
+
+/**
+ * Class containing the simulation information for the current working
+ * simulation. 
+ * @author Robert
+ *
+ */
 class simInfo{
 	String duration;
 	String startMonth;
@@ -75,7 +125,4 @@ class simInfo{
 	String decay;
 }
 
-class facilityItem{
-	String name;
-	String number;	
-}
+

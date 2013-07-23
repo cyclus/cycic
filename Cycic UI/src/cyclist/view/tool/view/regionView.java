@@ -26,10 +26,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import cyclist.view.component.View;
 
+/**
+ * A View Class for generating the form required for interacting with a Cyclus region.
+ * @author Robert
+ *
+ */
 public class regionView extends View{
-	public ObjectProperty<EventHandler<ActionEvent>> onActionProperty() {
-		return actionProperty;
-	}
+	/**
+	 * Init function for this class. Generates the top grids and form gridpane. 
+	 */
 	public regionView(){
 		super();
 		
@@ -212,7 +217,6 @@ public class regionView extends View{
 	private int columnEnd = 0;
 	private int userLevel = 0;
 	static regionNode workingRegion;
-	final private ObjectProperty<EventHandler<ActionEvent>> actionProperty = new SimpleObjectProperty<EventHandler<ActionEvent>>();
 	/**
 	 * This function takes a constructed data array and it's corresponding facility structure array and creates
 	 * a form in for the structure and data array and facility structure.
@@ -324,10 +328,11 @@ public class regionView extends View{
 	}
 	
 	/**
-	 * 
-	 * @param grid
-	 * @param dataArray
-	 * @return
+	 * Function to add an orMore button to the form. This button allows the user to add additional fields to zeroOrMore or oneOrMore form inputs.
+	 * @param grid This is the grid of the current view. 
+	 * @param facArray The ArrayList<Object> used to make a copy of the one or more field. 
+	 * @param dataArray The ArrayList<Object> the new orMore field will be added to.
+	 * @return Button that will add the orMore field to the dataArray and reload the form.
 	 */
 	public Button orMoreAddButton(final GridPane grid, final ArrayList<Object> facArray,final ArrayList<Object> dataArray){
 		Button button = new Button();
@@ -343,7 +348,13 @@ public class regionView extends View{
 		});
 		return button;
 	}
-	
+
+	/**
+	 * This function removes a orMore that has been added to a particular field.
+	 * @param dataArray The ArrayList<Object> containing the orMore field
+	 * @param dataArrayNumber the index number of the orMore field that is to be removed.
+	 * @return Button for executing the commands in this function.
+	 */
 	public Button arrayListRemove(final ArrayList<Object> dataArray, final int dataArrayNumber){
 		Button button = new Button();
 		button.setText("Remove");

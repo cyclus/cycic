@@ -12,13 +12,26 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.paint.Color;
 import cyclist.model.vo.DnD;
 
+/**
+ * The Clones class deals with all functions regarding generating and 
+ * removing clones.
+ * @author Robert
+ *
+ */
 public class Clones {
 	protected static double mousey;
 	protected static double mousex;
 	protected static double x;
 	protected static double y;
 	
+	/**
+	 * Builds a child facilityCircle and adds it to the parent facilityCircle's childrenList.
+	 * @param name Name of the new child
+	 * @param parent facilityCircle node the new child will be added to.
+	 * @param parentChildShow Boolean to indicate whether or not to show the child when it is built.
+	 */
 	static void addClone(String name, final facilityCircle parent, Boolean parentChildShow) {
+		// Building the facilityCircle and adding the basic information.
 		final facilityCircle clone = new facilityCircle();
 		clone.setId(name);
 		clone.setRadius(25);
@@ -26,18 +39,20 @@ public class Clones {
 		clone.type = "Child";
 		clone.name = name;
 		
+		// Providing the child with the index of its parent node in the dataArrays.facilityNodes ArrayList.
 		for(int i = 0; i < dataArrays.FacilityNodes.size(); i++){
 			if(dataArrays.FacilityNodes.get(i) == parent){
 				clone.parentIndex = i;
 			}
 		}
+		// Copying important information from parent to child.
 		clone.facilityStructure = dataArrays.FacilityNodes.get(clone.parentIndex).facilityStructure;
-		
-		dataArrays.FacilityNodes.get(clone.parentIndex).childrenList.add(clone);
-		clone.facTypeIndex = dataArrays.FacilityNodes.get(clone.parentIndex).facTypeIndex;
-		clone.setCenterX(dataArrays.FacilityNodes.get(clone.parentIndex).getCenterX()+60);
-		clone.setCenterY(dataArrays.FacilityNodes.get(clone.parentIndex).getCenterY()+60);
-		clone.facilityType = dataArrays.FacilityNodes.get(clone.parentIndex).facilityType;
+		parent.childrenList.add(clone);
+		clone.facTypeIndex = parent.facTypeIndex;
+		clone.setCenterX(parent.getCenterX()+60);
+		clone.setCenterY(parent.getCenterY()+60);
+		clone.facilityType = parent.facilityType;
+		// Building the child's facility data ArrayList
 		formBuilderFunctions.formArrayBuilder(clone.facilityStructure, clone.facilityData);
 		
 		// Setting the Fill Color //
@@ -55,13 +70,13 @@ public class Clones {
 		}
 		clone.setStroke(Color.BLACK);
 		
-		// Adding the label and the menu //
+		// Adding the facility menu //
 		final Menu menu1 = new Menu((String) clone.name);
 		MenuItem facForm = new MenuItem("Facility Form");
 		MenuItem delete = new MenuItem("Delete");
 		delete.setOnAction(new EventHandler<ActionEvent>(){
 			public void handle(ActionEvent e){
-				removeClone((String) clone.name, (String) parent.name);
+				removeClone(clone, parent);
 			}
 		});
 		menu1.getItems().addAll(facForm, delete);
@@ -69,25 +84,26 @@ public class Clones {
 		clone.menu.setLayoutX(clone.getCenterX());
 		clone.menu.setLayoutY(clone.getCenterY());
 		clone.menu.setVisible(false);
+		// Adding circle.text to be shown in the CYCIC pane.
 		clone.text.setText(name.toString());
 		clone.text.setX(clone.getCenterX()-clone.getRadius()*0.6);
 		clone.text.setY(clone.getCenterY());
 		clone.text.setWrappingWidth(clone.getRadius()*1.6);
 		clone.text.setMouseTransparent(true);
 		
-		// Adding the Parent Child Link //
+		// Adding the Parent Child Link different from normal market links.//
 		final nodeLink parentChild = new nodeLink();
 		parentChild.source = parent;
 		parentChild.target = name;
 		parentChild.line.setStroke(Color.GRAY);
 		parentChild.line.setStrokeWidth(1.5);
 		parentChild.line.getStrokeDashArray().addAll(15d, 5d);
-		parentChild.line.setStartX(dataArrays.FacilityNodes.get(clone.parentIndex).getCenterX());
-		parentChild.line.setStartY(dataArrays.FacilityNodes.get(clone.parentIndex).getCenterY());
-		parentChild.line.setEndX(dataArrays.FacilityNodes.get(clone.parentIndex).childrenList.get(dataArrays.FacilityNodes.get(clone.parentIndex).childrenList.size()-1).getCenterX());
-		parentChild.line.setEndY(dataArrays.FacilityNodes.get(clone.parentIndex).childrenList.get(dataArrays.FacilityNodes.get(clone.parentIndex).childrenList.size()-1).getCenterY());
+		parentChild.line.setStartX(parent.getCenterX());
+		parentChild.line.setStartY(parent.getCenterY());
+		parentChild.line.setEndX(parent.childrenList.get(parent.childrenList.size()-1).getCenterX());
+		parentChild.line.setEndY(parent.childrenList.get(parent.childrenList.size()-1).getCenterY());
 		
-		// Mouse Interaction Functions //
+		// Mouse drag detection function for initiating the construction of a new view. 
 		clone.setOnDragDetected(new EventHandler<MouseEvent>(){
 			@Override
 			public void handle(MouseEvent event){
@@ -101,6 +117,7 @@ public class Clones {
 			}
 		});
 		
+		// Recording informtaion for making the node move.
 		clone.onMousePressedProperty().set(new EventHandler<MouseEvent>(){
 			@Override
 			public void handle(MouseEvent event){
@@ -111,6 +128,7 @@ public class Clones {
 				mousey = event.getY();
 			}
 		});
+		// Handles the movement controls of the facilityNode.
 		clone.onMouseDraggedProperty().set(new EventHandler<MouseEvent>(){
 			@Override
 			public void handle(MouseEvent event){
@@ -145,6 +163,7 @@ public class Clones {
 				mousey = event.getY();
 			}
 		});
+		// Double click test && menu handing.
 		clone.setOnMouseClicked(new EventHandler<MouseEvent>(){
 			@Override
 			public void handle(MouseEvent event){
@@ -161,9 +180,10 @@ public class Clones {
 		});
 		
 		// Used for tracking the objects //
-		dataArrays.FacilityNodes.get(clone.parentIndex).childrenLinks.add(parentChild);	
+		parent.childrenLinks.add(parentChild);	
 		
-		int childIndex = dataArrays.FacilityNodes.get(clone.parentIndex).childrenList.size();
+		// If applicable adding node to CYCIC pane.
+		int childIndex = parent.childrenList.size();
 		if(parentChildShow == true){	
 			Cycic.pane.getChildren().add(dataArrays.FacilityNodes.get(clone.parentIndex).childrenList.get(childIndex-1));
 			Cycic.pane.getChildren().add(dataArrays.FacilityNodes.get(clone.parentIndex).childrenList.get(childIndex-1).menu);
@@ -173,22 +193,21 @@ public class Clones {
 		}
 	}
 	
-	static void removeClone(Object name, String parent){
-		int parentPass = 0;
-		for(int i = 0; i < dataArrays.FacilityNodes.size(); i++){
-			if(dataArrays.FacilityNodes.get(i).getId() == parent){
-				parentPass = i;
-			}
-		}
+	/**
+	 * Function to completely remove a child facilityCircle from the simulation.
+	 * @param child This is the name of the clone to be removed. 
+	 * @param parent Parent of the clone being removed.
+	 */
+	static void removeClone(facilityCircle child, facilityCircle parent){
 		for(int i = 0; i < dataArrays.Links.size(); i++){
-			if(dataArrays.Links.get(i).source == name){
+			if(dataArrays.Links.get(i).source == child){
 				dataArrays.Links.remove(i);
 			}
 		}
-		for(int i = 0; i < dataArrays.FacilityNodes.get(parentPass).childrenList.size(); i++){
-			if(dataArrays.FacilityNodes.get(parentPass).childrenList.get(i).getId() == name){
-				dataArrays.FacilityNodes.get(parentPass).childrenList.remove(i);
-				dataArrays.FacilityNodes.get(parentPass).childrenLinks.remove(i);
+		for(int i = 0; i < parent.childrenList.size(); i++){
+			if(parent.childrenList.get(i) == child){
+				parent.childrenList.remove(i);
+				parent.childrenLinks.remove(i);
 			}
 		}
 		visFunctions.reloadPane();

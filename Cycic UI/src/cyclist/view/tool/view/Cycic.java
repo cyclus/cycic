@@ -17,7 +17,16 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import cyclist.view.component.View;
 
+/**
+ * Main View Class for CYCIC. This view contains the CYCIC Pane used for visualization and 
+ * generates the data for the simulation. 
+ * @author Robert
+ *
+ */
 public class Cycic extends View{
+	/**
+	 * Function for building the CYCIC Pane and GridPane of this view. 
+	 */
 	public Cycic(){
 		super();
 		setMinHeight(600);
@@ -29,9 +38,13 @@ public class Cycic extends View{
 	static facilityCircle workingNode = null;
 	static marketCircle workingMarket = null;
 	
+	/**
+	 * Initiates the Pane and GridPane.
+	 */
 	private void init(){
-		realFacs.init();
-		practiceInstitute.init();
+		if (realFacs.alfredStructs.size() < 1){
+			realFacs.init();
+		}
 		
 		HBox cycicBox = new HBox();
 		Cycic.pane.setId("cycicPane");
@@ -51,25 +64,22 @@ public class Cycic extends View{
 		grid.add(scenetitle1, 0, 0);
 		Label facName = new Label("Name");
 		grid.add(facName, 1, 0);
-		
+		// Name Field
 		final TextField facNameField = new TextField();
 		grid.add(facNameField, 2, 0);
-		
+		// Facility Type
 		final ComboBox<String> structureCB = new ComboBox<String>();
-
 		for(int i = 0; i < realFacs.alfredStructs.size(); i++){
 			structureCB.getItems().add((String) realFacs.alfredStructsNames.get(i));	
 		}
-		
 		structureCB.valueProperty().addListener(new ChangeListener<String>(){
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue){
 				structureCB.setValue(newValue);
 			}
 		});
 		grid.add(structureCB, 3, 0);
-		
+		//Submit Button
 		Button submit1 = new Button("Submit");
-		
 		submit1.setOnAction(new EventHandler<ActionEvent>(){
 			@Override
 			public void handle(ActionEvent event){
@@ -85,16 +95,16 @@ public class Cycic extends View{
 						dataArrays.FacilityNodes.get(dataArrays.FacilityNodes.size()-1).facilityData
 						);
 			}
-		});
-		
+		});	
 		grid.add(submit1, 4, 0);
+		
 		// Adding a new Market
 		Text scenetitle2 = new Text("Add Market");
 		scenetitle2.setFont(new Font(20));
 		grid.add(scenetitle2, 0, 1);
 		Label markName = new Label("Name");
 		grid.add(markName, 1, 1);
-		
+		// Name Field
 		final TextField markNameField = new TextField();
 		grid.add(markNameField, 2, 1);
 		Button submit2 = new Button("Submit");
@@ -106,7 +116,6 @@ public class Cycic extends View{
 			}
 		});
 		grid.add(submit2, 3, 1);
-
 		pane.setOnMouseClicked(new EventHandler<MouseEvent>(){
 			@Override
 			public void handle(MouseEvent event){
@@ -120,6 +129,7 @@ public class Cycic extends View{
 			}
 		});
 		
+		// Prints the Cyclus input associated with this simulator. 
 		Button output = new Button();
 		output.setText("Print Output");
 		output.setOnAction(new EventHandler<ActionEvent>(){
