@@ -4,12 +4,17 @@ import java.util.ArrayList;
 import javafx.scene.effect.Bloom;
 import javafx.scene.effect.ColorAdjust;
 
+/**
+ * Contains all of the generic and misc visualization functions 
+ * for the CYCIC fuel cycle simulator.
+ * @author Robert
+ *
+ */
 public class visFunctions {
-	
 	/**
-	 * 
-	 * @param string
-	 * @return
+	 * Converts a string to a color.
+	 * @param string String to be converted.
+	 * @return rbg triple stored in an ArrayList<Integer>
 	 */
 	public static ArrayList<Integer> stringToColor(String string){
 		String hashCode;
@@ -56,8 +61,9 @@ public class visFunctions {
 	}
 	
 	/**
-	 * 
-	 * @param array
+	 * Test to determine which font color to use, based on the color
+	 * of the node the text belongs to.
+	 * @param array rbg color ArrayList<Integer>
 	 * @return
 	 */
 	public static boolean colorTest(ArrayList<Integer> array){
@@ -75,8 +81,9 @@ public class visFunctions {
 	}
 	
 	/**
-	 * 
-	 * @param color
+	 * Test determines if the a color should be made darker or lighter
+	 * based on the initial color being used.
+	 * @param color rbg Integer to test.
 	 * @return
 	 */
 	public static double colorMultiplierTest(Integer color){
@@ -106,6 +113,11 @@ public class visFunctions {
 		}
 	};
 	
+	/**
+	 * Code used to link a facilityCircle and a marketCircle in the CYCIC pane.
+	 * @param source facilityCircle that starts the line.
+	 * @param target marketCircle that ends the line.
+	 */
 	static void linkNodesSimple(facilityCircle source, marketCircle target){
 		marketCircle markIndex = null;
 		boolean hiddenLinkCheck = false;
@@ -139,9 +151,9 @@ public class visFunctions {
 		link.line.toBack();
 	}
 	/**
-	 * 
-	 * @param parentInt
-	 * @param marketInt
+	 * Adds a link between a prototype facilityCircle and a marketCircle.
+	 * @param parent facilityCircle of the prototype.
+	 * @param market marketCircle for the market.
 	 */
 	static void addHiddenLink(facilityCircle parent, marketCircle market){
 		nodeLink hiddenLink = new nodeLink();
@@ -159,7 +171,7 @@ public class visFunctions {
 	}
 	
 	/**
-	 * 
+	 * Reloads the CYCIC pane when changes have been made to it's contents.
 	 */
 	static void reloadPane(){
 		Cycic.pane.getChildren().remove(0, Cycic.pane.getChildren().size());
@@ -201,7 +213,13 @@ public class visFunctions {
 		}
 	}
 	
-	
+	/**
+	 * Tests for the presence of a hiddenLink to see if it can be removed 
+	 * or if it is still required after a commodities has changed.
+	 * @param parentName facilityCircle of the parent
+	 * @param oldMarket marketCircle that is removed from the facility
+	 * circle's commodity list.
+	 */
 	public static void hiddenLinkTest(facilityCircle parentName, Object oldMarket){
 		int hiddenLinkCount = 0;
 		for (int j = 0; j < dataArrays.hiddenLinks.size(); j++){
@@ -215,6 +233,12 @@ public class visFunctions {
 		}
 	}
 	
+	/**
+	 * Removing a hiddenLink after a facilities commodity has been changed.
+	 * @param parentName facilityCircle at the start of the hiddenLink.
+	 * @param oldMarket marketCircle at the end of the hiddenLink.
+	 * @param test Boolean return of the hiddenLinkTest.
+	 */
 	public static void hiddenLinkRemoval(facilityCircle parentName, Object oldMarket, Boolean test){
 
 		for (int j = 0; j < dataArrays.hiddenLinks.size(); j++){

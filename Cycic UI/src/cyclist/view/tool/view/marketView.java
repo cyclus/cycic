@@ -21,16 +21,24 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
+/**
+ * The marketView class is used to generate and populate the forms
+ * for a market. Starting with name and commodity tied to markets.
+ * @author Robert
+ *
+ */
 public class marketView extends View{
+	/**
+	 * Main init() function for the view. 
+	 */
 	public marketView(){
 		super();
 		formNode = Cycic.workingMarket;
-		
-		/*formBuilder(practiceFacs.Structures.get(formNode.facTypeIndex), formNode.facilityData);*/
+		// Tests to build the marketData ArrayList.
 		if (formNode.marketStruct != null){
 			marketFormBuilder(formNode.marketStruct, formNode.marketData);
 		}
-		
+		// Trouble shooting button (outputs dataArray)
 		Button button = new Button();
 		button.setText("Check Array");
 		button.setOnAction(new EventHandler<ActionEvent>(){
@@ -39,6 +47,7 @@ public class marketView extends View{
 				System.out.println(formNode.commodity);
 			}
 		});
+		// User level box. 
 		for(int i = 0; i < 11; i++){
 			userLevelBox.getItems().add(String.format("%d", i));
 		}
@@ -60,6 +69,7 @@ public class marketView extends View{
 		Label commod = new Label("Market Commodity");
 		topGrid.add(commod, 0, 1);
 		
+		// ComboBox for adding a commodity to the market.
 		final ComboBox<String> marketCommod = new ComboBox<String>();
 		
 		marketCommod.setOnMousePressed(new EventHandler<MouseEvent>(){
@@ -222,10 +232,12 @@ public class marketView extends View{
 	}
 	
 	/**
-	 * 
-	 * @param grid
-	 * @param dataArray
-	 * @return
+	 * Adds a orMore Button to the form that is required for orMore fields
+	 * to add another subfield.
+	 * @param grid GridPane that supports the form.
+	 * @param facArray ArrayList<Object> that contains the market structure.
+	 * @param dataArray ArrayList<Object> that contains the market data.
+	 * @return Button that will add the orMore field and redraw the form.
 	 */
 	public Button orMoreAddButton(final GridPane grid, final ArrayList<Object> facArray,final ArrayList<Object> dataArray){
 		Button button = new Button();
@@ -242,6 +254,12 @@ public class marketView extends View{
 		return button;
 	}
 	
+	/**
+	 * Function to remove a previously added orMore field.
+	 * @param dataArray ArrayList<Object> that contains the new orMore field.
+	 * @param dataArrayNumber The index of the orMore field to be removed.
+	 * @return Button to remove the orMore field and redraw the form. 
+	 */
 	public Button arrayListRemove(final ArrayList<Object> dataArray, final int dataArrayNumber){
 		Button button = new Button();
 		button.setText("Remove");

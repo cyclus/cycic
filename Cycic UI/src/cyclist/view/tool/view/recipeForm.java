@@ -12,7 +12,15 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import cyclist.view.component.View;
 
+/**
+ * View for building recipies inside of cyclus.
+ * @author Robert
+ *
+ */
 public class recipeForm extends View{
+	/**
+	 * View function for placing the forms onto the view.
+	 */
 	public recipeForm(){
 		super();
 		init();
@@ -28,10 +36,12 @@ public class recipeForm extends View{
 	private GridPane topRecipeGrid = new GridPane();
 	private GridPane recipeGrid = new GridPane();
 	private ComboBox<String> recipiesList = new ComboBox<String>();
+	private ComboBox<String> basisBox = new ComboBox<String>();
 	private int rowNumber;
 	
 	/**
-	 * 
+	 * Places the top grid onto the function. For selecting an existing recipe
+	 * or adding a new recipe.
 	 */
 	public void init(){
 		Label isoSelect = new Label("Select Recipe");
@@ -86,7 +96,7 @@ public class recipeForm extends View{
 	}
 	
 	/**
-	 * 
+	 * Builds the form structures required for each recipe. 
 	 */
 	public void recipeGenInfo(final Nrecipe recipe){
 		rowNumber = 3;
@@ -106,7 +116,6 @@ public class recipeForm extends View{
 		Label basis = new Label("Basis");
 		recipeGrid.add(basis, 0, 1);
 		
-		final ComboBox<String> basisBox = new ComboBox<String>();
 		basisBox.getItems().add("Atom");
 		basisBox.getItems().add("Mass");
 		basisBox.valueProperty().addListener(new ChangeListener<String>(){
@@ -131,8 +140,9 @@ public class recipeForm extends View{
 	}
 	
 	/**
-	 * 
-	 * @param recipe
+	 * Adds an isotopeData item to the selected recipe's composition
+	 * ArrayList
+	 * @param recipe Current working recipe.
 	 */
 	public void addIsotope(Nrecipe recipe){
 		final isotopeData isoData = new isotopeData(); 
@@ -145,6 +155,7 @@ public class recipeForm extends View{
 		isotopeNumber.setMaxSize(100, 20);
 		isotopeNumber.setText("ZZAAA");
 		
+		//Recording Isotope Name
 		isotopeNumber.textProperty().addListener(new ChangeListener<String>(){
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue){
 				isoData.Name = newValue;
@@ -153,7 +164,6 @@ public class recipeForm extends View{
 		recipeGrid.add(isotopeNumber, 1, rowNumber);
 		
 		Label isotopeValue = new Label("Amount");
-		
 		recipeGrid.add(isotopeValue, 2, rowNumber);
 		
 		TextField isoWeightFrac = new TextField(){
@@ -169,17 +179,32 @@ public class recipeForm extends View{
 				}
 			}
 		};
-		isoWeightFrac.textProperty().addListener(new ChangeListener<String>(){
-			@Override public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue){
-				isoData.weightFrac = Double.parseDouble(newValue);
-			}
-		});
+		// Determining if mass or atom needs to be used. 
+		if (basisBox.getValue() == "mass"){
+			isoWeightFrac.textProperty().addListener(new ChangeListener<String>(){
+				@Override public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue){
+					isoData.mass = Double.parseDouble(newValue);
+				}
+			});
+		} else {
+			isoWeightFrac.textProperty().addListener(new ChangeListener<String>(){
+				@Override public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue){
+					isoData.atom = Double.parseDouble(newValue);
+				}
+			});
+		}
 		recipeGrid.add(isoWeightFrac, 3, rowNumber);
 		recipeGrid.add(removeIsotope(recipe, isoData), 4, rowNumber);
 		recipe.Composition.add(isoData);
 		rowNumber += 1;
 	}
 	
+	/**
+	 * Removes an isotope for a recipe.
+	 * @param recipe Recipe the isotope will be removed from.
+	 * @param isoData isotopeData to be removed.
+	 * @return Button that will remove the isotope on click.
+	 */
 	public Button removeIsotope(final Nrecipe recipe, final isotopeData isoData){
 		Button removeIso = new Button();
 		removeIso.setText("Remove");
@@ -194,8 +219,8 @@ public class recipeForm extends View{
 	}
 	
 	/**
-	 * 
-	 * @param recipe
+	 * Loads a recipe stored to the simulation
+	 * @param recipe Recipe to be loaded.
 	 */
 	public void loadRecipe(final Nrecipe recipe){
 		recipeGenInfo(recipe);
@@ -233,12 +258,22 @@ public class recipeForm extends View{
 					}
 				}
 			};
-			isoWeightFrac.textProperty().addListener(new ChangeListener<String>(){
-				@Override public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue){
-					iso.weightFrac = Double.parseDouble(newValue);
-				}
-			});
-			isoWeightFrac.setText(String.valueOf(iso.weightFrac));
+			if (basisBox.getValue() == "mass"){
+				isoWeightFrac.textProperty().addListener(new ChangeListener<String>(){
+					@Override public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue){
+						iso.mass = Double.parseDouble(newValue);
+					}
+				});
+				isoWeightFrac.setText(String.valueOf(iso.mass));
+			} else {
+				isoWeightFrac.textProperty().addListener(new ChangeListener<String>(){
+					@Override public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue){
+						iso.atom = Double.parseDouble(newValue);
+					}
+				});
+				isoWeightFrac.setText(String.valueOf(iso.atom));
+			}
+			
 			isoWeightFrac.setMaxSize(80, 20);
 			recipeGrid.add(isoWeightFrac, 3, rowNumber);
 			recipeGrid.add(removeIsotope(recipe, iso), 4, rowNumber);

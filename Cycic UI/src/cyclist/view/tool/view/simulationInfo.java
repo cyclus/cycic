@@ -13,8 +13,15 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import cyclist.view.component.View;
-
+/**
+ * View for the Simulation Control Information
+ * @author Robert
+ *
+ */
 public class simulationInfo extends View{
+	/**
+	 * Initialization function for the view.
+	 */
 	public simulationInfo(){
 		super();
 		
@@ -30,6 +37,9 @@ public class simulationInfo extends View{
 	HashMap<String, String> months = new HashMap<String, String>();
 	ArrayList<String> monthList = new ArrayList<String>();
 	
+	/**
+	 * Adds the GridPane and input nodes to the simulationInfo view.
+	 */
 	public void init(){
 		TextField duration = new TextField();
 		duration.textProperty().addListener(new ChangeListener<String>(){
@@ -84,6 +94,10 @@ public class simulationInfo extends View{
 		setContent(simInfo);
 	}
 	
+	/**
+	 * Quick hack to convert months into their integer values.
+	 * i.e. January = 0, Feb = 1, etc...
+	 */
 	public void months(){
 		monthList.add("January");
 		monthList.add("February");

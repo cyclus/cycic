@@ -37,7 +37,7 @@ public class regionView extends View{
 	 */
 	public regionView(){
 		super();
-		
+		// Facility list view for available facilities list of the region
 		final ListView<String> facilityList = new ListView<String>();
 		facilityList.setOrientation(Orientation.VERTICAL);
 		facilityList.setMinHeight(25);
@@ -49,7 +49,7 @@ public class regionView extends View{
 				}
 			}
 		});
-		
+		//Institution list view for the region.
 		final ListView<String> institList = new ListView<String>();
 		institList.setOrientation(Orientation.VERTICAL);
 		institList.setMinHeight(25);
@@ -61,7 +61,7 @@ public class regionView extends View{
 				}
 			}
 		});		
-		
+		// Selection for new or currently built regions.
 		structureCB.setOnMouseClicked(new EventHandler<MouseEvent>(){
 			public void handle(MouseEvent e){
 				structureCB.getItems().clear();
@@ -110,10 +110,10 @@ public class regionView extends View{
 			}
 		});
 		
-		
 		topGrid.add(structureCB, 0, 0);
 		topGrid.add(button, 2, 0);
 		
+		// Code section to add new facility to region.
 		final ComboBox<String> addNewFacilityBox = new ComboBox<String>();
 		addNewFacilityBox.setOnMousePressed(new EventHandler<MouseEvent>(){
 			public void handle(MouseEvent e){
@@ -138,6 +138,7 @@ public class regionView extends View{
 			}
 		});
 		
+		// Code to add new institution to region.
 		final ComboBox<String> addNewInstitBox = new ComboBox<String>();
 		addNewInstitBox.setOnMousePressed(new EventHandler<MouseEvent>(){
 			public void handle(MouseEvent event){
@@ -160,6 +161,7 @@ public class regionView extends View{
 			}
 		});
 		
+		// Setting up the view visuals.
 		topGrid.add(addNewFacilityBox, 0, 2);
 		topGrid.add(addAvailFac, 1, 2);
 		topGrid.add(addNewInstitBox, 0, 3);
@@ -196,12 +198,6 @@ public class regionView extends View{
 		sc.setStyle("-fx-background-color: silver;");
 		setContent(sc);
 		setPrefSize(600,400);
-		
-		/*setOnMouseDragged(new EventHandler<MouseEvent>(){
-			public void handle(MouseEvent e){
-				sc.setPrefSize(getWidth(), getHeight());
-			}
-		});*/
 		
 		if (dataArrays.regionStructs.size() < 1) {
 			practiceRegions.init();

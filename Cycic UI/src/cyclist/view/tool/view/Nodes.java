@@ -18,6 +18,11 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
+/**
+ * The class used to build a new Prototype Facility node.
+ * @author Robert
+ *
+ */
 public class Nodes{
 
 	protected static double mousey;
@@ -25,6 +30,12 @@ public class Nodes{
 	protected static double x;
 	protected static double y;
 	
+	/**
+	 * Function to build a prototype facility node. This node will contain
+	 * the facilities available to institutions and regions. All children 
+	 * built from this node will mimic its structure. 
+	 * @param name Name of the new prototype facility.
+	 */
 	static void addNode(String name) {
 		final facilityCircle circle = new facilityCircle();
 		circle.setId(name);
@@ -33,6 +44,8 @@ public class Nodes{
 		circle.setCenterY(40);
 		circle.type = "Parent";
 		circle.childrenShow = true;
+		
+		//Setting up the name and nameing structure of the circle.
 		circle.text = new Text(name);
 		circle.name = name;
 		circle.text.setX(circle.getCenterX()-circle.getRadius()*0.6);
@@ -60,6 +73,7 @@ public class Nodes{
 		l.setSurfaceScale(5.0f);
 		circle.setEffect(l);*/
 		
+		// Adding the menu and it's menu items.
 		final Menu menu1 = new Menu("Options");
 		MenuItem facForm = new MenuItem("Facility Form");
 		MenuItem delete = new MenuItem("Delete");
@@ -104,12 +118,14 @@ public class Nodes{
 		circle.menu.setLayoutY(circle.getCenterY());
 		circle.menu.setVisible(false);
 		
+		// Piece of test code for changing the look of the facility circles.
 		circle.image.setImage(new Image("reactor.png"));
 		circle.image.setLayoutX(circle.getCenterX()-60);
 		circle.image.setLayoutY(circle.getCenterY()-60);
 		circle.image.setMouseTransparent(true);
 		circle.image.setVisible(false);
-
+		
+		// Mouse pressed to add in movement of the facilityCircle.
 		circle.onMousePressedProperty().set(new EventHandler<MouseEvent>(){
 			@Override
 			public void handle(MouseEvent event){
@@ -127,6 +143,7 @@ public class Nodes{
 			}
 		});
 		
+		// To allow the facilityCircle to be moved through the pane and setting bounding regions.
 		circle.onMouseDraggedProperty().set(new EventHandler<MouseEvent>(){
 			@Override
 			public void handle(MouseEvent event){
@@ -189,6 +206,7 @@ public class Nodes{
 				mousey = event.getY();
 			}
 		});
+		// Double click functionality to show/hide children. As well as a bloom feature to show which node is selected.
 		circle.setOnMouseClicked(new EventHandler<MouseEvent>(){
 			@Override
 			public void handle(MouseEvent event){
@@ -215,6 +233,7 @@ public class Nodes{
 		
 		dataArrays.FacilityNodes.add(circle);
 		
+		// Code for allow a shift + (drag and drop) to start a new facility form for this facilityCircle.
 		circle.setOnDragDetected(new EventHandler<MouseEvent>(){
 			@Override
 			public void handle(MouseEvent event){
@@ -228,6 +247,7 @@ public class Nodes{
 			}
 		});
 		
+		// Adding facilityCircle to the pane. 
 		Cycic.pane.getChildren().add(circle);
 		Cycic.pane.getChildren().add(circle.menu);
 		Cycic.pane.getChildren().add(circle.text);
@@ -236,13 +256,18 @@ public class Nodes{
 	}
 	
 	/**
-	 * 
-	 * @param name
+	 * Removes a facilityCircle from the simulation.
+	 * @param circle The facilityCircle to be removed. 
 	 */
 	static void deleteNode(facilityCircle circle){
 		for(int i = 0; i < dataArrays.Links.size(); i++){
 			if(dataArrays.Links.get(i).source == circle){
 				dataArrays.Links.remove(i);
+			}
+		}
+		for(int i = 0; i < dataArrays.hiddenLinks.size(); i++){
+			if(dataArrays.hiddenLinks.get(i).source == circle){
+				dataArrays.hiddenLinks.remove(i);
 			}
 		}
 		for(int i = 0; i < dataArrays.FacilityNodes.size(); i++){

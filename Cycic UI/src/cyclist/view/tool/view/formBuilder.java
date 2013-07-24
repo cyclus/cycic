@@ -1,10 +1,5 @@
 package cyclist.view.tool.view;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 import java.util.ArrayList;
 
 import cyclist.view.component.View;
@@ -26,11 +21,15 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
 /**
- *
+ * Class that extends the View class used to build the forms for 
+ * representing a facility and its input fields within Cyclus.
  * @author Robert
  */
-
 public class formBuilder extends View {
+	/**
+	 * Initiates the structures at the top of the form and the GridPane
+	 * used in the form view.
+	 */
 	public formBuilder(){
 		super();
 		formNode = Cycic.workingNode;
@@ -99,10 +98,13 @@ public class formBuilder extends View {
 	private int userLevel= 0;
 	
 	/**
-	 * 
-	 * @param grid
-	 * @param dataArray
-	 * @return
+	 * Function builds a button to add a orMore button to the facility form.
+	 * @param grid GridPane that the button will be added to. Also the same
+	 * used to build the facility form.
+	 * @param facArray ArrayList<Object> containing the data structure of the
+	 * facility.
+	 * @param dataArray ArrayList<Object> containing the data of the facility.
+	 * @return Button that adds an orMore to said facility structure.
 	 */
 	public Button orMoreAddButton(final GridPane grid, final ArrayList<Object> facArray,final ArrayList<Object> dataArray){
 		Button button = new Button();
@@ -119,6 +121,15 @@ public class formBuilder extends View {
 		return button;
 	}
 	
+	/**
+	 * Function removes a data structure from the facility visualized by this form.
+	 * @param grid GridPane that supports the form in this view.
+	 * @param dataArray ArrayList<Object> containing the information to be
+	 * removed.
+	 * @param dataArrayNumber Index of the object to be removed.
+	 * @return Button that is used to remove the structure, and redraw
+	 * the GridPane to update the form.
+	 */
 	public Button arrayListRemove(final GridPane grid, final ArrayList<Object> dataArray, final int dataArrayNumber){
 		Button button = new Button();
 		button.setText("Remove");
@@ -135,6 +146,15 @@ public class formBuilder extends View {
 		return button;
 	}
 	
+	/**
+	 * This function builds an input form from the data structures associated
+	 * with a facility.
+	 * @param grid GridPane that the form is built upon.
+	 * @param facArray ArrayList<Object> with the data structure
+	 * for the facility.
+	 * @param dataArray ArrayList<Object> that contains the data for the
+	 * facility.
+	 */
 	@SuppressWarnings("unchecked")
 	public void formBuilder(GridPane grid, ArrayList<Object> facArray, ArrayList<Object> dataArray){
 		for (int i = 0; i < facArray.size(); i++){
@@ -209,6 +229,7 @@ public class formBuilder extends View {
 							columnEnd = 2 + columnNumber;
 						}
 					} else {
+						// Special form building functions that are used for specific tags
 						switch ((String) facArray.get(0)) {
 						case "Name":
 							grid.add(formBuilderFunctions.nameFieldBuilder(formNode, dataArray), 1+columnNumber, rowNumber);

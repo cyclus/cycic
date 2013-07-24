@@ -6,6 +6,12 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.text.Text;
 
+/**
+ * Class used by CYCIC that expands the Ellipse.Java class. The class 
+ * is used to create market nodes in the simulation.
+ * @author Robert
+ *
+ */
 public class marketCircle extends Ellipse {
 	Object name;
 	String facilityType = "";

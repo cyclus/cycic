@@ -48,13 +48,13 @@ class Nrecipe {
 }
 
 /**
- * Contains name, weightFrac, and mass information for specify an isotope within a recipe.
+ * Contains name, atom, and mass information for specify an isotope within a recipe.
  * @author Robert
  *
  */
 class isotopeData {
 	String Name = new String();
-	double weightFrac;
+	double atom;
 	double mass;
 }
 

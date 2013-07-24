@@ -23,7 +23,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import cyclist.view.component.View;
 /**
- * A view used to build and develope instutitions for the simulation currently being built. 
+ * A view used to build and develope instutitions for the simulation 
+ * currently being built. 
  * @author Robert
  *
  */
@@ -271,11 +272,14 @@ public class instituteView extends View{
 	static instituteNode workingInstit;
 
 	/**
-	 * This function takes a constructed data array and it's corresponding institution structure array and creates
-	 * a form in for the structure and data arrays.
-	 * @param facArray This is the structure of the data array. Included in this array should be all of the information
-	 * needed to fully describe the data structure of a institution.
-	 * @param dataArray The empty data array that is associated with this institution. It should be built to match the structure
+	 * This function takes a constructed data array and it's corresponding 
+	 * institution structure array and creates a form in for the structure 
+	 * and data arrays.
+	 * @param facArray This is the structure of the data array. Included 
+	 * in this array should be all of the information needed to fully 
+	 * describe the data structure of a institution.
+	 * @param dataArray The empty data array that is associated with 
+	 * this institution. It should be built to match the structure
 	 * of the institution structure passed to the form. 
 	 */
 	@SuppressWarnings("unchecked")
@@ -382,11 +386,16 @@ public class instituteView extends View{
 	}
 	
 	/**
-	 * Function to add an orMore button to the form. This button allows the user to add additional fields to zeroOrMore or oneOrMore form inputs.
+	 * Function to add an orMore button to the form. 
+	 * This button allows the user to add additional 
+	 * fields to zeroOrMore or oneOrMore form inputs.
 	 * @param grid This is the grid of the current view. 
-	 * @param facArray The ArrayList<Object> used to make a copy of the one or more field. 
-	 * @param dataArray The ArrayList<Object> the new orMore field will be added to.
-	 * @return Button that will add the orMore field to the dataArray and reload the form.
+	 * @param facArray The ArrayList<Object> used to make 
+	 * a copy of the one or more field. 
+	 * @param dataArray The ArrayList<Object> the new 
+	 * orMore field will be added to.
+	 * @return Button that will add the orMore field 
+	 * to the dataArray and reload the form.
 	 */
 	public Button orMoreAddButton(final GridPane grid, final ArrayList<Object> facArray,final ArrayList<Object> dataArray){
 		Button button = new Button();
@@ -404,9 +413,11 @@ public class instituteView extends View{
 	}
 	
 	/**
-	 * This function removes a orMore that has been added to a particular field.
+	 * This function removes a orMore that has been 
+	 * added to a particular field.
 	 * @param dataArray The ArrayList<Object> containing the orMore field
-	 * @param dataArrayNumber the index number of the orMore field that is to be removed.
+	 * @param dataArrayNumber the index number of the orMore field 
+	 * that is to be removed.
 	 * @return Button for executing the commands in this function.
 	 */
 	public Button arrayListRemove(final ArrayList<Object> dataArray, final int dataArrayNumber){
@@ -420,8 +431,7 @@ public class instituteView extends View{
 				rowNumber = 0;
 				formBuilder(workingInstit.institStruct, workingInstit.institData);
 			}
-		});		
-		
+		});
 		return button;
 	}
 }

@@ -13,6 +13,12 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
+/**
+ * This class builds the marketCircles used to represent markets in the 
+ * CYCIC visualization. 
+ * @author Robert
+ *
+ */
 public class marketNodes{
 
 	protected static double mousey;
@@ -20,6 +26,10 @@ public class marketNodes{
 	protected static double x;
 	protected static double y;
 	
+	/**
+	 * Function initiates a new marketCircle.
+	 * @param name Name of the new market.
+	 */
 	static void addMarket(String name) {
 		final marketCircle circle = new marketCircle();
 		circle.setId(name);
@@ -27,6 +37,8 @@ public class marketNodes{
 		circle.setRadiusY(20);
 		circle.setCenterX(40);
 		circle.setCenterY(40);
+		
+		// Adding the text to the circle.
 		circle.text = new Text(name);
 		circle.name = name;
 		circle.text.setX(circle.getCenterX()-circle.text.getBoundsInLocal().getWidth()/2);
@@ -39,13 +51,14 @@ public class marketNodes{
 		circle.setFill(Color.rgb(100, 150, 200));
 		circle.text.setFill(Color.WHITE);
 		
+		//Adding the circle's menu and it's functions.
 		final Menu menu1 = new Menu(circle.getId());
 		MenuItem facForm = new MenuItem("Market Form");
 		MenuItem delete = new MenuItem("Delete");
 		delete.setOnAction(new EventHandler<ActionEvent>(){
 			@Override
 			public void handle(ActionEvent e){
-				deleteMarket(circle.getId());
+				deleteMarket(circle);
 			}
 		});
 		menu1.getItems().addAll(facForm, delete);
@@ -53,7 +66,8 @@ public class marketNodes{
 		circle.menu.setLayoutX(circle.getCenterX());
 		circle.menu.setLayoutY(circle.getCenterY());
 		circle.menu.setVisible(false);
-
+		
+		// Allows the shift drag event to load a new marketView.
 		circle.setOnDragDetected(new EventHandler<MouseEvent>(){
 			@Override
 			public void handle(MouseEvent event){
@@ -67,6 +81,7 @@ public class marketNodes{
 			}
 		});
 		
+		// Code for moving the marketCircle
 		circle.onMousePressedProperty().set(new EventHandler<MouseEvent>(){
 			@Override
 			public void handle(MouseEvent event){
@@ -131,15 +146,19 @@ public class marketNodes{
 		Cycic.pane.getChildren().add(circle.text);
 	}
 
-	static void deleteMarket(String name){
+	/**
+	 * Function used to delete a given market.
+	 * @param name MarketCircle to be deleted.
+	 */
+	static void deleteMarket(marketCircle circle){
 		for(int i = 0; i < dataArrays.Links.size(); i++){
-			if(dataArrays.Links.get(i).target == name){
+			if(dataArrays.Links.get(i).target == circle){
 				dataArrays.Links.remove(i);
 				i = i-1;
 			}
 		}
 		for(int i = 0; i < dataArrays.marketNodes.size(); i++){
-			if(dataArrays.marketNodes.get(i).getId() == name){
+			if(dataArrays.marketNodes.get(i) == circle){
 				dataArrays.marketNodes.remove(i);
 			}
 		}
