@@ -9,7 +9,7 @@ public class realFacs {
 	
 	public static void init(){
 		//build an recipereactor array
-		ArrayList<Object> RecipeReactor=new ArrayList<Object>();
+		ArrayList<Object> BatchReactor=new ArrayList<Object>();
 		//reactor name
 		ArrayList<Object> name = new ArrayList<Object>();
 		name.add("Name");
@@ -21,205 +21,194 @@ public class realFacs {
 		name.add(0);
 		name.add(null);
 		name.add(null);
-		RecipeReactor.add(name);
+		BatchReactor.add(name);
 		//build an fuelpair array
-		ArrayList<Object> FuelPair=new ArrayList<Object>();
-		FuelPair.add("Fuel Pair");
+		ArrayList<Object> fuelInput=new ArrayList<Object>();
+		fuelInput.add("fuel_input");
 		//build fuelpairsubarray
 		ArrayList<Object> FuelPairSub=new ArrayList<Object>();
 		//build reactor incommodity
 		ArrayList<Object> ReactorIncommodity=new ArrayList<Object>();
-		ReactorIncommodity.add("Incommodity");
+		ReactorIncommodity.add("incommodity");
 		ReactorIncommodity.add("String");
 		ReactorIncommodity.add("String");
 		ReactorIncommodity.add(null);
 		ReactorIncommodity.add(null);
 		ReactorIncommodity.add(null);
 		ReactorIncommodity.add(0);
-		ReactorIncommodity.add(null);
+		ReactorIncommodity.add("the input commidty name");
 		ReactorIncommodity.add(null);
 		//build reactor inrecipe
 		ArrayList<Object> ReactorInrecipe=new ArrayList<Object>();
-		ReactorInrecipe.add("Inrecipe");
+		ReactorInrecipe.add("inrecipe");
 		ReactorInrecipe.add("String");
 		ReactorInrecipe.add("String");
 		ReactorInrecipe.add(null);
 		ReactorInrecipe.add(null);
 		ReactorInrecipe.add(null);
 		ReactorInrecipe.add(0);
+		ReactorInrecipe.add("the input recipe (isotopic");
 		ReactorInrecipe.add(null);
-		ReactorInrecipe.add(null);
-		//build reactor outcommodity
-		ArrayList<Object> ReactorOutcommodity=new ArrayList<Object>();
-		ReactorOutcommodity.add("Outcommodity");
-		ReactorOutcommodity.add("String");
-		ReactorOutcommodity.add("String");
-		ReactorOutcommodity.add(null);
-		ReactorOutcommodity.add(null);
-		ReactorOutcommodity.add(null);
-		ReactorOutcommodity.add(0);
-		ReactorOutcommodity.add(null);
-		ReactorOutcommodity.add(null);
-		//build reactor outrecipe
-		ArrayList<Object> ReactorOutrecipe=new ArrayList<Object>();
-		ReactorOutrecipe.add("Outrecipe");
-		ReactorOutrecipe.add("String");
-		ReactorOutrecipe.add("String");
-		ReactorOutrecipe.add(null);
-		ReactorOutrecipe.add(null);
-		ReactorOutrecipe.add(null);
-		ReactorOutrecipe.add(0);
-		ReactorOutrecipe.add(null);
-		ReactorOutrecipe.add(null);
-
 		FuelPairSub.add(ReactorIncommodity);
 		FuelPairSub.add(ReactorInrecipe);
-		FuelPairSub.add(ReactorOutcommodity);
-		FuelPairSub.add(ReactorOutrecipe);
-		FuelPair.add(FuelPairSub);
-		FuelPair.add("oneOrMore");
-		FuelPair.add(null);
-		FuelPair.add(null);
-		FuelPair.add(null);
-		FuelPair.add(0);
-		FuelPair.add(null);
-		FuelPair.add(null);
-		//build  reactor startConstrYear
-		ArrayList<Object> ReactorstartConstrYear=new ArrayList<Object>();
-		ReactorstartConstrYear.add("Start Constr Year");
-		ReactorstartConstrYear.add("Double");
-		ReactorstartConstrYear.add("Double");
-		ReactorstartConstrYear.add(" ");
-		ReactorstartConstrYear.add(null);
-		ReactorstartConstrYear.add(null);
-		ReactorstartConstrYear.add(0);
-		ReactorstartConstrYear.add("Year construction begins on the reactor");
-		ReactorstartConstrYear.add("nonNegativeInteger");
-		//build reactor startconstrmonth
-		ArrayList<Object> ReactorstartConstrMonth=new ArrayList<Object>();
-		ReactorstartConstrMonth.add("Start Constr Month");
-		ReactorstartConstrMonth.add("Double");
-		ReactorstartConstrMonth.add("Double");
-		ReactorstartConstrMonth.add(" ");
-		ReactorstartConstrMonth.add(null);
-		ReactorstartConstrMonth.add(null);
-		ReactorstartConstrMonth.add(0);
-		ReactorstartConstrMonth.add("Number of month from 0 (January) to 11 (December)");
-		ReactorstartConstrMonth.add("nonNegativeInteger");
-		//build reactor startOperYear
-		ArrayList<Object> ReactorstartOperYear=new ArrayList<Object>();
-		ReactorstartOperYear.add("startOperYear");
-		ReactorstartOperYear.add("Double");
-		ReactorstartOperYear.add("Double");
-		ReactorstartOperYear.add(" ");
-		ReactorstartOperYear.add(null);
-		ReactorstartOperYear.add(null);
-		ReactorstartOperYear.add(0);
-		ReactorstartOperYear.add(null);
-		ReactorstartOperYear.add(null);
-		//build reactor startOperMonth
-		ArrayList<Object> ReactorstartOperMonth = new ArrayList<Object>();
-		ReactorstartOperMonth.add("startOperMonth");
-		ReactorstartOperMonth.add("Double");
-		ReactorstartOperMonth.add("Double");
-		ReactorstartOperMonth.add(" ");
-		ReactorstartOperMonth.add(null);
-		ReactorstartOperMonth.add(null);
-		ReactorstartOperMonth.add(0);
-		ReactorstartOperMonth.add(null);
-		ReactorstartOperMonth.add(null);
-		//build reactor licExpYear
-		ArrayList<Object> ReactorlicExpYear=new ArrayList<Object>();
-		ReactorlicExpYear.add("ReactorlicExpYear");
-		ReactorlicExpYear.add("Double");
-		ReactorlicExpYear.add("Double");
-		ReactorlicExpYear.add(" ");
-		ReactorlicExpYear.add(null);
-		ReactorlicExpYear.add(null);
-		ReactorlicExpYear.add(0);
-		ReactorlicExpYear.add(null);
-		ReactorlicExpYear.add("nonNegativeInteger");
-		//build reactor licExpMonth
-		ArrayList<Object> ReactorlicExpMonth=new ArrayList<Object>();
-		ReactorlicExpMonth.add("ReactorlicExpMonth");
-		ReactorlicExpMonth.add("Double");
-		ReactorlicExpMonth.add("Double");
-		ReactorlicExpMonth.add(" ");
-		ReactorlicExpMonth.add(null);
-		ReactorlicExpMonth.add(null);
-		ReactorlicExpMonth.add(0);
-		ReactorlicExpMonth.add(null);
-		ReactorlicExpMonth.add("nonNegativeInteger");
-		//build reactor lifetime
-		ArrayList<Object> ReactorlifeTime=new ArrayList<Object>();
-		ReactorlifeTime.add("lifetime");
-		ReactorlifeTime.add("Double");
-		ReactorlifeTime.add("Double");
-		ReactorlifeTime.add(" ");
-		ReactorlifeTime.add(null);
-		ReactorlifeTime.add(null);
-		ReactorlifeTime.add(0);
-		ReactorlifeTime.add(null);
-		ReactorlifeTime.add(null);
-		//build reactor state
-		ArrayList<Object> ReactorState=new ArrayList<Object>();
-		ReactorState.add("State");
-		ReactorState.add("String");
-		ReactorState.add("String");
-		ReactorState.add(null);
-		ReactorState.add(null);
-		ReactorState.add(null);
-		ReactorState.add(0);
-		ReactorState.add(null);
-		ReactorState.add(null);
-		//build reactor typeReactor
-		ArrayList<Object> typeReactor=new ArrayList<Object>();
-		typeReactor.add("typeReac");
-		typeReactor.add("String");
-		typeReactor.add("String");
-		typeReactor.add(null);
-		typeReactor.add(null);
-		typeReactor.add(null);
-		typeReactor.add(0);
-		typeReactor.add(null);
-		typeReactor.add(null);
-		//build reactor capacity
-		ArrayList<Object> ReactorCapacity=new ArrayList<Object>();
-		ReactorCapacity.add("Capacity");
-		ReactorCapacity.add("Double");
-		ReactorCapacity.add("Double");
-		ReactorCapacity.add("MW");
-		ReactorCapacity.add("0...6000");
-		ReactorCapacity.add("0");
-		ReactorCapacity.add(0);
-		ReactorCapacity.add(null);
-		ReactorCapacity.add(null);
-		//build reactor elecCF
-		ArrayList<Object> elecCF=new ArrayList<Object>();
-		elecCF.add("elecCF");
-		elecCF.add("Double");
-		elecCF.add("Double");
-		elecCF.add(" ");
-		elecCF.add(null);
-		elecCF.add(null);
-		elecCF.add(0);
-		elecCF.add(null);
-		elecCF.add(null);
-
-		RecipeReactor.add(FuelPair);
-		RecipeReactor.add(ReactorstartConstrYear);
-		RecipeReactor.add(ReactorstartConstrMonth);
-		RecipeReactor.add(ReactorstartOperYear);
-		RecipeReactor.add(ReactorstartOperMonth);
-		RecipeReactor.add(ReactorlicExpYear);
-		RecipeReactor.add(ReactorlicExpMonth);
-		RecipeReactor.add(ReactorlifeTime);
-		RecipeReactor.add(ReactorState);
-		RecipeReactor.add(typeReactor);
-		RecipeReactor.add(ReactorCapacity);
-		RecipeReactor.add(elecCF);
+		fuelInput.add(FuelPairSub);
+		fuelInput.add("fuel_input");
+		fuelInput.add(null);
+		fuelInput.add(null);
+		fuelInput.add(null);
+		fuelInput.add(0);
+		fuelInput.add("information about the fuel consumed by this reactor");
+		fuelInput.add(null);
 		
-		alfredStructs.add(RecipeReactor);
+		ArrayList<Object> fuelOutput = new ArrayList<Object>();
+		fuelOutput.add("fuel_output");
+		ArrayList<Object> FuelPairSub2=new ArrayList<Object>();
+		//build reactor outcommodity
+		ArrayList<Object> ReactorOutCommodity=new ArrayList<Object>();
+		ReactorOutCommodity.add("outcommodity");
+		ReactorOutCommodity.add("String");
+		ReactorOutCommodity.add("String");
+		ReactorOutCommodity.add(null);
+		ReactorOutCommodity.add(null);
+		ReactorOutCommodity.add(null);
+		ReactorOutCommodity.add(0);
+		ReactorOutCommodity.add("the output commodity name");
+		ReactorOutCommodity.add(null);
+		//build reactor inrecipe
+		ArrayList<Object> ReactorOutRecipe=new ArrayList<Object>();
+		ReactorOutRecipe.add("outrecipe");
+		ReactorOutRecipe.add("String");
+		ReactorOutRecipe.add("String");
+		ReactorOutRecipe.add(null);
+		ReactorOutRecipe.add(null);
+		ReactorOutRecipe.add(null);
+		ReactorOutRecipe.add(0);
+		ReactorOutRecipe.add("the output recipe (isotopics)");
+		ReactorOutRecipe.add(null);
+		FuelPairSub2.add(ReactorOutCommodity);
+		FuelPairSub2.add(ReactorOutRecipe);
+		fuelOutput.add(FuelPairSub2);
+		fuelOutput.add("fuel_output");
+		fuelOutput.add(null);
+		fuelOutput.add(null);
+		fuelOutput.add(null);
+		fuelOutput.add(0);
+		fuelOutput.add("information about the used fuel output by this reactor");
+		fuelOutput.add(null);
+
+		//build  reactor cycleLength
+		ArrayList<Object> reactorCycleLength=new ArrayList<Object>();
+		reactorCycleLength.add("cyclelength");
+		reactorCycleLength.add("Double");
+		reactorCycleLength.add("Double");
+		reactorCycleLength.add(" ");
+		reactorCycleLength.add(null);
+		reactorCycleLength.add(null);
+		reactorCycleLength.add(0);
+		reactorCycleLength.add("number of months the reactor is operational before refueling");
+		reactorCycleLength.add("nonNegativeInteger");
+		//build reactor refuelDelay
+		ArrayList<Object> reactorRefuelTime=new ArrayList<Object>();
+		reactorRefuelTime.add("refueldelay");
+		reactorRefuelTime.add("Double");
+		reactorRefuelTime.add("Double");
+		reactorRefuelTime.add(" ");
+		reactorRefuelTime.add(null);
+		reactorRefuelTime.add(null);
+		reactorRefuelTime.add(1);
+		reactorRefuelTime.add("the number of months the reactor is offline in order to be refuel");
+		reactorRefuelTime.add("nonNegativeInteger");
+		//build reactor startOperYear
+		ArrayList<Object> reactorLoading=new ArrayList<Object>();
+		reactorLoading.add("incoreloading");
+		reactorLoading.add("Double");
+		reactorLoading.add("Double");
+		reactorLoading.add(" ");
+		reactorLoading.add(null);
+		reactorLoading.add(null);
+		reactorLoading.add(0);
+		reactorLoading.add("the quantity of core material when entering the reactor");
+		reactorLoading.add(null);
+		//build reactor startOperMonth
+		ArrayList<Object> reactorOutLoading = new ArrayList<Object>();
+		reactorOutLoading.add("outcoreloading");
+		reactorOutLoading.add("Double");
+		reactorOutLoading.add("Double");
+		reactorOutLoading.add(" ");
+		reactorOutLoading.add(null);
+		reactorOutLoading.add(null);
+		reactorOutLoading.add(0);
+		reactorOutLoading.add("the quantity of core material when exiting the reactor");
+		reactorOutLoading.add(null);
+		//build reactor licExpYear
+		ArrayList<Object> batchsPerCore=new ArrayList<Object>();
+		batchsPerCore.add("batchespercore");
+		batchsPerCore.add("Double");
+		batchsPerCore.add("Double");
+		batchsPerCore.add(null);
+		batchsPerCore.add(null);
+		batchsPerCore.add(null);
+		batchsPerCore.add(0);
+		batchsPerCore.add("the number of batches comprising a full core");
+		batchsPerCore.add("nonNegativeInteger");
+		//commodity production
+		ArrayList<Object> commodityProduction = new ArrayList<Object>();
+		commodityProduction.add("commodity_production");
+		ArrayList<Object> commodProd = new ArrayList<Object>();
+		ArrayList<Object> commodityProd = new ArrayList<Object>();
+		commodityProd.add("commodity");
+		commodityProd.add("String");
+		commodityProd.add("String");
+		commodityProd.add(null);
+		commodityProd.add(null);
+		commodityProd.add(null);
+		commodityProd.add(0);
+		commodityProd.add("the name of the produced commodity");
+		commodityProd.add(null);
+		ArrayList<Object> capacityProd = new ArrayList<Object>();
+		capacityProd.add("capacity");
+		capacityProd.add("String");
+		capacityProd.add("String");
+		capacityProd.add(null);
+		capacityProd.add(null);
+		capacityProd.add(null);
+		capacityProd.add(0);
+		capacityProd.add("the nameplate capacity for the power production");
+		capacityProd.add(null);
+		ArrayList<Object> costProd = new ArrayList<Object>();
+		costProd.add("cost");
+		costProd.add("String");
+		costProd.add("String");
+		costProd.add(null);
+		costProd.add(null);
+		costProd.add(null);
+		costProd.add(0);
+		costProd.add("the cost to produce this capacity");
+		costProd.add("By default, this should be equal to the capacity");
+		
+		commodProd.add(commodityProd);
+		commodProd.add(capacityProd);
+		commodProd.add(costProd);
+		
+		commodityProduction.add(commodProd);
+		commodityProduction.add("commodity_production");
+		commodityProduction.add(null);
+		commodityProduction.add(null);
+		commodityProduction.add(null);
+		commodityProduction.add(0);
+		commodityProduction.add("information about the power produced by the reactor");
+		commodityProduction.add(null);
+		
+		BatchReactor.add(fuelInput);
+		BatchReactor.add(fuelOutput);
+		BatchReactor.add(reactorCycleLength);
+		BatchReactor.add(reactorRefuelTime);
+		BatchReactor.add(reactorLoading);
+		BatchReactor.add(reactorOutLoading);
+		BatchReactor.add(batchsPerCore);
+		BatchReactor.add(commodityProduction);
+		
+		alfredStructs.add(BatchReactor);
 		
 		//build enrichment facility array
 		ArrayList<Object>EnrichmentFacility=new ArrayList<Object>();
@@ -413,8 +402,8 @@ public class realFacs {
 		
 		alfredStructs.add(SourceFacility);
 		
-		//build Storage Facility
-		ArrayList<Object> StorageFacility=new ArrayList<Object>();
+		//build Sink Facility
+		ArrayList<Object> SinkFacility=new ArrayList<Object>();
 		//name
 		ArrayList<Object> nameStore = new ArrayList<Object>();
 		nameStore.add("Name");
@@ -424,9 +413,9 @@ public class realFacs {
 		nameStore.add(null);
 		nameStore.add(null);
 		nameStore.add(0);
-		nameStore.add("Name of Storage Facility");
+		nameStore.add("Name of Sink Facility");
 		nameStore.add(null);
-		StorageFacility.add(nameStore);
+		SinkFacility.add(nameStore);
 		//Build Incommodities array
 		ArrayList<Object> Incommodities=new ArrayList<Object>();
 		Incommodities.add("Incommodities");
@@ -442,109 +431,50 @@ public class realFacs {
 		Incommodity.add(null);
 		Incommodity.add(null);
 		Incommodity.add(0);
-		Incommodity.add(null);
+		Incommodity.add("a set of commodityies which can be accepted by this facility");
 		Incommodity.add(null);
 		
-		subIncommodities.add(Incommodity);
+		/*subIncommodities.add(Incommodity);
 		Incommodities.add(subIncommodities);
 		Incommodities.add("oneOrMore");
 		Incommodities.add(null);
 		Incommodities.add(null);
 		Incommodities.add(null);
 		Incommodities.add(0);
-		Incommodities.add("Commodities the facility accepts");
-		Incommodities.add(null);
+		Incommodities.add("a set of commodityies which can be accepted by this facility");
+		Incommodities.add(null);*/
 		//build Capacity array
 		ArrayList<Object> Capacity=new ArrayList<Object>();
-		Capacity.add("Capacity");
+		Capacity.add("capacity");
 		Capacity.add("Double");
 		Capacity.add("Double");
 		Capacity.add("kg/yr");
 		Capacity.add("0...10000");
 		Capacity.add("0");
 		Capacity.add(0);
-		Capacity.add(null);
+		Capacity.add("a maximum amount of material that can be accepted for any given time step");
 		Capacity.add(null);
 		//use inventory size from sourcefacility
-		//build Residence Time array
-		ArrayList<Object> ResidenceTime = new ArrayList<Object>();
-		ResidenceTime.add("Residence Time");
-		ResidenceTime.add("Double");
-		ResidenceTime.add("Double");
-		ResidenceTime.add("Months");
-		ResidenceTime.add(null);
-		ResidenceTime.add(null);
-		ResidenceTime.add(0);
-		ResidenceTime.add(null);
-		ResidenceTime.add("NonNegativeInteger");
+		ArrayList<Object> InventorySizeSink = new ArrayList<Object>();
+		InventorySizeSink.add("inventorysize");
+		InventorySizeSink.add("Double");
+		InventorySizeSink.add("Double");
+		InventorySizeSink.add("kg");
+		InventorySizeSink.add("0...1000000");
+		InventorySizeSink.add("0");
+		InventorySizeSink.add(0);
+		InventorySizeSink.add("the maximum amount of material that can be stored at this facility");
+		InventorySizeSink.add(null);
 		
-		//build Initial Stocks array
-		ArrayList<Object> InitialStocks=new ArrayList<Object>();
-		InitialStocks.add("Initial Stocks");
-		//build subarray for InitialStocks
-		ArrayList<Object> SubInitialStocks=new ArrayList<Object>();
-		
-		//Build facility array
-		ArrayList<Object> Facility=new ArrayList<Object>();
-		Facility.add("Facility");
-		Facility.add("String");
-		Facility.add("String");
-		Facility.add(null);
-		Facility.add(null);
-		Facility.add(null);
-		Facility.add(0);
-		Facility.add(null);
-		Facility.add(null);
-		//using the recipe from sourcefacility
-		//build amount array
-		ArrayList<Object> Amount=new ArrayList<Object>();
-		Amount.add("Amount");
-		Amount.add("Double");
-		Amount.add("Double");
-		Amount.add("kg");
-		Amount.add("0...1000");
-		Amount.add("0");
-		Amount.add(0);
-		Amount.add(null);
-		Amount.add(null);
-		
-		//build age array
-		ArrayList<Object> Age=new ArrayList<Object>();
-		Age.add("Age");
-		Age.add("Double");
-		Age.add("Double");
-		Age.add("Months");
-		Age.add(null);
-		Age.add(null);
-		Age.add(0);
-		Age.add(null);
-		Age.add(null);
-		
-		SubInitialStocks.add(Facility);
-		SubInitialStocks.add(Incommodity);
-		SubInitialStocks.add(Recipe);
-		SubInitialStocks.add(Amount);
-		SubInitialStocks.add(Age);
-		InitialStocks.add(SubInitialStocks);
-		InitialStocks.add("oneOrMore");
-		InitialStocks.add(null);
-		InitialStocks.add(null);
-		InitialStocks.add(null);
-		InitialStocks.add(0);
-		InitialStocks.add(null);
-		InitialStocks.add(null);
-		
-		StorageFacility.add(Incommodities);
-		StorageFacility.add(Capacity);
-		StorageFacility.add(InventorySize);
-		StorageFacility.add(ResidenceTime);
-		StorageFacility.add(InitialStocks);
+		SinkFacility.add(Incommodity);
+		SinkFacility.add(Capacity);
+		SinkFacility.add(InventorySizeSink);
 	
-		alfredStructs.add(StorageFacility);
+		alfredStructs.add(SinkFacility);
 		
-		alfredStructsNames.add("RecipeReactor");
+		alfredStructsNames.add("BatchReactor");
 		alfredStructsNames.add("EnrichmentFacility");
 		alfredStructsNames.add("SourceFacility");
-		alfredStructsNames.add("StorageFacility");
+		alfredStructsNames.add("SinkFacility");
 	}
 }

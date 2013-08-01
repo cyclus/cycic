@@ -195,9 +195,10 @@ public class formBuilder extends View {
 						// resetting the indent
 						columnNumber -= 1;
 					}
-				} else if (facArray.get(2) == "input" || facArray.get(2) == "output") {
+				} else if (facArray.get(1) instanceof ArrayList) {
 					if ((int)facArray.get(6) <= userLevel){
 						Label name = new Label((String) facArray.get(0));
+						name.setTooltip(new Tooltip ((String)facArray.get(7)));
 						grid.add(name, columnNumber, rowNumber);
 						rowNumber += 1;
 						// Indenting a sub structure

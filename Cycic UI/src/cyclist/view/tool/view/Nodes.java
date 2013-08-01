@@ -66,12 +66,13 @@ public class Nodes{
 		}
 		
 		// Really cool effect, not ready for testing yet.
-		/*Distant light = new Distant();
-		light.setAzimuth(-135.0f);
+		Distant light = new Distant();
+		light.setAzimuth(-120.0f);
 		final Lighting l = new Lighting();
 		l.setLight(light);
-		l.setSurfaceScale(5.0f);
-		circle.setEffect(l);*/
+		l.setSurfaceScale(1.0f);
+		circle.setEffect(l);
+		circle.setStyle("-fx-border-style(inset: 10, 10, 10, 10);");
 		
 		// Adding the menu and it's menu items.
 		final Menu menu1 = new Menu("Options");
@@ -101,7 +102,8 @@ public class Nodes{
 			public void handle(ActionEvent e){
 				circle.image.setVisible(true);
 				circle.image.toBack();
-				circle.setOpacity(0);			}
+				circle.setOpacity(0);			
+			}
 		});
 		
 		MenuItem hideImage = new MenuItem("Hide Image");
