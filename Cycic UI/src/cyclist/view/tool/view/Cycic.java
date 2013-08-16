@@ -83,13 +83,16 @@ public class Cycic extends View{
 		submit1.setOnAction(new EventHandler<ActionEvent>(){
 			@Override
 			public void handle(ActionEvent event){
+				System.out.println("test-1");
 				Nodes.addNode(facNameField.getText());
 				dataArrays.FacilityNodes.get(dataArrays.FacilityNodes.size()-1).facilityType = structureCB.getValue();
+				System.out.println("test");
 				for (int i = 0; i < realFacs.alfredStructs.size(); i++){
 					if (realFacs.alfredStructsNames.get(i) == structureCB.getValue()){
 						dataArrays.FacilityNodes.get(dataArrays.FacilityNodes.size()-1).facilityStructure = realFacs.alfredStructs.get(i);
 					}
 				}
+				System.out.println("test1");
 				formBuilderFunctions.formArrayBuilder(
 						dataArrays.FacilityNodes.get(dataArrays.FacilityNodes.size()-1).facilityStructure,
 						dataArrays.FacilityNodes.get(dataArrays.FacilityNodes.size()-1).facilityData
